@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane fx:id="paneAll" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="btnAbrir" layoutX="974.0" layoutY="685.0" mnemonicParsing="false" text="ABRIR CUENTA" />
+      <Pane fx:id="paneAdmin" layoutX="74.0" layoutY="45.0" prefHeight="202.0" prefWidth="952.0">
+         <children>
+            <Button fx:id="btnCrear" layoutX="815.0" layoutY="26.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="CREAR" />
+            <Button fx:id="btnModificar" layoutX="815.0" layoutY="89.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="MODIFICAR" />
+            <Button fx:id="btnEliminar" layoutX="815.0" layoutY="152.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="ELIMINAR" />
+            <Label fx:id="lblIban" layoutX="37.0" layoutY="22.0" prefHeight="17.0" prefWidth="206.0" text="IBAN" />
+            <Label fx:id="lblNombre" layoutX="563.0" layoutY="21.0" prefHeight="17.0" prefWidth="230.0" text="NOMBRE" />
+            <Label fx:id="lblSaldo" layoutX="33.0" layoutY="105.0" prefHeight="17.0" prefWidth="230.0" text="SALDO" />
+            <Label fx:id="lblPlan" layoutX="563.0" layoutY="110.0" prefHeight="17.0" prefWidth="173.0" text="PLAN" />
+            <ComboBox fx:id="planCombo" layoutX="563.0" layoutY="127.0" prefHeight="25.0" prefWidth="196.0" promptText="Tipo de plan de la cuenta" />
+            <Label fx:id="lblSalario" layoutX="292.0" layoutY="108.0" prefHeight="17.0" prefWidth="196.0" text="SALARIO" />
+            <Separator layoutX="3.0" prefHeight="3.0" prefWidth="945.0" />
+            <Separator layoutX="6.0" layoutY="201.0" prefHeight="3.0" prefWidth="945.0" />
+            <Separator layoutX="3.0" layoutY="1.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="0.0" />
+            <Separator layoutX="949.0" layoutY="1.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="0.0" />
+            <TextField fx:id="txtSalario" layoutX="292.0" layoutY="125.0" prefHeight="25.0" prefWidth="219.0" promptText="Introduzca el salario mensual" />
+            <TextField fx:id="txtNombre" layoutX="563.0" layoutY="39.0" prefHeight="25.0" prefWidth="219.0" promptText="Introduzca el nombre de la persona" />
+            <TextField fx:id="txtSaldo" layoutX="33.0" layoutY="126.0" prefHeight="25.0" prefWidth="219.0" promptText="Introduzca el saldo de la cuenta" />
+            <TextField fx:id="txtIban" layoutX="33.0" layoutY="39.0" prefHeight="25.0" prefWidth="479.0" promptText="Introduzca el IBAN de la cuenta" />
+         </children>
+      </Pane>
+      <ComboBox fx:id="filterCombo" layoutX="910.0" layoutY="306.0" prefHeight="25.0" prefWidth="112.0" promptText="Filtrar" />
+      <Button fx:id="btnInforme" layoutX="742.0" layoutY="685.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="INFORME" />
+      <TabPane fx:id="tabPane" layoutX="80.0" layoutY="285.0" prefHeight="373.0" prefWidth="774.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab fx:id="tabPane" text="Cuentas">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="table" prefHeight="341.0" prefWidth="775.0">
+                           <columns>
+                              <TableColumn fx:id="tcIban" prefWidth="103.99999237060547" text="IBAN" />
+                              <TableColumn fx:id="tcNombre" prefWidth="111.99996948242188" text="NOMBRE" />
+                              <TableColumn fx:id="tcSaldo" prefWidth="159.99996948242188" text="SALDO" />
+                              <TableColumn fx:id="tcPlan" prefWidth="130.4000244140625" text="SALARIO" />
+                              <TableColumn fx:id="tcSalario" prefWidth="138.39996337890625" text="PLAN" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="tabSelect" text="Gastos de la cuenta seleccionada">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <MenuBar layoutY="-2.0" prefHeight="26.0" prefWidth="1100.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Inicio" />
+          <Menu mnemonicParsing="false" text="Navegacion">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Gastos recurrentes" />
+                  <MenuItem mnemonicParsing="false" text="Gastos puntuales" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Ayuda">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Ayuda" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Cerrar Sesión" />
+        </menus>
+      </MenuBar>
+   </children>
+</Pane>

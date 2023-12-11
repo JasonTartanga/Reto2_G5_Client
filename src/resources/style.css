@@ -1,0 +1,18 @@
+.fondo {
+    -fx-background-color: #B0B0B0
+}
+
+.textField {
+    -fx-background-radius: 12px;
+}
+
+.button {
+    -fx-background-radius: 30px;
+}
+
+.panel_borde {
+
+    -fx-border-color: #333333;
+    
+}
+

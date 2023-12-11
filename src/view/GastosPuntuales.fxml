@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane fx:id="paneAll" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button id="btnCerrar" fx:id="btnAbrir" layoutX="923.0" layoutY="685.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Cerrar" />
+      <Pane id="paneAtributes" fx:id="paneAdmin" layoutX="74.0" layoutY="45.0" prefHeight="202.0" prefWidth="952.0">
+         <children>
+            <Button id="btnCrear" fx:id="btnCrear" layoutX="815.0" layoutY="26.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="CREAR" />
+            <Button id="btnModificar" fx:id="btnModificar" layoutX="815.0" layoutY="89.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="MODIFICAR" />
+            <Button id="btnEliminar" fx:id="btnEliminar" layoutX="815.0" layoutY="152.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="ELIMINAR" />
+            <Label id="lblUuid" fx:id="lblIban" layoutX="37.0" layoutY="22.0" prefHeight="17.0" prefWidth="206.0" text="UUID" />
+            <Label id="lblNombre" fx:id="lblNombre" layoutX="292.0" layoutY="22.0" prefHeight="17.0" prefWidth="230.0" text="NOMBRE" />
+            <Label id="lblImporte" fx:id="lblSaldo" layoutX="33.0" layoutY="105.0" prefHeight="17.0" prefWidth="230.0" text="IMPORTE" />
+            <Label id="lblImportancia" fx:id="lblPlan" layoutX="563.0" layoutY="110.0" prefHeight="17.0" prefWidth="173.0" text="IMPORTANCIA" />
+            <ComboBox id="combBoxImportancia" fx:id="planCombo" layoutX="563.0" layoutY="140.0" prefHeight="25.0" prefWidth="219.0" promptText="Tipo de importancia del gasto" />
+            <Label id="lblFecha" fx:id="lblSalario" layoutX="292.0" layoutY="108.0" prefHeight="17.0" prefWidth="196.0" text="FECHA" />
+            <Separator layoutX="3.0" prefHeight="3.0" prefWidth="945.0" />
+            <Separator layoutX="6.0" layoutY="201.0" prefHeight="3.0" prefWidth="945.0" />
+            <Separator layoutX="3.0" layoutY="1.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="0.0" />
+            <Separator layoutX="949.0" layoutY="1.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="0.0" />
+            <TextField id="txtNombre" fx:id="txtNombre" layoutX="292.0" layoutY="52.0" prefHeight="25.0" prefWidth="219.0" />
+            <TextField id="txtImporte" fx:id="txtSaldo" layoutX="30.0" layoutY="138.0" prefHeight="25.0" prefWidth="219.0" />
+            <TextField id="txtUUID" fx:id="txtIban" layoutX="33.0" layoutY="52.0" prefHeight="25.0" prefWidth="219.0" />
+            <Label id="lblConcepto" fx:id="lblNombre1" layoutX="563.0" layoutY="22.0" prefHeight="17.0" prefWidth="230.0" text="CONCEPTO" />
+            <TextField id="txtConcepto" fx:id="txtNombre1" layoutX="563.0" layoutY="52.0" prefHeight="25.0" prefWidth="219.0" />
+            <DatePicker id="txtFecha" layoutX="292.0" layoutY="138.0" prefHeight="26.0" prefWidth="219.0" />
+         </children>
+      </Pane>
+      <ComboBox id="combBoxFiltrar" fx:id="filterCombo" layoutX="910.0" layoutY="306.0" prefHeight="25.0" prefWidth="112.0" promptText="Filtrar" />
+      <Button id="btnInforme" fx:id="btnInforme" layoutX="742.0" layoutY="685.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="INFORME" />
+      <TabPane id="tabPane" fx:id="tabPane" layoutX="80.0" layoutY="285.0" prefHeight="373.0" prefWidth="774.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab id="tabGastosPuntuales" fx:id="tabPane" text="Gastos Puntuales">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView id="tableView" fx:id="table" prefHeight="342.0" prefWidth="793.0">
+                           <columns>
+                              <TableColumn id="tbColumUuid" fx:id="tcIban" prefWidth="103.99999237060547" text="UUID" />
+                              <TableColumn id="tbColumNombre" fx:id="tcNombre" prefWidth="111.99996948242188" text="NOMBRE" />
+                              <TableColumn id="tbColumConcepto" fx:id="tcSaldo" prefWidth="159.99996948242188" text="CONCEPTO" />
+                              <TableColumn id="tbColumImporte" fx:id="tcPlan" prefWidth="130.4000244140625" text="IMPORTE" />
+                              <TableColumn id="tbColumFecha" fx:id="tcSalario" prefWidth="138.39996337890625" text="FECHA" />
+                              <TableColumn id="tbColumImportancia" fx:id="tcSalario1" prefWidth="138.39996337890625" text="IMPORTANCIA" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab id="tabGrafico" fx:id="tabSelect" text="Grafico">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <MenuBar id="MenuBar" layoutY="-2.0" prefHeight="26.0" prefWidth="1100.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Inicio" />
+          <Menu mnemonicParsing="false" text="Navegacion">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Gastos recurrentes" />
+                  <MenuItem mnemonicParsing="false" text="Gastos puntuales" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Ayuda">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Ayuda" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Cerrar Sesión" />
+        </menus>
+      </MenuBar>
+   </children>
+</Pane>
