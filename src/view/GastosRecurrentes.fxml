@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="paneAll" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1100.0" style="border: 15px;" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="fondoRecurrentes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1100.0" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <MenuBar prefHeight="26.0" prefWidth="1100.0">
             <menus>
@@ -35,9 +35,8 @@
                 <Menu mnemonicParsing="false" text="Cerrar Sesión" />
             </menus>
         </MenuBar>
-        <Pane fx:id="paneAdmin" layoutX="74.0" layoutY="47.0" prefHeight="202.0" prefWidth="952.0">
+        <Pane fx:id="paneAdmin" layoutX="74.0" layoutY="47.0" prefHeight="202.0" prefWidth="952.0" styleClass="panel_borde">
             <children>
-            <Pane layoutY="1.0" prefHeight="200.0" prefWidth="952.0" style="-fx-border-width: 5px;" styleClass="panel_borde" />
                 <Button fx:id="btnCrear" layoutX="815.0" layoutY="24.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="CREAR" />
                 <Button fx:id="btnModificar" layoutX="815.0" layoutY="86.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="MODIFICAR" />
                 <Button fx:id="btnEliminar" layoutX="815.0" layoutY="150.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="ELIMINAR" />
@@ -57,13 +56,13 @@
                 <ComboBox fx:id="cbNaturaleza" layoutX="562.0" layoutY="152.0" prefHeight="25.0" prefWidth="219.0" promptText="Naturaleza" styleClass="textField" />
             </children>
         </Pane>
-        <TabPane fx:id="tabPane" layoutX="80.0" layoutY="287.0" prefHeight="373.0" prefWidth="774.0" tabClosingPolicy="UNAVAILABLE">
+        <TabPane fx:id="tabPane" layoutX="74.0" layoutY="287.0" prefHeight="382.0" prefWidth="784.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab fx:id="tabGastos" text="Gastos Recurrentes">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <TableView fx:id="table" prefHeight="341.0" prefWidth="775.0">
+                                <TableView fx:id="table" prefHeight="342.0" prefWidth="784.0">
                                     <columns>
                                         <TableColumn fx:id="tcUuid" prefWidth="110.0" text="UUID" />
                                         <TableColumn fx:id="tcNombre" prefWidth="110.0" text="Nombre" />
@@ -71,7 +70,7 @@
                                         <TableColumn fx:id="tcFecha" prefWidth="110.0" text="Fecha" />
                                         <TableColumn fx:id="tcNaturaleza" prefWidth="110.0" text="Naturaleza" />
                                         <TableColumn fx:id="tcPeriodicidad" prefWidth="110.0" text="Periodicidad" />
-                                        <TableColumn fx:id="tcConcepto" prefWidth="110.0" text="Concepto" />
+                                        <TableColumn fx:id="tcConcepto" prefWidth="120.79998779296875" text="Concepto" />
                                     </columns>
                                     <contextMenu>
                                         <ContextMenu>
@@ -95,8 +94,8 @@
                 </Tab>
             </tabs>
         </TabPane>
-        <ComboBox fx:id="filterCombo" layoutX="892.0" layoutY="287.0" prefHeight="26.0" prefWidth="130.0" promptText="Filtrar" styleClass="textField" />
-        <Button fx:id="btnInforme" layoutX="766.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="INFORME" />
-        <Button fx:id="btnAbrir" layoutX="910.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="CERRAR" />
+        <ComboBox fx:id="filterCombo" layoutX="888.0" layoutY="287.0" prefHeight="30.0" prefWidth="112.0" promptText="Filtrar" styleClass="textField" />
+        <Button fx:id="btnInforme" layoutX="748.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="INFORME" />
+        <Button fx:id="btnAbrir" layoutX="888.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="CERRAR" />
     </children>
 </AnchorPane>

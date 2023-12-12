@@ -11,8 +11,8 @@
 }
 
 .panel_borde {
-
-    -fx-border-color: #333333;
-    
+    -fx-border-width: 2px;
+    -fx-border-color: grey;
+    -fx-border-radius: 10px;
 }
 
