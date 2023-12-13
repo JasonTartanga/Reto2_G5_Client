@@ -17,7 +17,7 @@
 <AnchorPane fx:id="fondoBanco" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1100.0" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="btnAbrir" layoutX="888.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="ABRIR CUENTA" />
-      <Pane fx:id="paneAdmin" layoutX="74.0" layoutY="45.0" prefHeight="202.0" prefWidth="952.0" styleClass="panel_borde">
+      <Pane fx:id="paneAdmin" layoutX="74.0" layoutY="45.0" prefHeight="202.0" prefWidth="952.0" styleClass="panel_datos">
          <children>
             <Button fx:id="btnCrear" layoutX="815.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="CREAR" />
             <Button fx:id="btnModificar" layoutX="815.0" layoutY="89.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="MODIFICAR" />

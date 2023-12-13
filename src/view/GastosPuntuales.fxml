@@ -34,7 +34,7 @@
             <Menu mnemonicParsing="false" text="Cerrar Sesión" />
         </menus>
       </MenuBar>
-      <Pane id="paneAtributes" fx:id="paneAdmin" layoutX="74.0" layoutY="45.0" prefHeight="202.0" prefWidth="952.0" styleClass="panel_borde">
+      <Pane id="paneAtributes" fx:id="paneAdmin" layoutX="74.0" layoutY="45.0" prefHeight="202.0" prefWidth="952.0" styleClass="panel_datos">
          <children>
             <Button id="btnCrear" fx:id="btnCrear" layoutX="815.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="CREAR" />
             <Button id="btnModificar" fx:id="btnModificar" layoutX="815.0" layoutY="89.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="MODIFICAR" />
