@@ -39,41 +39,41 @@
             <Button id="btnCrear" fx:id="btnCrear" layoutX="815.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="CREAR" />
             <Button id="btnModificar" fx:id="btnModificar" layoutX="815.0" layoutY="89.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="MODIFICAR" />
             <Button id="btnEliminar" fx:id="btnEliminar" layoutX="815.0" layoutY="152.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="ELIMINAR" />
-            <Label id="lblUuid" fx:id="lblIban" layoutX="34.0" layoutY="43.0" prefHeight="17.0" prefWidth="206.0" text="UUID" />
-            <TextField id="txtUUID" fx:id="txtIban" layoutX="34.0" layoutY="63.0" prefHeight="25.0" prefWidth="219.0" styleClass="textField" />
+            <Label id="lblUuid" fx:id="lblUuid" layoutX="34.0" layoutY="43.0" prefHeight="17.0" prefWidth="206.0" text="UUID" />
+            <TextField id="txtUUID" fx:id="tfUuid" layoutX="34.0" layoutY="63.0" prefHeight="25.0" prefWidth="219.0" promptText="Introduce el UUID del gasto" styleClass="textField" />
             <Label id="lblNombre" fx:id="lblNombre" layoutX="297.0" layoutY="43.0" prefHeight="17.0" prefWidth="230.0" text="Nombre" />
-            <TextField id="txtNombre" fx:id="txtNombre" layoutX="297.0" layoutY="63.0" prefHeight="25.0" prefWidth="219.0" styleClass="textField" />
-            <Label id="lblConcepto" fx:id="lblNombre1" layoutX="562.0" layoutY="43.0" prefHeight="17.0" prefWidth="230.0" text="Concepto" />
-            <TextField id="txtConcepto" fx:id="txtNombre1" layoutX="562.0" layoutY="63.0" prefHeight="25.0" prefWidth="219.0" styleClass="textField" />
-            <Label id="lblImporte" fx:id="lblSaldo" layoutX="34.0" layoutY="126.0" prefHeight="17.0" prefWidth="206.0" text="Importe" />
-            <TextField id="txtImporte" fx:id="txtSaldo" layoutX="34.0" layoutY="146.0" prefHeight="25.0" prefWidth="219.0" styleClass="textField" />
-            <Label id="lblFecha" fx:id="lblSalario" layoutX="297.0" layoutY="126.0" prefHeight="17.0" prefWidth="196.0" text="Fecha" />
-            <DatePicker id="txtFecha" layoutX="297.0" layoutY="145.0" prefHeight="26.0" prefWidth="219.0" />
-            <Label id="lblImportancia" fx:id="lblPlan" layoutX="562.0" layoutY="126.0" prefHeight="17.0" prefWidth="173.0" text="Importancia" />
-            <ComboBox id="combBoxImportancia" fx:id="planCombo" layoutX="562.0" layoutY="144.0" prefHeight="25.0" prefWidth="219.0" promptText="Tipo de importancia del gasto" styleClass="textField" />
+            <TextField id="txtNombre" fx:id="tfNombre" layoutX="297.0" layoutY="63.0" prefHeight="25.0" prefWidth="219.0" promptText="Introduce el nombre del gasto" styleClass="textField" />
+            <Label id="lblConcepto" fx:id="lblConcepto" layoutX="562.0" layoutY="43.0" prefHeight="17.0" prefWidth="230.0" text="Concepto" />
+            <TextField id="txtConcepto" fx:id="tfConcepto" layoutX="562.0" layoutY="63.0" prefHeight="25.0" prefWidth="219.0" promptText="Introduce una breve descripcion" styleClass="textField" />
+            <Label id="lblImporte" fx:id="lblImporte" layoutX="34.0" layoutY="126.0" prefHeight="17.0" prefWidth="206.0" text="Importe" />
+            <TextField id="txtImporte" fx:id="tfImporte" layoutX="34.0" layoutY="146.0" prefHeight="25.0" prefWidth="219.0" promptText="Introduce el importe en €" styleClass="textField" />
+            <Label id="lblFecha" fx:id="lblFecha" layoutX="297.0" layoutY="126.0" prefHeight="17.0" prefWidth="196.0" text="Fecha" />
+            <DatePicker id="txtFecha" fx:id="tfFecha" layoutX="297.0" layoutY="145.0" prefHeight="26.0" prefWidth="219.0" promptText="Introduce la fecha del gasto" />
+            <Label id="lblImportancia" fx:id="lblImportancia" layoutX="562.0" layoutY="126.0" prefHeight="17.0" prefWidth="173.0" text="Importancia" />
+            <ComboBox id="combBoxImportancia" fx:id="importanciaCombo" layoutX="562.0" layoutY="144.0" prefHeight="25.0" prefWidth="219.0" promptText="Nivel de importancia del gasto" styleClass="textField" />
          </children>
       </Pane>
       <TabPane id="tabPane" fx:id="tabPane" layoutX="74.0" layoutY="287.0" prefHeight="382.0" prefWidth="784.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab id="tabGastosPuntuales" fx:id="tabPane" text="Gastos Puntuales">
+          <Tab id="tabGastosPuntuales" fx:id="tabPuntuales" text="Gastos Puntuales">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <TableView id="tableView" fx:id="table" prefHeight="342.0" prefWidth="793.0">
                            <columns>
-                              <TableColumn id="tbColumUuid" fx:id="tcIban" prefWidth="110.0" text="UUID" />
+                              <TableColumn id="tbColumUuid" fx:id="tcUuid" prefWidth="110.0" text="UUID" />
                               <TableColumn id="tbColumNombre" fx:id="tcNombre" prefWidth="110.0" text="Nombre" />
-                              <TableColumn id="tbColumImporte" fx:id="tcPlan" prefWidth="110.0" text="Importe" />
-                              <TableColumn id="tbColumFecha" fx:id="tcSalario" prefWidth="110.0" text="Fecha" />
-                              <TableColumn id="tbColumImportancia" fx:id="tcSalario1" prefWidth="110.0" text="Importancia" />
-                              <TableColumn id="tbColumConcepto" fx:id="tcSaldo" prefWidth="240.80001220703127" text="Concepto" />
+                              <TableColumn id="tbColumImporte" fx:id="tcImporte" prefWidth="110.0" text="Importe" />
+                              <TableColumn id="tbColumFecha" fx:id="tcFecha" prefWidth="110.0" text="Fecha" />
+                              <TableColumn id="tbColumImportancia" fx:id="tcImportancia" prefWidth="110.0" text="Importancia" />
+                              <TableColumn id="tbColumConcepto" fx:id="tcConcepto" prefWidth="240.80001220703127" text="Concepto" />
                            </columns>
                         </TableView>
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab id="tabGrafico" fx:id="tabSelect" text="Grafico">
+          <Tab id="tabGrafico" fx:id="tabGrafico" text="Grafico">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
@@ -82,6 +82,6 @@
       </TabPane>
       <ComboBox id="combBoxFiltrar" fx:id="filterCombo" layoutX="888.0" layoutY="287.0" prefHeight="30.0" prefWidth="112.0" promptText="Filtrar" styleClass="textField" />
       <Button id="btnInforme" fx:id="btnInforme" layoutX="748.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="INFORME" />
-      <Button id="btnCerrar" fx:id="btnAbrir" layoutX="888.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="CERRAR" />
+      <Button id="btnCerrar" fx:id="btnCerrar" layoutX="888.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="CERRAR" />
    </children>
 </AnchorPane>

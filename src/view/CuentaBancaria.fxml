@@ -16,7 +16,6 @@
 
 <AnchorPane fx:id="fondoBanco" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1100.0" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="btnAbrir" layoutX="888.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="ABRIR CUENTA" />
       <Pane fx:id="paneAdmin" layoutX="74.0" layoutY="45.0" prefHeight="202.0" prefWidth="952.0" styleClass="panel_datos">
          <children>
             <Button fx:id="btnCrear" layoutX="815.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="CREAR" />
@@ -35,7 +34,6 @@
          </children>
       </Pane>
       <ComboBox fx:id="filterCombo" layoutX="888.0" layoutY="287.0" prefHeight="30.0" prefWidth="112.0" promptText="Filtrar" styleClass="button" />
-      <Button fx:id="btnInforme" layoutX="748.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="INFORME" />
       <TabPane fx:id="tabPane" layoutX="74.0" layoutY="287.0" prefHeight="382.0" prefWidth="784.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab fx:id="tabPane" text="Cuentas">
@@ -79,5 +77,7 @@
             <Menu mnemonicParsing="false" text="Cerrar Sesión" />
         </menus>
       </MenuBar>
+      <Button fx:id="btnInforme" layoutX="748.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="INFORME" />
+      <Button fx:id="btnAbrir" layoutX="888.0" layoutY="687.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="112.0" text="ABRIR CUENTA" />
    </children>
 </AnchorPane>
