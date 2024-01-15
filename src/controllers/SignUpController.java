@@ -1,5 +1,6 @@
-package controller;
+package controllers;
 
+import controllers.SignInController;
 import exceptions.WrongPasswordException;
 import java.io.IOException;
 import java.util.Optional;

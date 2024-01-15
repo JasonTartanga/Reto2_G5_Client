@@ -9,82 +9,84 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="fondoSignUp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" styleClass="fondo" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
-   <children>
-      <TextField fx:id="txtNombre" layoutX="577.0" layoutY="78.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce el nombre" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="45.0" />
-      <TextField fx:id="txtEmail" layoutX="610.0" layoutY="150.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce el email" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="109.4" />
-      <TextField fx:id="txtDireccion" layoutX="577.0" layoutY="196.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce la direccion" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="177.8" />
-      <TextField fx:id="txtTelefono" layoutX="580.0" layoutY="399.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce el telefono" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="392.0" />
-      <TextField fx:id="txtCodPostal" layoutX="577.0" layoutY="490.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce el codigo postal" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="463.4" />
-      <Button fx:id="btnRegistro" layoutX="834.0" layoutY="537.0" mnemonicParsing="false" text="REGISTRAR" AnchorPane.bottomAnchor="25.399999999999977">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-      <Button fx:id="btnVolver" layoutX="610.0" layoutY="537.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="101.0" text="VOLVER" AnchorPane.bottomAnchor="25.399999999999977">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-      <ImageView fx:id="ivNombre" fitHeight="35.0" fitWidth="35.0" layoutX="553.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="553.0">
-         <image>
-            <Image url="@../resources/img/usuario.png" />
-         </image></ImageView>
-      <ImageView fx:id="ivEmail" fitHeight="35.0" fitWidth="35.0" layoutX="553.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="553.0">
-         <image>
-            <Image url="@../resources/img/correo-electronico.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="ivDireccion" fitHeight="35.0" fitWidth="35.0" layoutX="550.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="550.0">
-         <image>
-            <Image url="@../resources/img/direccion.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="ivTelefono" fitHeight="35.0" fitWidth="35.0" layoutX="554.0" layoutY="388.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="554.0">
-         <image>
-            <Image url="@../resources/img/telefono.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="ivPasswd2" fitHeight="40.0" fitWidth="40.0" layoutX="551.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="551.0">
-         <image>
-            <Image url="@../resources/img/repetir-contrasena.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="ivCodPostal" fitHeight="35.0" fitWidth="35.0" layoutX="554.0" layoutY="459.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="554.0">
-         <image>
-            <Image url="@../resources/img/codigo-postal%20(5).png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="ivPasswd" fitHeight="40.0" fitWidth="40.0" layoutX="550.0" layoutY="242.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="550.0">
-         <image>
-            <Image url="@../resources/img/contrasena.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="ivPane" fitHeight="620.0" fitWidth="500.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="0.0">
-         <image>
-            <Image url="@../resources/img/Sign%20Up.png" />
-         </image></ImageView>
-      <ToggleButton fx:id="tbtnPasswd1" layoutX="946.0" layoutY="250.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" styleClass="button">
-         <graphic>
-            <ImageView fx:id="ivShow1" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../resources/img/ver.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </ToggleButton>
-      <ToggleButton fx:id="tbtnPasswd2" layoutX="946.0" layoutY="322.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" styleClass="button">
-         <graphic>
-            <ImageView fx:id="ivShow2" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../resources/img/ver.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </ToggleButton>
-      <PasswordField fx:id="txtPasswd" layoutX="609.0" layoutY="249.0" prefHeight="26.0" prefWidth="326.0" promptText="Introduce la contraseña" styleClass="textField" AnchorPane.leftAnchor="610.0" />
-      <TextField fx:id="txtShowPasswd" layoutX="610.0" layoutY="249.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce la contraseña" styleClass="textField" stylesheets="@../resources/style.css" />
-      <PasswordField fx:id="txtPasswd2" layoutX="609.0" layoutY="321.0" prefHeight="26.0" prefWidth="326.0" promptText="Introduce la contraseña" styleClass="textField" AnchorPane.leftAnchor="610.0" />
-      <TextField fx:id="txtShowPasswd2" layoutX="610.0" layoutY="321.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce la contraseña" styleClass="textField" stylesheets="@../resources/style.css" />
-   </children>
+<AnchorPane fx:id="fondoSignUp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" styleClass="fondo" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignUpController">
+    <children>
+        <TextField fx:id="txtNombre" layoutX="577.0" layoutY="78.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce el nombre" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="45.0" />
+        <TextField fx:id="txtEmail" layoutX="610.0" layoutY="150.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce el email" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="109.4" />
+        <TextField fx:id="txtDireccion" layoutX="577.0" layoutY="196.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce la direccion" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="177.8" />
+        <TextField fx:id="txtTelefono" layoutX="580.0" layoutY="399.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce el telefono" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="392.0" />
+        <TextField fx:id="txtCodPostal" layoutX="577.0" layoutY="490.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce el codigo postal" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="463.4" />
+        <Button fx:id="btnRegistro" layoutX="834.0" layoutY="537.0" mnemonicParsing="false" text="REGISTRAR" AnchorPane.bottomAnchor="25.399999999999977">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Button>
+        <Button fx:id="btnVolver" layoutX="610.0" layoutY="537.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="101.0" text="VOLVER" AnchorPane.bottomAnchor="25.399999999999977">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Button>
+        <ImageView fx:id="ivNombre" fitHeight="35.0" fitWidth="35.0" layoutX="553.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="553.0">
+            <image>
+                <Image url="@../resources/img/usuario.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="ivEmail" fitHeight="35.0" fitWidth="35.0" layoutX="553.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="553.0">
+            <image>
+                <Image url="@../resources/img/correo-electronico.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="ivDireccion" fitHeight="35.0" fitWidth="35.0" layoutX="550.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="550.0">
+            <image>
+                <Image url="@../resources/img/direccion.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="ivTelefono" fitHeight="35.0" fitWidth="35.0" layoutX="554.0" layoutY="388.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="554.0">
+            <image>
+                <Image url="@../resources/img/telefono.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="ivPasswd2" fitHeight="40.0" fitWidth="40.0" layoutX="551.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="551.0">
+            <image>
+                <Image url="@../resources/img/repetir-contrasena.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="ivCodPostal" fitHeight="35.0" fitWidth="35.0" layoutX="554.0" layoutY="459.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="554.0">
+            <image>
+                <Image url="@../resources/img/codigo-postal%20(5).png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="ivPasswd" fitHeight="40.0" fitWidth="40.0" layoutX="550.0" layoutY="242.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="550.0">
+            <image>
+                <Image url="@../resources/img/contrasena.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="ivPane" fitHeight="620.0" fitWidth="500.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="0.0">
+            <image>
+                <Image url="@../resources/img/Sign%20Up.png" />
+            </image>
+        </ImageView>
+        <ToggleButton fx:id="tbtnPasswd1" layoutX="946.0" layoutY="250.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" styleClass="button">
+            <graphic>
+                <ImageView fx:id="ivShow1" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../resources/img/ver.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </ToggleButton>
+        <ToggleButton fx:id="tbtnPasswd2" layoutX="946.0" layoutY="322.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" styleClass="button">
+            <graphic>
+                <ImageView fx:id="ivShow2" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../resources/img/ver.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </ToggleButton>
+        <PasswordField fx:id="txtPasswd" layoutX="609.0" layoutY="249.0" prefHeight="26.0" prefWidth="326.0" promptText="Introduce la contraseña" styleClass="textField" AnchorPane.leftAnchor="610.0" />
+        <TextField fx:id="txtShowPasswd" layoutX="610.0" layoutY="249.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce la contraseña" styleClass="textField" stylesheets="@../resources/style.css" />
+        <PasswordField fx:id="txtPasswd2" layoutX="609.0" layoutY="321.0" prefHeight="26.0" prefWidth="326.0" promptText="Introduce la contraseña" styleClass="textField" AnchorPane.leftAnchor="610.0" />
+        <TextField fx:id="txtShowPasswd2" layoutX="610.0" layoutY="321.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce la contraseña" styleClass="textField" stylesheets="@../resources/style.css" />
+    </children>
 </AnchorPane>
