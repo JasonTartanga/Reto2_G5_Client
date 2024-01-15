@@ -1,6 +1,5 @@
-package controllers;
+package controller;
 
-import cipher.Asimetric;
 import exceptions.CredentialErrorException;
 import exceptions.ServerErrorException;
 import java.io.IOException;
@@ -28,11 +27,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.GenericType;
 import model.entitys.UserBean;
 import model.factory.UserFactory;
-import model.interfaces.UserInterface;
 
 /**
  * Esta clase es el controlador encargado de que la ventna SignIn funcione.
@@ -224,33 +221,24 @@ public class SignInController {
             //Si se produce algún error saldrá una ventana informativa con la excepción LoginErrorException que se encontrará en las excepciones creadas en la
             //librería y limpiará esos campos y se cambiará el color del fondo a rojo.
             //Si no se produce error, se cambiara el fondo a color verde y le pasamos el objeto User a la siguiente ventana (Message) y cerramos la actual.
-            UserBean user = new UserBean();
-            user.setMail(txtEmail.getText().toLowerCase());
+            UserBean user = new UserBean(txtEmail.getText().toLowerCase(), txtPasswd.getText());
 
-            //user.setPassword(txtPasswd.getText().toLowerCase());
-            String cipherPasswd = Asimetric.cipherPassword(txtPasswd.getText());
-            user.setPassword(cipherPasswd);
+            System.out.println(txtEmail.getText().toLowerCase());
 
-            UserInterface ui = UserFactory.getFactory();
-            user = ui.loginUser_XML(new GenericType<UserBean>() {
+            user = new UserFactory().getFactory().loginUser_XML(new GenericType<UserBean>() {
             }, user.getMail(), user.getPassword());
 
-            //********** CAMBIAR VENTANAS A LA DE CADA UNO **********/
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RecurrentView.fxml"));
+            System.out.println(user.toString());
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Message.fxml"));
             Parent root = loader.load();
-            RecurrentController rec = loader.getController();
-            rec.setStage(thisStage);
-            rec.setUser(user);
-            rec.initStage(root);
+            MessageController message = loader.getController();
+            message.setStage(thisStage);
+            message.setUser(user);
+            message.initStage(root);
 
             thisStage.close();
 
-        } catch (InternalServerErrorException e) {
-            if (e.getClass().equals(javax.ws.rs.InternalServerErrorException.class)) {
-                new Alert(Alert.AlertType.ERROR, "No se ha encontrado un usuario con esas credenciales", ButtonType.OK).showAndWait();
-            }
-
-            e.printStackTrace();
         } catch (CredentialErrorException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
             alert.setHeaderText(null);

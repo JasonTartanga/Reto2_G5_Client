@@ -3,14 +3,12 @@ package model.entitys;
 import java.io.Serializable;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Es el bean de la entidad Expense.
  *
  * @author Jason, Ian.
  */
-@XmlRootElement(name = "user")
 public class UserBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,15 +21,6 @@ public class UserBean implements Serializable {
     private final SimpleIntegerProperty phone;
     private final SimpleIntegerProperty zip;
 
-    public UserBean() {
-        this.mail = new SimpleStringProperty();
-        this.name = new SimpleStringProperty();
-        this.address = new SimpleStringProperty();
-        this.password = new SimpleStringProperty();
-        this.phone = new SimpleIntegerProperty();
-        this.zip = new SimpleIntegerProperty();
-    }
-
     public UserBean(String mail, String name, String address, String password, Integer phone, Integer zip) {
         this.mail = new SimpleStringProperty(mail);
         this.name = new SimpleStringProperty(name);
@@ -41,12 +30,22 @@ public class UserBean implements Serializable {
         this.zip = new SimpleIntegerProperty(zip);
     }
 
+    public UserBean(String mail, String password) {
+        this.mail = new SimpleStringProperty(mail);
+        this.password = new SimpleStringProperty(password);
+        this.name = null;
+        this.address = null;
+        this.phone = null;
+        this.zip = null;
+    }
+
     //******************** GETTERS && SETTERS *********************/
     public String getMail() {
         return this.mail.get();
     }
 
     public void setMail(String mail) {
+        System.out.println("Mail bean " + mail);
         this.mail.set(mail);
     }
 
@@ -71,7 +70,7 @@ public class UserBean implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password.set(password);
+        this.mail.set(password);
     }
 
     public Integer getPhone() {

@@ -1,4 +1,4 @@
-package controllers;
+package controller;
 
 import exceptions.WrongPasswordException;
 import java.io.IOException;
