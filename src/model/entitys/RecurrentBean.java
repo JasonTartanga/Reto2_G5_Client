@@ -3,6 +3,7 @@ package model.entitys;
 import java.io.Serializable;
 import java.util.Date;
 import javafx.beans.property.SimpleObjectProperty;
+import javax.xml.bind.annotation.XmlRootElement;
 import model.enums.Category;
 import model.enums.Period;
 
@@ -11,6 +12,7 @@ import model.enums.Period;
  *
  * @author Jason.
  */
+@XmlRootElement(name = "recurrent")
 public class RecurrentBean extends ExpenseBean implements Serializable {
 
     private static final long serialVersionUID = 11L;
@@ -24,6 +26,12 @@ public class RecurrentBean extends ExpenseBean implements Serializable {
         super(uuid, name, concept, amount, date, account);
         this.periodicity = new SimpleObjectProperty<>(periodicity);
         this.category = new SimpleObjectProperty<>(category);
+    }
+
+    public RecurrentBean() {
+        super();
+        this.periodicity = new SimpleObjectProperty<>();
+        this.category = new SimpleObjectProperty<>();
     }
 
     //******************** GETTERS && SETTERS *********************/

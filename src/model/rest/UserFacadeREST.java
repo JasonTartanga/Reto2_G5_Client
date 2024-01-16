@@ -5,6 +5,8 @@
  */
 package model.rest;
 
+import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -28,7 +30,9 @@ public class UserFacadeREST implements UserInterface {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/Reto2_G5_Server/webresources";
+    private static final String BASE_URI = ResourceBundle.getBundle("resources.config").getString("BASE_URI");
+
+    private static final Logger log = Logger.getLogger(UserFacadeREST.class.getName());
 
     public UserFacadeREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
@@ -78,6 +82,7 @@ public class UserFacadeREST implements UserInterface {
     public <T> T loginUser_XML(GenericType<T> responseType, String mail, String passwd) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("login/{0}/{1}", new Object[]{mail, passwd}));
+        System.out.println("webTarget --> " + resource.getUri());
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 

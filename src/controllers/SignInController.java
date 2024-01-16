@@ -30,6 +30,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.GenericType;
+import model.entitys.AccountBean;
 import model.entitys.UserBean;
 import model.factory.UserFactory;
 import model.interfaces.UserInterface;
@@ -224,15 +225,14 @@ public class SignInController {
             //Si se produce algún error saldrá una ventana informativa con la excepción LoginErrorException que se encontrará en las excepciones creadas en la
             //librería y limpiará esos campos y se cambiará el color del fondo a rojo.
             //Si no se produce error, se cambiara el fondo a color verde y le pasamos el objeto User a la siguiente ventana (Message) y cerramos la actual.
+
             UserBean user = new UserBean();
             user.setMail(txtEmail.getText().toLowerCase());
-
-            //user.setPassword(txtPasswd.getText().toLowerCase());
-            String cipherPasswd = Asimetric.cipherPassword(txtPasswd.getText());
-            user.setPassword(cipherPasswd);
+            //user.setPassword(Asimetric.cipherPassword(txtPasswd.getText()));
+            user.setPassword(txtPasswd.getText());
 
             UserInterface ui = UserFactory.getFactory();
-            user = ui.loginUser_XML(new GenericType<UserBean>() {
+            ui.loginUser_XML(new GenericType<UserBean>() {
             }, user.getMail(), user.getPassword());
 
             //********** CAMBIAR VENTANAS A LA DE CADA UNO **********/
@@ -244,7 +244,6 @@ public class SignInController {
             rec.initStage(root);
 
             thisStage.close();
-
         } catch (InternalServerErrorException e) {
             if (e.getClass().equals(javax.ws.rs.InternalServerErrorException.class)) {
                 new Alert(Alert.AlertType.ERROR, "No se ha encontrado un usuario con esas credenciales", ButtonType.OK).showAndWait();

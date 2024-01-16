@@ -6,12 +6,14 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Es el bean de la entidad Expense.
  *
  * @author Jason, Ian.
  */
+@XmlRootElement(name = "expense")
 public class ExpenseBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,6 +33,15 @@ public class ExpenseBean implements Serializable {
         this.amount = new SimpleFloatProperty(amount);
         this.date = new SimpleObjectProperty<>(date);
         this.account = new SimpleObjectProperty<>(account);
+    }
+
+    public ExpenseBean() {
+        this.uuid = new SimpleLongProperty();
+        this.name = new SimpleStringProperty();
+        this.concept = new SimpleStringProperty();
+        this.amount = new SimpleFloatProperty();
+        this.date = new SimpleObjectProperty<>();
+        this.account = new SimpleObjectProperty<>();
     }
 
     //******************** GETTERS && SETTERS *********************/
