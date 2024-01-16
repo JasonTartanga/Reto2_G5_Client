@@ -241,6 +241,11 @@ public class SignInController {
             RecurrentController rec = loader.getController();
             rec.setStage(thisStage);
             rec.setUser(user);
+
+            AccountBean acc = new AccountBean();
+            acc.setId(Long.parseLong(1 + ""));
+            rec.setAccount(acc);
+
             rec.initStage(root);
 
             thisStage.close();

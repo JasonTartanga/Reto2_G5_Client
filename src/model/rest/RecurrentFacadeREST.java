@@ -5,10 +5,14 @@
  */
 package model.rest;
 
+import java.util.ResourceBundle;
+import javax.annotation.Resource;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import model.enums.Category;
+import model.enums.Period;
 import model.interfaces.RecurrentInterface;
 
 /**
@@ -28,7 +32,7 @@ public class RecurrentFacadeREST implements RecurrentInterface {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/Reto2_G5_Server/webresources";
+    private static final String BASE_URI = ResourceBundle.getBundle("resources.config").getString("BASE_URI");
 
     public RecurrentFacadeREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
@@ -46,17 +50,17 @@ public class RecurrentFacadeREST implements RecurrentInterface {
     }
 
     @Override
-    public void updateRecurrent_XML(Object requestEntity, String uuid) throws ClientErrorException {
+    public void updateRecurrent_XML(Object requestEntity, Long uuid) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{uuid})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
     @Override
-    public void updateRecurrent_JSON(Object requestEntity, String uuid) throws ClientErrorException {
+    public void updateRecurrent_JSON(Object requestEntity, Long uuid) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{uuid})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
     @Override
-    public void deleteRecurrent(String uuid) throws ClientErrorException {
+    public void deleteRecurrent(Long uuid) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{uuid})).request().delete();
     }
 
@@ -73,129 +77,122 @@ public class RecurrentFacadeREST implements RecurrentInterface {
     }
 
     @Override
-    public <T> T findRecurrent_XML(GenericType<T> responseType, String uuid) throws ClientErrorException {
+    public <T> T findRecurrent_XML(GenericType<T> responseType, Long uuid) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{uuid}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T findRecurrent_JSON(GenericType<T> responseType, String uuid) throws ClientErrorException {
+    public <T> T findRecurrent_JSON(GenericType<T> responseType, Long uuid) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{uuid}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
-    public <T> T findRecurrentsByAccount_XML(GenericType<T> responseType, String uuid) throws ClientErrorException {
+    public <T> T findRecurrentsByAccount_XML(GenericType<T> responseType, Long uuid) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("findRecurrentsByAccount/{0}", new Object[]{uuid}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T findRecurrentsByAccount_JSON(GenericType<T> responseType, String uuid) throws ClientErrorException {
+    public <T> T findRecurrentsByAccount_JSON(GenericType<T> responseType, Long uuid) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("findRecurrentsByAccount/{0}", new Object[]{uuid}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentsByName_XML(GenericType<T> responseType, String name, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsByName_XML(GenericType<T> responseType, String name, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsByName/{0}/{1}", new Object[]{name, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentsByName_JSON(GenericType<T> responseType, String name, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsByName_JSON(GenericType<T> responseType, String name, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsByName/{0}/{1}", new Object[]{name, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentsByConcept_XML(GenericType<T> responseType, String concept, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsByConcept_XML(GenericType<T> responseType, String concept, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsByConcept/{0}/{1}", new Object[]{concept, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentsByConcept_JSON(GenericType<T> responseType, String concept, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsByConcept_JSON(GenericType<T> responseType, String concept, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsByConcept/{0}/{1}", new Object[]{concept, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentsWithHigherAmount_XML(GenericType<T> responseType, String amount, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsWithHigherAmount_XML(GenericType<T> responseType, Float amount, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsWithHigherAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentsWithHigherAmount_JSON(GenericType<T> responseType, String amount, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsWithHigherAmount_JSON(GenericType<T> responseType, Float amount, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsWithHigherAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentsWithLowerAmount_XML(GenericType<T> responseType, String amount, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsWithLowerAmount_XML(GenericType<T> responseType, Float amount, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsWithLowerAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentsWithLowerAmount_JSON(GenericType<T> responseType, String amount, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsWithLowerAmount_JSON(GenericType<T> responseType, Float amount, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsWithLowerAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentByPeriodicity_XML(GenericType<T> responseType, String periodicity, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsByPeriodicity_XML(GenericType<T> responseType, Period periodicity, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsByPeriodicity/{0}/{1}", new Object[]{periodicity, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentByPeriodicity_JSON(GenericType<T> responseType, String periodicity, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsByPeriodicity_JSON(GenericType<T> responseType, Period periodicity, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsByPeriodicity/{0}/{1}", new Object[]{periodicity, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentByCategory_XML(GenericType<T> responseType, String category, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsByCategory_XML(GenericType<T> responseType, Category category, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsByCategory/{0}/{1}", new Object[]{category, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T filterRecurrentByCategory_JSON(GenericType<T> responseType, String category, String account_id) throws ClientErrorException {
+    public <T> T filterRecurrentsByCategory_JSON(GenericType<T> responseType, Category category, Long account_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterRecurrentsByCategory/{0}/{1}", new Object[]{category, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
-    public <T> T findExpensesByAccount_XML(GenericType<T> responseType, String uuid) throws ClientErrorException {
+    public <T> T countExpenses(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("findExpensesByAccount/{0}", new Object[]{uuid}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-    }
-
-    @Override
-    public <T> T findExpensesByAccount_JSON(GenericType<T> responseType, String uuid) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("findExpensesByAccount/{0}", new Object[]{uuid}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+        resource = resource.path(java.text.MessageFormat.format("countExpenses", new Object[]{}));
+        return resource.request().get(responseType);
     }
 
     public void close() {
