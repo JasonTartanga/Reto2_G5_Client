@@ -42,7 +42,9 @@ import model.entitys.RecurrentBean;
 import model.entitys.UserBean;
 import model.enums.Category;
 import model.enums.Period;
+import model.factory.AccountFactory;
 import model.factory.RecurrentFactory;
+import model.interfaces.AccountInterface;
 import model.interfaces.RecurrentInterface;
 
 /**
@@ -56,6 +58,7 @@ public class RecurrentController {
     private AccountBean account;
 
     private List<RecurrentBean> recurrentes;
+    private List<AccountBean> accountsUser;
 
     private RecurrentInterface rest = RecurrentFactory.getRecurrentREST();
     private static final Logger log = Logger.getLogger(RecurrentController.class.getName());
@@ -142,7 +145,7 @@ public class RecurrentController {
             btnSearch.setTooltip(new Tooltip("Buscar gastos recurrentes"));
 
             //El filtrado es mediante un ComboBox (cbAtribute) y podrá filtrarse por “Uuid/Nombre/ Concepto/ Importe/ Naturaleza/  Periodicidad”. Está visible y habilitado siempre .
-            cbAtribute.getItems().addAll("Uuid", "Nombre", "Concepto", "Importe", "Naturaleza", "Periodicidad");
+            cbAtribute.getItems().addAll("Sin Filtro", "Uuid", "Nombre", "Concepto", "Importe", "Naturaleza", "Periodicidad");
             cbAtribute.setOnAction(this::handleChangeFilter);
 
             //El otro ComboBox es de condición (cbCondition) y estará deshabilitado pero visible hasta que el usuario seleccione un dato en el ComboBox anterior
@@ -166,7 +169,6 @@ public class RecurrentController {
             tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
             tcName.setCellFactory(TextFieldTableCell.forTableColumn());
             tcName.setOnEditCommit(event -> {
-
                 RecurrentBean rec = event.getRowValue();
                 rec.setName(event.getNewValue());
                 rec.setAccount(account);
@@ -237,11 +239,21 @@ public class RecurrentController {
 
             log.addHandler(new FileHandler("recurrent.log"));
 
-            recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
-            }, account.getId());
+            //  recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
+            //  }, account.getId());
+            // handleRefreshTable(null);
+            //******************** ACCOUNTS ********************/
+            cbAccounts.setOnAction(this::setAccounts);
 
-            handleRefreshTable(null);
+            accountsUser = AccountFactory.getFactory().findAllAccountsByUser_XML(new GenericType<List<AccountBean>>() {
+            }, user.getMail());
 
+            for (AccountBean a : accountsUser) {
+                cbAccounts.getItems().add(a.getName());
+            }
+
+            cbAccounts.setValue(accountsUser.get(0).getName());
+            setAccounts(null);
             thisStage.show();
 
         } catch (IOException | SecurityException ex) {
@@ -292,9 +304,6 @@ public class RecurrentController {
     public void handleRefreshTable(ActionEvent event) {
         log.info("Recargando la tabla");
         try {
-            //   List<RecurrentBean> recurrentes = rest.listAllRecurrents_XML(new GenericType<List<RecurrentBean>>() {
-            //   });
-
             ObservableList<RecurrentBean> recurrentesList = FXCollections.observableArrayList(recurrentes);
             table.setItems(recurrentesList);
             table.refresh();
@@ -352,22 +361,32 @@ public class RecurrentController {
     public void handleChangeFilter(Event event) {
         try {
             log.info("Cambiado el filtro a -->" + cbAtribute.getValue().toString());
-            // List<RecurrentBean> recurrentes = null;
+            //  List<RecurrentBean> recurrentes = null;
 
             switch (cbAtribute.getValue().toString()) {
                 case "Sin Filtro":
-                    cbCondition.setDisable(false);
-                    tfSearch.setDisable(false);
-                    btnSearch.setDisable(false);
+                    cbCondition.setDisable(true);
+                    tfSearch.setDisable(true);
+                    btnSearch.setDisable(true);
 
                     recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
                     }, account.getId());
                     break;
+                case "Uuid":
+                    cbCondition.setDisable(true);
+                    tfSearch.setDisable(false);
+                    btnSearch.setDisable(false);
 
-                case "Por Nombre":
-                    cbCondition.setDisable(false);
-                    tfSearch.setDisable(true);
-                    btnSearch.setDisable(true);
+                    if (!tfSearch.getText().isEmpty()) {
+                        recurrentes = rest.findRecurrent_XML(new GenericType<List<RecurrentBean>>() {
+                        }, Long.parseLong(tfSearch.getText()));
+                    }
+                    break;
+
+                case "Nombre":
+                    cbCondition.setDisable(true);
+                    tfSearch.setDisable(false);
+                    btnSearch.setDisable(false);
 
                     if (!tfSearch.getText().isEmpty()) {
                         recurrentes = rest.filterRecurrentsByName_XML(new GenericType<List<RecurrentBean>>() {
@@ -375,10 +394,10 @@ public class RecurrentController {
                     }
                     break;
 
-                case "Por Concepto":
-                    cbCondition.setDisable(false);
-                    tfSearch.setDisable(true);
-                    btnSearch.setDisable(true);
+                case "Concepto":
+                    cbCondition.setDisable(true);
+                    tfSearch.setDisable(false);
+                    btnSearch.setDisable(false);
 
                     if (!tfSearch.getText().isEmpty()) {
                         recurrentes = rest.filterRecurrentsByConcept_XML(new GenericType<List<RecurrentBean>>() {
@@ -386,10 +405,10 @@ public class RecurrentController {
                     }
                     break;
 
-                case "Por Importe":
-                    cbCondition.setDisable(true);
-                    tfSearch.setDisable(true);
-                    btnSearch.setDisable(true);
+                case "Importe":
+                    cbCondition.setDisable(false);
+                    tfSearch.setDisable(false);
+                    btnSearch.setDisable(false);
 
                     cbCondition.getItems().setAll("Mayor que...", "Menor que...");
                     cbCondition.setPromptText("Rango...");
@@ -406,10 +425,10 @@ public class RecurrentController {
                     }
                     break;
 
-                case "Por Naturaleza":
-                    cbCondition.setDisable(true);
-                    tfSearch.setDisable(false);
-                    btnSearch.setDisable(true);
+                case "Naturaleza":
+                    cbCondition.setDisable(false);
+                    tfSearch.setDisable(true);
+                    btnSearch.setDisable(false);
 
                     cbCondition.getItems().setAll(FXCollections.observableArrayList(Category.values()));
                     cbCondition.setPromptText("Naturaleza...");
@@ -420,10 +439,10 @@ public class RecurrentController {
                     }
                     break;
 
-                case "Por Periodicidad":
-                    cbCondition.setDisable(true);
-                    tfSearch.setDisable(false);
-                    btnSearch.setDisable(true);
+                case "Periodicidad":
+                    cbCondition.setDisable(false);
+                    tfSearch.setDisable(true);
+                    btnSearch.setDisable(false);
 
                     cbCondition.getItems().setAll(FXCollections.observableArrayList(Period.values()));
                     cbCondition.setPromptText("Periodicidad...");
@@ -437,7 +456,7 @@ public class RecurrentController {
 
             this.handleRefreshTable(null);
             tfSearch.setText("");
-            cbAtribute.setValue(null);
+            cbCondition.setValue(null);
         } catch (Exception ex) {
             new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK).showAndWait();
         }
@@ -479,5 +498,24 @@ public class RecurrentController {
 
     public void setAccount(AccountBean account) {
         this.account = account;
+    }
+
+    protected void setAccounts(Event event) {
+        try {
+            log.info("Cargando las cuentas.");
+
+            for (AccountBean account : accountsUser) {
+                if (account.getName().equalsIgnoreCase(cbAccounts.getValue().toString())) {
+                    this.account = account;
+                }
+            }
+            recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
+            }, account.getId());
+
+            this.handleRefreshTable(null);
+//            cargarGraficos(null);
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK).showAndWait();
+        }
     }
 }
