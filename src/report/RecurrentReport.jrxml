@@ -1,91 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d549893d-cba8-426c-95ae-22f4b0be40b3">
-	<property name="ireport.zoom" value="2.1435888100000016"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="50ab64c0-0f25-4308-b9dc-0b23267febd8">
+	<property name="ireport.zoom" value="1.771561000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
-	<field name="descripcion" class="java.lang.String"/>
-	<field name="duracion" class="java.lang.Integer"/>
-	<field name="fechaPeriod" class="java.util.Date"/>
-	<field name="intensidad" class="java.lang.Integer"/>
-	<field name="repeticion" class="java.lang.Integer"/>
-	<field name="objetivo" class="java.lang.Object"/>
-	<background>
+	<property name="ireport.y" value="461"/>
+        <field name="uuid" class="java.lang.Long"/>
+        <field name="name" class="java.lang.String"/>
+        <field name="concept" class="java.lang.String"/>
+        <field name="amount" class="java.lang.Float"/>
+        <field name="date" class="java.util.Date"/>
+        <field name="category" class="model.enums.Category"/>
+        <field name="periodicity" class="model.enums.Period"/>
+	
+        <background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
-			<staticText>
-				<reportElement x="131" y="15" width="289" height="64" uuid="21b71fc0-5302-424e-9ab0-539409f2e6cf"/>
+		<band height="35" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="466" y="0" width="89" height="14" uuid="184ab19e-e06d-4e1e-96e3-736443872e7e"/>
 				<textElement>
-					<font size="36"/>
+					<font size="10"/>
 				</textElement>
-				<text><![CDATA[Gasto Recurrente]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch"/>
+		<band height="80" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="79" uuid="d4fb4118-c293-48c2-afc2-0473f653e733"/>
+				<textElement textAlignment="Center">
+					<font size="36"/>
+				</textElement>
+				<text><![CDATA[GASTOS RECURRENTES]]></text>
+			</staticText>
+		</band>
 	</pageHeader>
 	<columnHeader>
 		<band height="61" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="59" height="61" uuid="9d620370-6cd7-4941-a8ca-d5aba638ccfa"/>
-				<text><![CDATA[Uuid]]></text>
+				<reportElement x="0" y="20" width="50" height="41" uuid="e5d2ddd1-d8ac-4cb9-86b7-775dc8077cdd"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[UUID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="59" y="0" width="75" height="61" uuid="a9cbbf54-f5ff-4543-861f-f8bb1a4d3e29"/>
+				<reportElement x="50" y="20" width="105" height="41" uuid="407e1c85-f1a3-41ac-9fc8-7cd57744f9c2"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="134" y="0" width="127" height="61" uuid="06f902d3-1e35-4962-b6c0-81ad3fb7758d"/>
+				<reportElement x="155" y="20" width="127" height="41" uuid="b891cb96-e514-4052-a118-e592c8ba79b9"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
 				<text><![CDATA[Concepto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="261" y="0" width="49" height="61" uuid="d696335d-5c85-48cb-84b3-461c8c4748ca"/>
+				<reportElement x="282" y="20" width="55" height="41" uuid="7fc658dd-236b-47f8-af20-a78fd08ace1c"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
 				<text><![CDATA[Importe]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="310" y="0" width="74" height="61" uuid="ad3007d3-6929-42c2-88a0-6ca2f44652da"/>
-				<text><![CDATA[Fecha]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="384" y="0" width="86" height="61" uuid="79be9c28-a236-4236-8542-a6c199777f45"/>
+				<reportElement x="399" y="20" width="78" height="41" uuid="74434ac6-4f67-4240-b630-0bedb5ec3aad"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
 				<text><![CDATA[Naturaleza]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="470" y="0" width="86" height="61" uuid="84961597-1b50-4b1d-8fea-e7d67b5cab62"/>
+				<reportElement x="477" y="20" width="78" height="41" uuid="e05e3ba9-7565-497d-a2c2-78312a3dbf55"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
 				<text><![CDATA[Periodicidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="337" y="20" width="62" height="41" uuid="0ede6602-7906-40f2-8bd4-1e9340ebff0f"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="125" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="59" height="61" uuid="fe9078a9-0445-49dc-ac94-a67f4945ef93"/>
+				<reportElement x="0" y="0" width="50" height="16" uuid="4cb77b67-6d3c-47db-b418-e142d30246d0"/>
 				<textFieldExpression><![CDATA[$F{uuid}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="134" y="0" width="127" height="61" uuid="ea864fcd-da0a-461a-b8b9-4a8857d3cca9"/>
-				<textFieldExpression><![CDATA[$F{concept}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="60" y="0" width="74" height="61" uuid="471d16c8-637b-4631-a1b1-a053845a6fed"/>
+				<reportElement x="50" y="0" width="105" height="16" uuid="71197a03-c84a-48e2-bf05-32e4f13512fd"/>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="261" y="0" width="49" height="61" uuid="09c9a731-0eab-4b84-a161-1a2c2d45564b"/>
+				<reportElement x="155" y="0" width="127" height="16" uuid="5f978d5f-6cf1-4518-9602-04eb241a421a"/>
+				<textFieldExpression><![CDATA[$F{concept}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="282" y="0" width="55" height="16" uuid="7abd830c-946d-40e7-adbb-5a90e37ce26d"/>
 				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="310" y="0" width="74" height="61" uuid="d942b664-73b0-43b1-8582-9d18f09ca34f"/>
+				<reportElement x="337" y="0" width="62" height="16" uuid="01cafbaf-3ef0-427f-bcf9-56bd4975c462"/>
 				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="384" y="0" width="86" height="61" uuid="83bcbf28-5edd-487b-ba50-132da35276df"/>
+				<reportElement x="399" y="0" width="78" height="16" uuid="52212786-925f-48f0-8afb-b88eea27ed11"/>
 				<textFieldExpression><![CDATA[$F{category}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="469" y="0" width="86" height="61" uuid="582597fc-ef8e-4bc8-a8d9-0674aea207a3"/>
+				<reportElement x="477" y="0" width="78" height="16" uuid="b1a78cee-33ca-42a9-b720-6e6cc3471acd"/>
 				<textFieldExpression><![CDATA[$F{periodicity}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -94,9 +125,20 @@
 		<band height="45" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="54" splitType="Stretch"/>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="34" width="555" height="20" uuid="50479cf6-32b8-4fca-9c80-6e65cfe8f101"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="42" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="608" y="22" width="40" height="20" uuid="4893f7ae-6587-42d6-b372-f88c4556235e"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
 	</summary>
 </jasperReport>

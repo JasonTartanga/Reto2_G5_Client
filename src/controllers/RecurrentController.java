@@ -356,12 +356,22 @@ public class RecurrentController {
             JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<RecurrentBean>) this.table.getItems());
 
             Map<String, Object> parameters = new HashMap<>();
+            //parameters.put("ItemDataSource", dataItems);
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, dataItems);
 
             JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
             jasperViewer.setVisible(true);
 
+            /*
+             * <field name="uuid" class="java.lang.Long"/>
+             * <field name="name" class="java.lang.String"/>
+             * <field name="concept" class="java.lang.String"/>
+             * <field name="amount" class="java.lang.Float"/>
+             * <field name="date" class="java.util.Date"/>
+             * <field name="category" class="model.enums.Category"/>
+             * <field name="periodicity" class="model.enums.Period"/>
+             */
         } catch (JRException e) {
             new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
             log.severe(e.getMessage());
@@ -428,8 +438,7 @@ public class RecurrentController {
                     break;
             }
 
-            this.handleRefreshTable(event);
-
+            //this.handleRefreshTable(event);
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
             log.severe(e.getMessage());
