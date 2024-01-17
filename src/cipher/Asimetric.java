@@ -16,6 +16,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.MessageDigest;
 import java.math.BigInteger;
+import javax.xml.bind.DatatypeConverter;
 
 public class Asimetric {
 
@@ -41,12 +42,12 @@ public class Asimetric {
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             byte[] encryptedData = cipher.doFinal(passwd.getBytes());
 
-            log.info("Contraseña cifrada --> " + cipherPasswd);
+            log.info("encriptedData --> " + encryptedData);
             //La convertimos en String y le damos la posiblidad de viajar mediante HTTP
             //cipherPasswd = Base64.getEncoder().encodeToString(encryptedData);
             //log.info("passwd cifrada sin URL --> " + cipherPasswd);
             //cipherPasswd = URLEncoder.encode(cipherPasswd, "UTF-8");
-            cipherPasswd = calculateMD5(encryptedData);
+            cipherPasswd = DatatypeConverter.printHexBinary(encryptedData);
             log.info("Contraseña cifrada --> " + cipherPasswd);
 
         } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
@@ -61,25 +62,19 @@ public class Asimetric {
         return cipherPasswd;
     }
 
-    private static String calculateMD5(byte[] byteArray) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(byteArray);
-            byte[] digest = md.digest();
+    public static String bytesToHex(byte[] bytes) {
+        // Convierte el arreglo de bytes a un objeto BigInteger
+        BigInteger bigInt = new BigInteger(1, bytes);
 
-            // Convertir el array de bytes a una representación hexadecimal
-            BigInteger bigInt = new BigInteger(1, digest);
-            String md5Hash = bigInt.toString(16);
+        // Convierte el BigInteger a una cadena hexadecimal
+        String hexString = bigInt.toString(16);
 
-            // Asegurarse de que la cadena tenga 32 caracteres
-            while (md5Hash.length() < 32) {
-                md5Hash = "0" + md5Hash;
-            }
-
-            return md5Hash;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        // Asegura que la cadena tenga la longitud adecuada
+        int paddingLength = (bytes.length * 2) - hexString.length();
+        if (paddingLength > 0) {
+            return String.format("%0" + paddingLength + "d", 0) + hexString;
+        } else {
+            return hexString;
         }
     }
 }

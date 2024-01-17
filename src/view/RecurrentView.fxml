@@ -94,7 +94,7 @@
          <graphic>
             <ImageView fx:id="imgSwitch" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../resources/img/cambiar.png" />
+                  <Image url="@../resources/img/switch.png" />
                </image>
             </ImageView>
          </graphic>

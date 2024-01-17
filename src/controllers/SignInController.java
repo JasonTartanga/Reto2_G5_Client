@@ -228,8 +228,8 @@ public class SignInController {
 
             UserBean user = new UserBean();
             user.setMail(txtEmail.getText().toLowerCase());
-            //user.setPassword(Asimetric.cipherPassword(txtPasswd.getText()));
-            user.setPassword(txtPasswd.getText());
+            user.setPassword(Asimetric.cipherPassword(txtPasswd.getText()));
+            //user.setPassword(txtPasswd.getText());
 
             UserInterface ui = UserFactory.getFactory();
             ui.loginUser_XML(new GenericType<UserBean>() {
