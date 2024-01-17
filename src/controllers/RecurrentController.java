@@ -17,6 +17,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -25,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -68,8 +70,6 @@ public class RecurrentController {
     private List<RecurrentBean> recurrentes;
     private List<AccountBean> accountsUser;
 
-    private String request = "Sin Filtro";
-
     private RecurrentInterface rest = RecurrentFactory.getRecurrentREST();
     private static final Logger log = Logger.getLogger(RecurrentController.class.getName());
 
@@ -104,6 +104,12 @@ public class RecurrentController {
     private MenuBar menuBar;
     @FXML
     private MenuItem miCreate, miDelete, miRefresh, miReport;
+
+    @FXML
+    private PieChart pieCategory, piePeriodicity;
+
+    @FXML
+    private Tab tabRecurrentes, tabGraficos;
 
     public void initStage(Parent root) {
         try {
@@ -155,7 +161,7 @@ public class RecurrentController {
             btnSearch.setTooltip(new Tooltip("Buscar gastos recurrentes"));
 
             //El filtrado es mediante un ComboBox (cbAtribute) y podrá filtrarse por “Uuid/Nombre/ Concepto/ Importe/ Naturaleza/  Periodicidad”. Está visible y habilitado siempre .
-            cbAtribute.getItems().addAll("Sin Filtro", "Uuid", "Nombre", "Concepto", "Importe", "Naturaleza", "Periodicidad");
+            cbAtribute.getItems().addAll("Uuid", "Nombre", "Concepto", "Importe", "Naturaleza", "Periodicidad");
             cbAtribute.setOnAction(this::handleChangeFilter);
 
             //El otro ComboBox es de condición (cbCondition) y estará deshabilitado pero visible hasta que el usuario seleccione un dato en el ComboBox anterior
@@ -247,6 +253,7 @@ public class RecurrentController {
             miRefresh.setOnAction(this::handleRefreshTable);
             miReport.setOnAction(this::handleGenerateReport);
 
+            tabGraficos.setOnSelectionChanged(this::handleLoadGraphics);
             log.addHandler(new FileHandler("recurrent.log"));
 
             //  recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
@@ -273,6 +280,9 @@ public class RecurrentController {
     }
 
     public void handleCreateRecurrent(ActionEvent event) {
+        //Creará una nueva fila en el TableView con datos nulos excepto el id que se autogeneran.
+        //Creará un nuevo grupo en la base de datos.
+
         log.info("Creando un gasto recurrente");
         try {
             Long uuid = rest.countExpenses(new GenericType<Long>() {
@@ -286,6 +296,7 @@ public class RecurrentController {
             table.refresh();
 
         } catch (Exception e) {
+            //En caso de error, saldrá una ventana informativa.
             new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
             log.severe(e.getLocalizedMessage());
             e.printStackTrace();
@@ -293,6 +304,9 @@ public class RecurrentController {
     }
 
     public void handleDeleteRecurrent(ActionEvent event) {
+        //Para eliminar, haremos click en la TableView (table) sobre uno o varios accounts que queramos eliminar y clickeamos en el botón de eliminar de la parte superior de la ventana.
+        //Validar que los campos no contienen datos y que en la TableView (table) se ha eliminado correctamente.
+
         log.info("Eliminando uno o varios gastos recurrentes");
         try {
             List<RecurrentBean> recurrents = table.getSelectionModel().getSelectedItems();
@@ -300,11 +314,13 @@ public class RecurrentController {
             for (RecurrentBean r : recurrents) {
                 System.out.println(r.toString());
                 rest.deleteRecurrent(r.getUuid());
+                table.getItems().remove(r);
             }
 
-            this.handleRefreshTable(event);
+            table.refresh();
 
         } catch (Exception e) {
+            //En caso de error saldrá una ventana informativa.
             new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
             log.severe(e.getMessage());
             e.printStackTrace();
@@ -312,13 +328,17 @@ public class RecurrentController {
     }
 
     public void handleRefreshTable(ActionEvent event) {
-        log.info("Recargando la tabla");
         try {
-            this.handleSearch(event);
+            log.info("Recargando la tabla");
+
+            recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
+            }, account.getId());
 
             ObservableList<RecurrentBean> recurrentesList = FXCollections.observableArrayList(recurrentes);
             table.setItems(recurrentesList);
             table.refresh();
+
+            this.handleLoadGraphics(event);
 
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
@@ -380,15 +400,10 @@ public class RecurrentController {
     }
 
     public void handleSearch(ActionEvent event) {
-        log.info("Buscando gasto recurrente");
+        log.info("Buscando gasto recurrente con el siguiente filtro --> " + cbAtribute.getValue().toString());
 
         try {
-            switch (request) {
-                case "Sin Filto":
-                    recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
-                    }, account.getId());
-                    break;
-
+            switch (cbAtribute.getValue().toString()) {
                 case "Uuid":
                     if (validateUuid(tfSearch.getText())) {
                         recurrentes = rest.findRecurrent_XML(new GenericType<List<RecurrentBean>>() {
@@ -437,13 +452,76 @@ public class RecurrentController {
                     }
                     break;
             }
+            ObservableList<RecurrentBean> recurrentesList = FXCollections.observableArrayList(recurrentes);
+            table.setItems(recurrentesList);
+            table.refresh();
 
-            //this.handleRefreshTable(event);
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
             log.severe(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleLoadGraphics(Event event) {
+        try {
+            log.info("Cargando graficos.");
+
+            List<RecurrentBean> recurentes = rest.findRecurrentsByAccount_XML(new GenericType< List<RecurrentBean>>() {
+            }, account.getId());
+
+            Map<Category, Integer> categories = this.getCategoryDataGraphic(recurentes);
+            Map<Period, Integer> periodicities = this.getPeriodDataGraphic(recurentes);
+
+            ObservableList<PieChart.Data> categoryData = FXCollections.observableArrayList();
+            ObservableList<PieChart.Data> periodData = FXCollections.observableArrayList();
+
+            for (Map.Entry<Category, Integer> c : categories.entrySet()) {
+                categoryData.add(new PieChart.Data(c.getKey() + "", c.getValue()));
+            }
+            for (Map.Entry<Period, Integer> p : periodicities.entrySet()) {
+                periodData.add(new PieChart.Data(p.getKey() + "", p.getValue()));
+            }
+
+            pieCategory.getData().clear();
+            pieCategory.getData().addAll(categoryData);
+            piePeriodicity.getData().clear();
+            piePeriodicity.getData().addAll(periodData);
+
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK).showAndWait();
+        }
+    }
+
+    private Map<Category, Integer> getCategoryDataGraphic(List<RecurrentBean> recurrentAccount) {
+        Map<Category, Integer> categories = new HashMap();
+
+        for (RecurrentBean r : recurrentAccount) {
+            if (!categories.containsKey(r.getCategory())) {
+                categories.put(r.getCategory(), 1);
+            } else {
+                int i = categories.get(r.getCategory()) + 1;
+                categories.replace(r.getCategory(), i);
+            }
+        }
+
+        return categories;
+    }
+
+    private Map<Period, Integer> getPeriodDataGraphic(List<RecurrentBean> recurrentAccount) {
+        Map<Period, Integer> categories = new HashMap();
+
+        for (RecurrentBean r : recurrentAccount) {
+            if (!categories.containsKey(r.getPeriodicity())) {
+                categories.put(r.getPeriodicity(), 1);
+            } else {
+                int i = categories.get(r.getPeriodicity()) + 1;
+                categories.replace(r.getPeriodicity(), i);
+            }
+        }
+
+        return categories;
     }
 
     public void handleChangeFilter(Event event) {
@@ -456,28 +534,32 @@ public class RecurrentController {
                     cbCondition.setDisable(true);
                     tfSearch.setDisable(true);
                     btnSearch.setDisable(false);
-                    request = "Sin Filtro";
+                    cbCondition.setPromptText("Condicion");
+                    tfSearch.setText("");
                     break;
 
                 case "Uuid":
                     cbCondition.setDisable(true);
                     tfSearch.setDisable(false);
                     btnSearch.setDisable(false);
-                    request = "Uuid";
+                    cbCondition.setPromptText("Condicion");
+                    tfSearch.setText("");
                     break;
 
                 case "Nombre":
                     cbCondition.setDisable(true);
                     tfSearch.setDisable(false);
                     btnSearch.setDisable(false);
-                    request = "Nombre";
+                    cbCondition.setPromptText("Condicion");
+                    tfSearch.setText("");
                     break;
 
                 case "Concepto":
                     cbCondition.setDisable(true);
                     tfSearch.setDisable(false);
                     btnSearch.setDisable(false);
-                    request = "Concepto";
+                    cbCondition.setPromptText("Condicion");
+                    tfSearch.setText("");
                     break;
 
                 case "Importe":
@@ -486,24 +568,25 @@ public class RecurrentController {
                     btnSearch.setDisable(false);
                     cbCondition.getItems().setAll("Mayor que...", "Menor que...");
                     cbCondition.setPromptText("Rango...");
+                    tfSearch.setText("");
                     break;
 
                 case "Naturaleza":
                     cbCondition.setDisable(false);
                     tfSearch.setDisable(true);
                     btnSearch.setDisable(false);
-                    request = "Naturaleza";
                     cbCondition.getItems().setAll(FXCollections.observableArrayList(Category.values()));
                     cbCondition.setPromptText("Naturaleza...");
+                    tfSearch.setText("");
                     break;
 
                 case "Periodicidad":
                     cbCondition.setDisable(false);
                     tfSearch.setDisable(true);
                     btnSearch.setDisable(false);
-                    request = "Periodicidad";
                     cbCondition.getItems().setAll(FXCollections.observableArrayList(Period.values()));
                     cbCondition.setPromptText("Periodicidad...");
+                    tfSearch.setText("");
                     break;
 
                 default:

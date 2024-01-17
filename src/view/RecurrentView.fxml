@@ -134,7 +134,7 @@
          </graphic></Button>
       <TabPane fx:id="tabPane" layoutX="50.0" layoutY="114.0" prefHeight="578.0" prefWidth="1180.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
-            <Tab fx:id="tabPuntuales" text="Gastos Recurrentes">
+            <Tab fx:id="tabRecurrentes" text="Gastos Recurrentes">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="528.0" prefWidth="1180.0">
                      <children>
@@ -169,7 +169,7 @@
                   </AnchorPane>
                </content>
             </Tab>
-            <Tab fx:id="tabSelect" text="Graficos">
+            <Tab fx:id="tabGraficos" text="Graficos">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="410.0" prefWidth="960.0">
                      <children>
