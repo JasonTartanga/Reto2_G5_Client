@@ -296,28 +296,28 @@ public class AccountController {
     //Se eliminarán los gastos y si sucede algún error, saldrá un mensaje de error. Para ello usaremos la excepción (DeleteException).
     //Seguido, saldrá del método del botón.
     
-    @FXML
-    private void handleEliminarButtonAction(ActionEvent event) {
-        AccountBean selectedAccount = (AccountBean) table.getSelectionModel().getSelectedItem();
-
-        try {
-            try {
-                aInterface.deleteAccount(selectedAccount.getId().toString());
-
-                table.getItems().remove(selectedAccount);
-
-                throw new Exception("EL GRUPO DE GASTOS SE HA ELIMINADO CORRECTAMENTE");
-
-            } catch (Exception e) {
-                new Alert(Alert.AlertType.INFORMATION, e.getMessage()).showAndWait();
-
-            }
-
-        } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
-        }
-
-    }
+//    @FXML
+//    private void handleEliminarButtonAction(ActionEvent event) {
+//        AccountBean selectedAccount = (AccountBean) table.getSelectionModel().getSelectedItem();
+//
+//        try {
+//            try {
+//                aInterface.deleteAccount(selectedAccount.getId().toString());
+//
+//                table.getItems().remove(selectedAccount);
+//
+//                throw new Exception("EL GRUPO DE GASTOS SE HA ELIMINADO CORRECTAMENTE");
+//
+//            } catch (Exception e) {
+//                new Alert(Alert.AlertType.INFORMATION, e.getMessage()).showAndWait();
+//
+//            }
+//
+//        } catch (Exception e) {
+//            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+//        }
+//
+//    }
 
 
     //BTN ACTUALIZAR: Al pulsar el botón volverá a cargar la tabla con los datos actualizados.
