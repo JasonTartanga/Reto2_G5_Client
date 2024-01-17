@@ -1,5 +1,6 @@
 package model.entitys;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javafx.beans.property.SimpleFloatProperty;
@@ -13,7 +14,7 @@ import model.enums.Plan;
  * 
  * @author Jessica.
  */
-public class AccountBean {
+public class AccountBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

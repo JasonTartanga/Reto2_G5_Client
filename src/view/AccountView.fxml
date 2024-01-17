@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="fondoAccount" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="fondoAccount" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AccountController">
    <children>
       <HBox id="hBox" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="1280.0">
          <children>
@@ -137,7 +137,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <ComboBox fx:id="cbAttribute" layoutX="646.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" promptText="Atributo" styleClass="textField" />
+      <ComboBox fx:id="cbAtribute" layoutX="646.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" promptText="Atributo" styleClass="textField" />
       <ComboBox fx:id="cbCondition" layoutX="821.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" promptText="Condicion" styleClass="textField" />
       <TextField fx:id="tfSearch" layoutX="996.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" styleClass="textField" />
       <Button fx:id="btnSearch" layoutX="1171.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
