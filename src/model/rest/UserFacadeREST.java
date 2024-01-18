@@ -82,7 +82,6 @@ public class UserFacadeREST implements UserInterface {
     public <T> T loginUser_XML(GenericType<T> responseType, String mail, String passwd) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("login/{0}/{1}", new Object[]{mail, passwd}));
-        System.out.println("webTarget --> " + resource.getUri());
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 

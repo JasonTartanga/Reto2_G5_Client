@@ -211,7 +211,7 @@ public class RecurrentController {
 
             //La columna de “tcFecha” está formada por una DatePicker y es editable.
             tcDate.setCellValueFactory(new PropertyValueFactory<>("date"));
-            tcDate.setCellFactory(TextFieldTableCell.forTableColumn(new DateStringConverter()));
+            tcDate.setCellFactory(param -> new DatePickerCellRecurrent());
             tcDate.setOnEditCommit(event -> {
                 RecurrentBean rec = event.getRowValue();
                 rec.setDate(event.getNewValue());

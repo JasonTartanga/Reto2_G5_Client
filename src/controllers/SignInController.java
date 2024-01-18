@@ -4,6 +4,7 @@ import cipher.Asimetric;
 import exceptions.CredentialErrorException;
 import exceptions.ServerErrorException;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +30,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
 import model.entitys.UserBean;
@@ -248,25 +250,26 @@ public class SignInController {
 
             rec.initStage(root);
 
+            FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/view/RecurrentView.fxml"));
+            MenuBarController menu = loader2.getController();
+            menu.menu.setUser(user);
+
             thisStage.close();
-        } catch (InternalServerErrorException e) {
+            /* } catch (InternalServerErrorException e) {
             if (e.getClass().equals(javax.ws.rs.InternalServerErrorException.class)) {
                 new Alert(Alert.AlertType.ERROR, "No se ha encontrado un usuario con esas credenciales", ButtonType.OK).showAndWait();
             }
 
-            e.printStackTrace();
+             e.printStackTrace(); */
+        } catch (ProcessingException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido conectar con el servidor", ButtonType.OK);
+            alert.setHeaderText(null);
+            alert.showAndWait();
         } catch (CredentialErrorException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
             alert.setHeaderText(null);
             alert.showAndWait();
-
-        } catch (ServerErrorException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
-            alert.setHeaderText(null);
-            alert.showAndWait();
-
         } catch (Exception e) {
-            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
             alert.setHeaderText(null);
             alert.showAndWait();
