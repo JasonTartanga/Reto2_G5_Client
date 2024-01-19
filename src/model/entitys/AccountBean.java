@@ -41,7 +41,12 @@ public class AccountBean implements Serializable {
         this.plan = new SimpleObjectProperty<>(plan);
     }
    
+     public AccountBean() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
  //******************** GETTERS && SETTERS *********************/
+
+   
    
 
     public Long getId() {

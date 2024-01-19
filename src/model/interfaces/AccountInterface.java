@@ -8,6 +8,7 @@ package model.interfaces;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import model.enums.Plan;
 
 /**
  * Interface de Account
@@ -25,14 +26,14 @@ public interface AccountInterface {
     public void updateAccount_JSON(Object requestEntity) throws ClientErrorException;
     
     
-    public <T> T filterAccountsWithLowerBalance_XML(GenericType<T> responseType, String balance) throws ClientErrorException ;
+    public <T> T filterAccountsWithLowerBalance_XML(GenericType<T> responseType, Float balance) throws ClientErrorException ;
 
-    public <T> T filterAccountsWithLowerBalance_JSON(GenericType<T> responseType, String balance) throws ClientErrorException;
+    public <T> T filterAccountsWithLowerBalance_JSON(GenericType<T> responseType, Float balance) throws ClientErrorException;
 
     
-    public <T> T find_XML(GenericType<T> responseType, String id) throws ClientErrorException;
+    public <T> T find_XML(GenericType<T> responseType, Long id) throws ClientErrorException;
 
-    public <T> T find_JSON(GenericType<T> responseType, String id) throws ClientErrorException ;
+    public <T> T find_JSON(GenericType<T> responseType, Long id) throws ClientErrorException ;
 
     
     public <T> T viewAllAccounts_XML(GenericType<T> responseType) throws ClientErrorException ;
@@ -49,6 +50,9 @@ public interface AccountInterface {
    
     public <T> T filterAccountsByDivisa_JSON(GenericType<T> responseType, String divisa) throws ClientErrorException;
     
+    public <T> T filterAccountsByPlan_XML(GenericType<T> responseType, Plan plan) throws ClientErrorException;
+     
+    public <T> T filterAccountsByPlan_JSON(GenericType<T> responseType, Plan plan) throws ClientErrorException;
    
     public <T> T findAllAccountsByUser_XML(GenericType<T> responseType, String mail) throws ClientErrorException;
 
@@ -60,12 +64,12 @@ public interface AccountInterface {
     public <T> T filterAccountsByDescription_JSON(GenericType<T> responseType, String description) throws ClientErrorException;
     
     
-    public <T> T filterAccountsWithHigherBalance_XML(GenericType<T> responseType, String balance) throws ClientErrorException;
+    public <T> T filterAccountsWithHigherBalance_XML(GenericType<T> responseType, Float balance) throws ClientErrorException;
     
-    public <T> T filterAccountsWithHigherBalance_JSON(GenericType<T> responseType, String balance) throws ClientErrorException;
+    public <T> T filterAccountsWithHigherBalance_JSON(GenericType<T> responseType, Float balance) throws ClientErrorException;
    
     
-    public void deleteAccount(String id) throws ClientErrorException;
+    public void deleteAccount(Long id) throws ClientErrorException;
    
 
    
