@@ -1,5 +1,6 @@
 package controllers;
 
+import cipher.Asimetric;
 import controllers.SignInController;
 import exceptions.WrongPasswordException;
 import java.io.IOException;
@@ -28,6 +29,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.entitys.UserBean;
+import model.enums.Privileges;
+import model.factory.UserFactory;
+import model.interfaces.UserInterface;
 
 /**
  * Este es el controlador de la ventana de Sign Up.
@@ -298,12 +302,15 @@ public class SignUpController {
                     txtEmail.getText().toLowerCase(),
                     txtNombre.getText(),
                     txtDireccion.getText(),
-                    txtPasswd.getText(),
+                    Asimetric.cipherPassword(txtPasswd.getText()),
                     Integer.parseInt(txtTelefono.getText()),
-                    Integer.parseInt(txtCodPostal.getText())
+                    Integer.parseInt(txtCodPostal.getText()),
+                    Privileges.CLIENT
             );
 
-            LOGGER.info("Creando socket y pedir SIGN UP");
+            LOGGER.info("Llamando al UserFacadeREST y pedir SIGN UP");
+            UserInterface uInterface = UserFactory.getFactory();
+            uInterface.createUser_XML(user);
             // ClientSocket cs = SocketFactory.getSocket();
             // cs.getExecuteSignUp(user);
 

@@ -1,7 +1,7 @@
 package model.factory;
 
 import model.interfaces.RecurrentInterface;
-import model.rest.RecurrentFacadeREST;
+import model.rest.RecurrentRESTCliente;
 
 /**
  *
@@ -10,6 +10,6 @@ import model.rest.RecurrentFacadeREST;
 public class RecurrentFactory {
 
     public static RecurrentInterface getRecurrentREST() {
-        return new RecurrentFacadeREST();
+        return new RecurrentRESTCliente();
     }
 }

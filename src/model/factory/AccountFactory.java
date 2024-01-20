@@ -6,7 +6,7 @@
 package model.factory;
 
 import model.interfaces.AccountInterface;
-import model.rest.AccountRESTClient;
+import model.rest.AccountRESTCliente;
 
 /**
  * Factoria de Account
@@ -16,7 +16,7 @@ import model.rest.AccountRESTClient;
 public class AccountFactory {
 
     public static AccountInterface getFactory() {
-        return new AccountRESTClient();
+        return new AccountRESTCliente();
     }
 
 }

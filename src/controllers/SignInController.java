@@ -238,38 +238,25 @@ public class SignInController {
             }, user.getMail(), user.getPassword());
 
             //********** CAMBIAR VENTANAS A LA DE CADA UNO **********/
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RecurrentView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
             Parent root = loader.load();
-            RecurrentController rec = loader.getController();
-            rec.setStage(thisStage);
-            rec.setUser(user);
+            AccountController acc = loader.getController();
+            acc.setStage(thisStage);
+            acc.setUser(user);
+            acc.initStage(root);
 
-            AccountBean acc = new AccountBean();
-            acc.setId(Long.parseLong(1 + ""));
-            rec.setAccount(acc);
-
-            rec.initStage(root);
-
-            FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/view/RecurrentView.fxml"));
-            MenuBarController menu = loader2.getController();
-            menu.menu.setUser(user);
-
-            thisStage.close();
-            /* } catch (InternalServerErrorException e) {
-            if (e.getClass().equals(javax.ws.rs.InternalServerErrorException.class)) {
-                new Alert(Alert.AlertType.ERROR, "No se ha encontrado un usuario con esas credenciales", ButtonType.OK).showAndWait();
-            }
-
-             e.printStackTrace(); */
         } catch (ProcessingException e) {
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido conectar con el servidor", ButtonType.OK);
             alert.setHeaderText(null);
             alert.showAndWait();
         } catch (CredentialErrorException e) {
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
             alert.setHeaderText(null);
             alert.showAndWait();
         } catch (Exception e) {
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
             alert.setHeaderText(null);
             alert.showAndWait();

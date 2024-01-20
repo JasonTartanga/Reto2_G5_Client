@@ -2,8 +2,10 @@ package model.entitys;
 
 import java.io.Serializable;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
+import model.enums.Privileges;
 
 /**
  * Es el bean de la entidad Expense.
@@ -22,6 +24,7 @@ public class UserBean implements Serializable {
     private final SimpleStringProperty password;
     private final SimpleIntegerProperty phone;
     private final SimpleIntegerProperty zip;
+    private final SimpleObjectProperty<Privileges> privileges;
 
     public UserBean() {
         this.mail = new SimpleStringProperty();
@@ -30,15 +33,17 @@ public class UserBean implements Serializable {
         this.password = new SimpleStringProperty();
         this.phone = new SimpleIntegerProperty();
         this.zip = new SimpleIntegerProperty();
+        this.privileges = new SimpleObjectProperty();
     }
 
-    public UserBean(String mail, String name, String address, String password, Integer phone, Integer zip) {
+    public UserBean(String mail, String name, String address, String password, Integer phone, Integer zip, Privileges privilege) {
         this.mail = new SimpleStringProperty(mail);
         this.name = new SimpleStringProperty(name);
         this.address = new SimpleStringProperty(address);
         this.password = new SimpleStringProperty(password);
         this.phone = new SimpleIntegerProperty(phone);
         this.zip = new SimpleIntegerProperty(zip);
+        this.privileges = new SimpleObjectProperty(privilege);
     }
 
     //******************** GETTERS && SETTERS *********************/
@@ -88,6 +93,14 @@ public class UserBean implements Serializable {
 
     public void setZip(Integer zip) {
         this.zip.set(zip);
+    }
+
+    public Privileges getPrivileges() {
+        return this.privileges.get();
+    }
+
+    public void setPrivileges(Privileges privileges) {
+        this.privileges.set(privileges);
     }
 
     //******************** METODOS *********************/

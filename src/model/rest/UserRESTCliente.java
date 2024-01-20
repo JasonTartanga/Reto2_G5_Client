@@ -26,15 +26,15 @@ import model.interfaces.UserInterface;
  *
  * @author Jason.
  */
-public class UserFacadeREST implements UserInterface {
+public class UserRESTCliente implements UserInterface {
 
     private WebTarget webTarget;
     private Client client;
     private static final String BASE_URI = ResourceBundle.getBundle("resources.config").getString("BASE_URI");
 
-    private static final Logger log = Logger.getLogger(UserFacadeREST.class.getName());
+    private static final Logger log = Logger.getLogger(UserRESTCliente.class.getName());
 
-    public UserFacadeREST() {
+    public UserRESTCliente() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("entitys.user");
     }

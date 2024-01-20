@@ -181,6 +181,5 @@
             </Tab>
          </tabs>
       </TabPane>
-      <ComboBox fx:id="cbAccounts" layoutX="1060.0" layoutY="680.0" prefHeight="26.0" prefWidth="173.0" styleClass="textField" />
    </children>
 </AnchorPane>

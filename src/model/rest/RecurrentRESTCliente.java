@@ -28,13 +28,13 @@ import model.interfaces.RecurrentInterface;
  *
  * @author Jason.
  */
-public class RecurrentFacadeREST implements RecurrentInterface {
+public class RecurrentRESTCliente implements RecurrentInterface {
 
     private WebTarget webTarget;
     private Client client;
     private static final String BASE_URI = ResourceBundle.getBundle("resources.config").getString("BASE_URI");
 
-    public RecurrentFacadeREST() {
+    public RecurrentRESTCliente() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("entitys.recurrent");
     }

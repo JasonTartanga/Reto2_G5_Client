@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
@@ -36,6 +37,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.FloatStringConverter;
@@ -76,7 +78,7 @@ public class RecurrentController {
     @FXML
     private Button btnCreate, btnDelete, btnRefresh, btnSwitch, btnReport, btnSearch;
     @FXML
-    private ComboBox cbAtribute, cbCondition, cbAccounts;
+    private ComboBox cbAtribute, cbCondition;
     @FXML
     private TextField tfSearch;
     @FXML
@@ -117,6 +119,7 @@ public class RecurrentController {
             thisStage = new Stage();
 
             thisStage.setScene(scene);
+            thisStage.initModality(Modality.APPLICATION_MODAL);
 
             //El título de la ventana es “Recurrent View”
             thisStage.setTitle("Recurrent View");
@@ -148,6 +151,9 @@ public class RecurrentController {
             btnReport.setVisible(true);
             btnReport.setDisable(false);
             btnReport.setOnAction(this::handleGenerateReport);
+            btnSwitch.setVisible(true);
+            btnSwitch.setDisable(false);
+            btnSwitch.setOnAction(this::handleSwitch);
             btnSearch.setVisible(true);
             btnSearch.setDisable(false);
             btnSearch.setOnAction(this::handleSearch);
@@ -204,9 +210,14 @@ public class RecurrentController {
             tcAmount.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
             tcAmount.setOnEditCommit(event -> {
                 RecurrentBean rec = event.getRowValue();
+                Float previousAmount = rec.getAmount();
                 rec.setAmount(event.getNewValue());
-                rec.setAccount(account);
+                Float changeAmount = previousAmount - rec.getAmount();
+                account.setBalance(account.getBalance() - changeAmount);
+                //rec.setAccount(account);
+
                 rest.updateRecurrent_XML(rec, rec.getUuid());
+                AccountFactory.getFactory().updateAccount_XML(account, account.getId());
             });
 
             //La columna de “tcFecha” está formada por una DatePicker y es editable.
@@ -256,21 +267,8 @@ public class RecurrentController {
             tabGraficos.setOnSelectionChanged(this::handleLoadGraphics);
             log.addHandler(new FileHandler("recurrent.log"));
 
-            //  recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
-            //  }, account.getId());
-            // handleRefreshTable(null);
-            //******************** ACCOUNTS ********************/
-            cbAccounts.setOnAction(this::setAccounts);
+            this.handleRefreshTable(null);
 
-            accountsUser = AccountFactory.getFactory().findAllAccountsByUser_XML(new GenericType<List<AccountBean>>() {
-            }, user.getMail());
-
-            for (AccountBean a : accountsUser) {
-                cbAccounts.getItems().add(a.getName());
-            }
-
-            cbAccounts.setValue(accountsUser.get(0).getName());
-            setAccounts(null);
             thisStage.show();
 
         } catch (IOException | SecurityException ex) {
@@ -289,6 +287,7 @@ public class RecurrentController {
             });
 
             RecurrentBean rec = new RecurrentBean();
+            rec.setAccount(account);
             rest.createRecurrent_XML(rec);
             rec.setUuid(uuid + 1);
 
@@ -350,16 +349,16 @@ public class RecurrentController {
     public void handleSwitch(ActionEvent event) {
         log.info("Cambiando a PunctualView");
         try {
-            /*
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PunctualView.fxml"));
             Parent root = loader.load();
             PunctualController punctualController = loader.getController();
             punctualController.setStage(thisStage);
-            punctualController.setUser(user);
-            punctualController.setAccount(account);
+            //punctualController.setUser(user);
+            //punctualController.setAccount(account);
             punctualController.initStage(root);
             thisStage.close();
-             */
+
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
             log.severe(e.getMessage());
@@ -406,8 +405,9 @@ public class RecurrentController {
             switch (cbAtribute.getValue().toString()) {
                 case "Uuid":
                     if (validateUuid(tfSearch.getText())) {
-                        recurrentes = rest.findRecurrent_XML(new GenericType<List<RecurrentBean>>() {
-                        }, Long.parseLong(tfSearch.getText()));
+                        recurrentes.clear();
+                        recurrentes.add(rest.findRecurrent_XML(new GenericType<RecurrentBean>() {
+                        }, Long.parseLong(tfSearch.getText())));
                     }
                     break;
 
@@ -653,24 +653,5 @@ public class RecurrentController {
 
     public void setAccount(AccountBean account) {
         this.account = account;
-    }
-
-    protected void setAccounts(Event event) {
-        try {
-            log.info("Cargando las cuentas.");
-
-            for (AccountBean account : accountsUser) {
-                if (account.getName().equalsIgnoreCase(cbAccounts.getValue().toString())) {
-                    this.account = account;
-                }
-            }
-            recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
-            }, account.getId());
-
-            this.handleRefreshTable(null);
-//            cargarGraficos(null);
-        } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK).showAndWait();
-        }
     }
 }

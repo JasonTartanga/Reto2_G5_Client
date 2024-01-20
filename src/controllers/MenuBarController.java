@@ -21,6 +21,10 @@ public class MenuBarController {
 
     public void innitStage() {
         miInicio.setOnAction(this::handleMainMenu);
+        miChangePassword.setOnAction(this::handleChangePasswordMenu);
+        miHelp.setOnAction(this::handleHelpMenu);
+        miLogout.setOnAction(this::handleLogoutMenu);
+        miClose.setOnAction(this::handleCloseMenu);
     }
 
     @FXML
@@ -48,23 +52,28 @@ public class MenuBarController {
         }
     }
 
+    @FXML
     public void handleMainMenu(ActionEvent action) {
-
+        log.info("Menu item de inicio pulsado");
     }
 
+    @FXML
     public void handleChangePasswordMenu(ActionEvent action) {
-
+        log.info("Menu item de cambiar contraseña pulsado");
     }
 
+    @FXML
     public void handleHelpMenu(ActionEvent action) {
-
+        log.info("Menu item de ayuda pulsado");
     }
 
+    @FXML
     public void handleLogoutMenu(ActionEvent action) {
-
+        log.info("Menu item de cerrar sesion pulsado");
     }
 
+    @FXML
     public void handleCloseMenu(ActionEvent action) {
-
+        log.info("Menu item de cerrar aplicacion pulsado");
     }
 }

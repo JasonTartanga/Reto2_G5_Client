@@ -11,23 +11,23 @@
         <menus>
           <Menu id="menuInicio" fx:id="mInicio" mnemonicParsing="false" text="Inicio">
             <items>
-              <MenuItem id="menuItemInicio" fx:id="miInicio" mnemonicParsing="false" text="Inicio" />
+              <MenuItem id="menuItemInicio" fx:id="miInicio" mnemonicParsing="false" onAction="#handleMainMenu" text="Inicio" />
             </items>
           </Menu>
             <Menu id="menuInicio" fx:id="mPerfil" mnemonicParsing="false" text="Perfil">
                <items>
-                  <MenuItem id="menuItemCambiarContraseña" fx:id="miChangePassword" mnemonicParsing="false" text="Cambiar contraseña" />
+                  <MenuItem id="menuItemCambiarContraseña" fx:id="miChangePassword" mnemonicParsing="false" onAction="#handleChangePasswordMenu" text="Cambiar contraseña" />
                </items>
             </Menu>
           <Menu id="menuAyuda" fx:id="mAyuda" mnemonicParsing="false" text="Ayuda">
             <items>
-              <MenuItem id="menuItemAyuda" fx:id="miHelp" mnemonicParsing="false" text="Contenidos de ayuda" />
+              <MenuItem id="menuItemAyuda" fx:id="miHelp" mnemonicParsing="false" onAction="#handleHelpMenu" text="Contenidos de ayuda" />
             </items>
           </Menu>
           <Menu id="menuSalir" fx:id="mSalir" mnemonicParsing="false" text="Salir">
             <items>
-              <MenuItem id="menuItemCerrarSesion" fx:id="miLogout" mnemonicParsing="false" text="Cerrar Sesion" />
-                  <MenuItem id="menuItemSalir" fx:id="miClose" mnemonicParsing="false" text="Salir" />
+              <MenuItem id="menuItemCerrarSesion" fx:id="miLogout" mnemonicParsing="false" onAction="#handleLogoutMenu" text="Cerrar Sesion" />
+                  <MenuItem id="menuItemSalir" fx:id="miClose" mnemonicParsing="false" onAction="#handleCloseMenu" text="Salir" />
             </items>
           </Menu>
         </menus>
