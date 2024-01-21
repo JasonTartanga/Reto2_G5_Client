@@ -5,12 +5,14 @@
  */
 package controllers;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -28,6 +30,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
@@ -53,6 +56,7 @@ import model.entitys.UserBean;
 import model.enums.Divisa;
 import model.enums.Plan;
 import model.factory.AccountFactory;
+import model.factory.UserFactory;
 import model.interfaces.AccountInterface;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -80,7 +84,7 @@ public class AccountController {
 
     //Declaramos los camois que utilizaremos en la ventana Account
     @FXML
-    private Button btnCreate, btnDelete, btnRefresh, btnRecurrent, btnPunctual, btnReport, btnSearch;
+    private Button btnCreate, btnDelete, btnRefresh, btnRecurrent, btnPunctual, btnReport, btnSearch, btnPrueba;
 
     @FXML
     private TableView<AccountBean> table;
@@ -129,7 +133,7 @@ public class AccountController {
 
     //TODO: falta columna de asociados
     @FXML
-    private TableColumn<AccountBean, Long> tcAsociated;
+    private TableColumn<AccountBean, String> tcAsociated;
 
     @FXML
     private AnchorPane fondoAccount;
@@ -190,6 +194,8 @@ public class AccountController {
 
         btnReport.setDisable(false);
         btnReport.setOnAction(this::handleButtonInformeAction);
+
+        btnPrueba.setOnAction(this::abrirNM);
 
         //Los botones tendrán ToolTip con el mensaje correspondiente.
         btnCreate.setTooltip(new Tooltip("Inserta nueva fila"));
@@ -294,9 +300,31 @@ public class AccountController {
         });
 
         //La columna “Asociados” está formada por un ComboBox multi seleccionable y será editable.
-        tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tcAsociated.setCellValueFactory(new PropertyValueFactory<>("asociated"));
+        tcAsociated.setCellFactory(TextFieldTableCell.forTableColumn());
+        tcAsociated.setOnEditStart(event -> {
+            try {
+                String asociated = this.abrirNM(null);
+
+                TableColumn.CellEditEvent<?, String> editEvent = (TableColumn.CellEditEvent<?, String>) event;
+                ((AccountBean) editEvent.getRowValue()).setAsociated(asociated);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        tcAsociated.setOnEditCommit(event -> {
+            try {
+                //   AccountBean accountBean = event.getRowValue();
+                //   accountBean.setPlan(event.getNewValue());
+                //   aInterface.updateAccount_XML(accountBean, accountBean.getId());
+            } catch (Exception e) {
+
+            }
+        });
 
         //La columna de ID no será editable ya que se genera automáticamente.
+        tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
+
         table.getColumns().clear();
         table.getColumns().addAll(tcId, tcName, tcDescription, tcDate, tcBalance, tcDivisa, tcPlan, tcAsociated);
         table.setEditable(true);
@@ -338,6 +366,32 @@ public class AccountController {
 
         this.cargarTabla();
         stage.show();
+    }
+
+    public String abrirNM(ActionEvent event) {
+        String asociated = null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SelectAsociatedView.fxml"));
+            Parent root = loader.load();
+
+            SelectAsociatedController selectController = loader.getController();
+            Stage selectStage = new Stage();
+
+            // Set the stage for the SelectAsociatedController
+            selectController.setStage(selectStage);
+
+            // Load the list of users
+            List<UserBean> userList = UserFactory.getFactory().findAllUsers_XML(new GenericType<List<UserBean>>() {
+            });
+            selectController.handleLoadList(userList);
+
+            // Show the SelectAsociatedView and wait for user interaction
+            selectController.initStage(root);
+            asociated = selectController.getAsociated();
+        } catch (IOException ex) {
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return asociated;
     }
 
     public void cargarTabla() {
@@ -467,7 +521,7 @@ public class AccountController {
                 recurrent.setAccount(acc);
                 recurrent.setUser(user);
                 recurrent.initStage(root);
-
+                stage.close();
             }
         } catch (Exception e) {
             e.printStackTrace();

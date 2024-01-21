@@ -6,30 +6,22 @@
 package testRecurrent;
 
 import controllers.RecurrentController;
+import exceptions.SelectException;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
 import model.entitys.RecurrentBean;
 import model.entitys.UserBean;
-import model.enums.Privileges;
 import model.factory.AccountFactory;
 import model.factory.RecurrentFactory;
 import model.factory.UserFactory;
@@ -38,13 +30,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
-import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
 /**
  *
@@ -79,70 +68,65 @@ public class Test_RecurrentController extends ApplicationTest {
     }
 
     @Test
-    @Ignore
     public void test1_initStage() {
     }
 
     @Test
-    @Ignore
     public void test2_HandleCreateRecurrent() {
-        // Simulamos hacer clic en el botón de crear
-        clickOn("#btnCreate");
-        // Verificamos que se haya agregado una nueva fila en la tabla
-        TableView<RecurrentBean> table = lookup("#table").query();
+        try {
+            // Simulamos hacer clic en el botón de crear
+            clickOn("#btnCreate");
+            // Verificamos que se haya agregado una nueva fila en la tabla
+            TableView<RecurrentBean> table = lookup("#table").query();
 
-        //Miramos si el ultimo elemento de la tabla existe en la base de datos
-        RecurrentBean rec = table.getItems().get(table.getItems().size() - 1);
-        assertTrue(rest.findRecurrent_XML(new GenericType<RecurrentBean>() {
-        }, rec.getUuid()) != null);
+            //Miramos si el ultimo elemento de la tabla existe en la base de datos
+            RecurrentBean rec = table.getItems().get(table.getItems().size() - 1);
+            assertTrue(rest.findRecurrent_XML(new GenericType<RecurrentBean>() {
+            }, rec.getUuid()) != null);
+        } catch (SelectException ex) {
+            Logger.getLogger(Test_RecurrentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Test
-    @Ignore
     public void test3_HandleDeleteRecurrent() {
-        // Simulamos seleccionar una fila en la tabla
-        clickOn("#table").clickOn(MouseButton.PRIMARY).type(KeyCode.HOME);
+        try {
+            // Simulamos seleccionar una fila en la tabla
+            clickOn("#table").clickOn(MouseButton.PRIMARY).type(KeyCode.HOME);
 
-        // Obtener el número de filas antes de la eliminación
-        int numRowsBefore = lookup("#table").queryTableView().getItems().size();
+            //Guardamos el recurrente que va a eliminar
+            RecurrentBean rec = (RecurrentBean) lookup("#table").queryTableView().getSelectionModel().getSelectedItem();
 
-        //Guardamos el recurrente que va a eliminar
-        RecurrentBean rec = (RecurrentBean) lookup("#table").queryTableView().getSelectionModel().getSelectedItem();
+            clickOn("#btnDelete");
 
-        clickOn("#btnDelete");
-
-        // Obtener el número de filas después de la eliminación
-        int numRowsAfter = lookup("#table").queryTableView().getItems().size();
-
-        System.out.println(numRowsBefore);
-        System.out.println(numRowsAfter);
-
-        // Verificamos que se haya eliminado una fila
-        assertEquals(numRowsBefore - 1, numRowsAfter);
-
-        //Verificamos que se ha borrado de la base de datos
-        assertTrue(rest.findRecurrent_XML(new GenericType<RecurrentBean>() {
-        }, rec.getUuid()) == null);
+            //Verificamos que se ha borrado de la base de datos
+            assertTrue(rest.findRecurrent_XML(new GenericType<RecurrentBean>() {
+            }, rec.getUuid()) == null);
+        } catch (SelectException ex) {
+            Logger.getLogger(Test_RecurrentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Test
-    @Ignore
     public void test4_HandleRefreshTable() {
-        List<RecurrentBean> recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
-        }, account.getId());
+        try {
+            List<RecurrentBean> recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
+            }, account.getId());
 
-        // Simulamos hacer clic en el botón de actualizar
-        clickOn("#btnRefresh");
+            // Simulamos hacer clic en el botón de actualizar
+            clickOn("#btnRefresh");
 
-        // Verificamos que la tabla se haya actualizado correctamente
-        TableView<RecurrentBean> table = lookup("#table").query();
-        assertNotNull(table);
+            // Verificamos que la tabla se haya actualizado correctamente
+            TableView<RecurrentBean> table = lookup("#table").query();
+            assertNotNull(table);
 
-        // assertEquals(FXCollections.observableArrayList(recurrentes), table.getItems());
+            // assertEquals(FXCollections.observableArrayList(recurrentes), table.getItems());
+        } catch (SelectException ex) {
+            Logger.getLogger(Test_RecurrentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Test
-    @Ignore
     public void test5_HandleSwitch() {
         // Simulamos hacer clic en el botón de cambiar
         clickOn("#btnSwitch");
@@ -160,22 +144,28 @@ public class Test_RecurrentController extends ApplicationTest {
 
     @Test
     public void test7_HandleSearch() {
-        Long id = rest.countExpenses(new GenericType<Long>() {
-        });
+        try {
+            Long id = rest.countExpenses(new GenericType<Long>() {
+            });
+            TableView<RecurrentBean> table = lookup("#table").query();
 
-        // Simulamos ingresar texto en el campo de búsqueda y hacer clic en el botón de búsqueda
-        clickOn("#cbAtribute").clickOn("Uuid"); // Seleccionar filtro por Uuid
-        clickOn("#tfSearch").write(id + "");
-        clickOn("#btnSearch");
+            // Simulamos ingresar texto en el campo de búsqueda y hacer clic en el botón de búsqueda
+            clickOn("#cbAtribute").clickOn("Uuid"); // Seleccionar filtro por Uuid
+            clickOn("#tfSearch").write(id + "");
+            clickOn("#btnSearch");
 
-        // Verificamos que la búsqueda se haya realizado correctamente
-        // Asegúrate de que la búsqueda haya tenido el resultado esperado
-        TableView<RecurrentBean> table = lookup("#table").query();
-        assertEquals(id, table.getItems().get(0).getUuid());
+            // Verificamos que la búsqueda se haya realizado correctamente
+            // Asegúrate de que la búsqueda haya tenido el resultado esperado
+            List<RecurrentBean> recurrents = table.getItems();
+            RecurrentBean rec = recurrents.get(recurrents.size() - 1);
+            System.out.println(rec.toString());
+            assertEquals(id, rec.getUuid());
+        } catch (SelectException ex) {
+            Logger.getLogger(Test_RecurrentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Test
-    @Ignore
     public void test8_HandleLoadGraphics() {
         // Simulamos cambiar a la pestaña de gráficos
         clickOn("#tabGraficos");

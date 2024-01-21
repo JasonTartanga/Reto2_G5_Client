@@ -131,6 +131,73 @@ public class SignInController {
     }
 
     /**
+     * Cuando se pulse el boton de iniciar sesion se validaran los campos y si
+     * son correctos se iniciara sesion.
+     *
+     * @param event evento que sucede al pulsarse el botón.
+     */
+    @FXML
+    protected void handleIniciarSesionButtonAction(ActionEvent event) {
+        try {
+            if (tbtnPasswd.isSelected()) {
+                txtPasswd.setText(txtShowPasswd.getText());
+            }
+
+            //Validar que los TextField email y contraseña no estén vacíos. Si está vacío alguno de los dos campos, saldrá una ventana informativa
+            //con el error. Seguido, saldrá del método del botón.
+            if (txtEmail.getText().isEmpty() || txtPasswd.getText().isEmpty()) {
+                throw new Exception("Por favor rellene ambos campos");
+            }
+
+            //Validar que el máximo número de caracteres en el campo de email sea de 255 caracteres y tenga el patrón de email.Si no es correcto, saldrá
+            //una ventana informativa con el error. Seguido, saldrá del método del botón.
+            String emailRegex = "^(?=.{1,255}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+            if (txtEmail.getText().matches(emailRegex)) {
+                txtEmail.setStyle("-fx-background-color: #1DFD33");
+            } else {
+                txtEmail.setStyle("-fx-background-color: #FB3131");
+                throw new Exception("El formato del email no es correcto");
+            }
+
+            UserBean user = new UserBean();
+            user.setMail(txtEmail.getText().toLowerCase());
+            user.setPassword(Asimetric.cipherPassword(txtPasswd.getText()));
+
+            UserInterface ui = UserFactory.getFactory();
+            ui.loginUser_XML(new GenericType<UserBean>() {
+            }, user.getMail(), user.getPassword());
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
+            Parent root = loader.load();
+            AccountController acc = loader.getController();
+            acc.setStage(thisStage);
+            acc.setUser(user);
+            acc.initStage(root);
+            thisStage.close();
+
+        } catch (ProcessingException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido conectar con el servidor", ButtonType.OK);
+            alert.setHeaderText(null);
+            alert.showAndWait();
+        } catch (InternalServerErrorException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido encontrar a ese usuario", ButtonType.OK);
+            alert.setHeaderText(null);
+            alert.showAndWait();
+        } catch (CredentialErrorException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+            alert.setHeaderText(null);
+            alert.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+            alert.setHeaderText(null);
+            alert.showAndWait();
+        }
+    }
+
+    /**
      * Cuando se pulse en el hyperlink de crear cuenta abre la ventana signUp y
      * cierra esta.
      *
@@ -180,86 +247,6 @@ public class SignInController {
             txtPasswd.setVisible(true);
             txtShowPasswd.setVisible(false);
             ivTbntPasswd.setImage(new Image(getClass().getResource("/resources/img/ver.png").toExternalForm()));
-        }
-    }
-
-    /**
-     * Cuando se pulse el boton de iniciar sesion se validaran los campos y si
-     * son correctos se iniciara sesion.
-     *
-     * @param event evento que sucede al pulsarse el botón.
-     */
-    @FXML
-    protected void handleIniciarSesionButtonAction(ActionEvent event) {
-        try {
-            if (tbtnPasswd.isSelected()) {
-                txtPasswd.setText(txtShowPasswd.getText());
-            }
-
-            //Validar que los TextField email y contraseña no estén vacíos. Si está vacío alguno de los dos campos, saldrá una ventana informativa
-            //con el error. Seguido, saldrá del método del botón.
-            if (txtEmail.getText().isEmpty() || txtPasswd.getText().isEmpty()) {
-                throw new Exception("Por favor rellene ambos campos");
-            }
-
-            //Validar que el máximo número de caracteres en el campo de email sea de 255 caracteres y tenga el patrón de email.Si no es correcto, saldrá
-            //una ventana informativa con el error. Seguido, saldrá del método del botón.
-            String emailRegex = "^(?=.{1,255}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-            if (txtEmail.getText().matches(emailRegex)) {
-                txtEmail.setStyle("-fx-background-color: #1DFD33");
-            } else {
-                txtEmail.setStyle("-fx-background-color: #FB3131");
-                throw new Exception("El formato del email no es correcto");
-            }
-            /*
-            //Validar que el campo de la contraseña tenga un máximo de 255 caracteres y obligatoriamente lleve mayúsculas, minúsculas y números,
-            //y que no tenga espacios en blanco. Si no es correcto, saldrá una ventana informativa con el error.  Seguido, saldrá del método del botón.
-            String passwdRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,255}$";
-            if (txtPasswd.getText().matches(passwdRegex)) {
-                txtPasswd.setStyle("-fx-background-color: #1DFD33");
-            } else {
-                txtPasswd.setStyle("-fx-background-color: #FB3131");
-                throw new Exception("La contraseña debe contener:\nUna mayuscula, una minuscula, y un numero");
-            }
-             */
-            //Una vez que los campos de email y contraseña son válidos. Se llama al método getExecuteSignIn de la interfaz (Signable) pasándole un objeto (User)
-            //con los valores del nombre de usuario y la password:
-            //Si se produce algún error saldrá una ventana informativa con la excepción LoginErrorException que se encontrará en las excepciones creadas en la
-            //librería y limpiará esos campos y se cambiará el color del fondo a rojo.
-            //Si no se produce error, se cambiara el fondo a color verde y le pasamos el objeto User a la siguiente ventana (Message) y cerramos la actual.
-
-            UserBean user = new UserBean();
-            user.setMail(txtEmail.getText().toLowerCase());
-            user.setPassword(Asimetric.cipherPassword(txtPasswd.getText()));
-            //user.setPassword(txtPasswd.getText());
-
-            UserInterface ui = UserFactory.getFactory();
-            ui.loginUser_XML(new GenericType<UserBean>() {
-            }, user.getMail(), user.getPassword());
-
-            //********** CAMBIAR VENTANAS A LA DE CADA UNO **********/
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
-            Parent root = loader.load();
-            AccountController acc = loader.getController();
-            acc.setStage(thisStage);
-            acc.setUser(user);
-            acc.initStage(root);
-
-        } catch (ProcessingException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido conectar con el servidor", ButtonType.OK);
-            alert.setHeaderText(null);
-            alert.showAndWait();
-        } catch (CredentialErrorException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
-            alert.setHeaderText(null);
-            alert.showAndWait();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
-            alert.setHeaderText(null);
-            alert.showAndWait();
         }
     }
 

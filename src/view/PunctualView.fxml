@@ -31,7 +31,7 @@
                     <menus>
                         <Menu id="menuInicio" fx:id="mInicio" mnemonicParsing="false" text="Inicio">
                             <items>
-                                <MenuItem id="menuItemInicio" fx:id="miInicio" mnemonicParsing="false" text="Inicio" />
+                                <MenuItem id="menuItemInicio" fx:id="miInicio" mnemonicParsing="false" onAction="#handleMainMenu" text="Inicio" />
                             </items>
                         </Menu>
                         <Menu id="menuInicio" fx:id="mPerfil" mnemonicParsing="false" text="Perfil">

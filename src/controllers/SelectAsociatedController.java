@@ -27,10 +27,12 @@ public class SelectAsociatedController {
     @FXML
     private Button btn;
 
+    private String asociated;
+
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
 
-        Stage stage = new Stage();
+        stage = new Stage();
         stage.setResizable(false);
 
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -39,24 +41,23 @@ public class SelectAsociatedController {
         list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         btn.setOnAction(this::handleSelectNames);
 
-        stage.show();
-
+        stage.showAndWait();
     }
 
-    public String handleSelectNames(ActionEvent event) {
-        String nombresFormateados = null;
+    public void handleSelectNames(ActionEvent event) {
+        asociated = null;
         List<String> nombres = list.getSelectionModel().getSelectedItems();
 
         for (String user : nombres) {
-            if (nombresFormateados != null) {
-                nombresFormateados += ", " + user;
+            if (asociated != null) {
+                asociated += ", " + user;
             } else {
-                nombresFormateados = user;
+                asociated = user;
             }
         }
 
-        System.out.println(nombresFormateados);
-        return nombresFormateados;
+        System.out.println(asociated);
+        stage.close();
     }
 
     public void handleLoadList(List<UserBean> usuarios) {
@@ -70,8 +71,8 @@ public class SelectAsociatedController {
         list.refresh();
     }
 
-    public void setUsers() {
-        this.stage = stage;
+    public String getAsociated() {
+        return asociated;
     }
 
     public void setStage(Stage stage) {
