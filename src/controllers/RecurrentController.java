@@ -30,7 +30,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
@@ -44,10 +43,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.FloatStringConverter;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
@@ -80,7 +77,7 @@ public class RecurrentController {
     private List<RecurrentBean> recurrentes;
     private List<AccountBean> accountsUser;
 
-    private RecurrentInterface rest = RecurrentFactory.getRecurrentREST();
+    private final RecurrentInterface rest = RecurrentFactory.getFactory();
     private static final Logger log = Logger.getLogger(RecurrentController.class.getName());
 
     @FXML
@@ -396,7 +393,7 @@ public class RecurrentController {
     public void handleGenerateReport(ActionEvent event) {
         log.info("Generando un reporte");
         try {
-            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/report/RecurrentReport.jrxml"));
+            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/reports/RecurrentReport.jrxml"));
             JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<RecurrentBean>) this.table.getItems());
             Map<String, Object> parameters = new HashMap<>();
             JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, dataItems);

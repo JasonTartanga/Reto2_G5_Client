@@ -5,7 +5,9 @@
  */
 package controllers;
 
+import exceptions.SelectException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,7 +21,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,20 +31,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -51,11 +51,15 @@ import javafx.util.converter.FloatStringConverter;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
 import model.entitys.ExpenseBean;
+import model.enums.Permissions;
 import model.entitys.RecurrentBean;
+import model.entitys.SharedBean;
+import model.entitys.SharedIdBean;
 import model.entitys.UserBean;
 import model.enums.Divisa;
 import model.enums.Plan;
 import model.factory.AccountFactory;
+import model.factory.SharedFactory;
 import model.factory.UserFactory;
 import model.interfaces.AccountInterface;
 import net.sf.jasperreports.engine.JRException;
@@ -77,8 +81,7 @@ public class AccountController {
     @FXML
     private Stage stage;
     private AccountInterface aInterface = AccountFactory.getFactory();
-    //private User user;
-    private AccountBean account;
+
     private UserBean user;
     private static final Logger log = Logger.getLogger(RecurrentController.class.getName());
 
@@ -301,26 +304,51 @@ public class AccountController {
 
         //La columna “Asociados” está formada por un ComboBox multi seleccionable y será editable.
         tcAsociated.setCellValueFactory(new PropertyValueFactory<>("asociated"));
-        tcAsociated.setCellFactory(TextFieldTableCell.forTableColumn());
+        //tcAsociated.setCellFactory(TextFieldTableCell.forTableColumn());
         tcAsociated.setOnEditStart(event -> {
             try {
                 String asociated = this.abrirNM(null);
 
-                TableColumn.CellEditEvent<?, String> editEvent = (TableColumn.CellEditEvent<?, String>) event;
-                ((AccountBean) editEvent.getRowValue()).setAsociated(asociated);
+                TablePosition<AccountBean, ?> editingCellPosition = table.getEditingCell();
+                if (editingCellPosition != null) {
+                    int row = editingCellPosition.getRow();
+                    TableColumn< AccountBean, ?> column = editingCellPosition.getTableColumn();
+
+                    // Actualizar el valor de la celda
+                    table.getItems().get(row).setAsociated(asociated);
+                    table.refresh();
+
+                    String[] emailArray = asociated.split(",\\s*");
+
+                    // Convertir el array a una List<String>
+                    List<String> emailList = Arrays.asList(emailArray);
+
+                    for (String mail : emailList) {
+                        UserFactory.getFactory().findUser_XML(new GenericType<UserBean>() {
+                        }, mail);
+
+                        SharedBean shared = new SharedBean(
+                                new SharedIdBean(mail, event.getRowValue().getId()),
+                                user, event.getRowValue(), Permissions.Autorizado);
+
+                        SharedFactory.getFactory().create_XML(shared);
+
+                        System.out.println(shared.toString());
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        tcAsociated.setOnEditCommit(event -> {
-            try {
-                //   AccountBean accountBean = event.getRowValue();
-                //   accountBean.setPlan(event.getNewValue());
-                //   aInterface.updateAccount_XML(accountBean, accountBean.getId());
-            } catch (Exception e) {
-
-            }
-        });
+//        tcAsociated.setOnEditCommit(event -> {
+//            try {
+//                //   AccountBean accountBean = event.getRowValue();
+//                //   accountBean.setPlan(event.getNewValue());
+//                //   aInterface.updateAccount_XML(accountBean, accountBean.getId());
+//            } catch (Exception e) {
+//
+//            }
+//        });
 
         //La columna de ID no será editable ya que se genera automáticamente.
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -390,6 +418,8 @@ public class AccountController {
             asociated = selectController.getAsociated();
         } catch (IOException ex) {
             Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SelectException ex) {
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return asociated;
     }
@@ -411,14 +441,14 @@ public class AccountController {
     @FXML
     private void handleButtonCrearAction(ActionEvent event) {
         try {
-            Long id = aInterface.findAccount_XML(new GenericType<Long>() {
-            }, account.getId());
-
-            AccountBean a = new AccountBean();
-            a.setId(id + 1);
-
-            table.getItems().add(a);
-            table.refresh();
+//            Long id = aInterface.findAccount_XML(new GenericType<Long>() {
+//            }, account.getId());
+//
+//            AccountBean a = new AccountBean();
+//            a.setId(id + 1);
+//
+//            table.getItems().add(a);
+//            table.refresh();
 
         } catch (Exception e) {
             //En caso de error, saldrá una ventana informativa.
@@ -461,12 +491,12 @@ public class AccountController {
     @FXML
     private void handleButtonActualizarAction(ActionEvent event) {
         try {
-
-            ObservableList<AccountBean> listAccountBeans = FXCollections.observableArrayList(account);
-            table.setItems(listAccountBeans);
-            table.refresh();
-
-            this.handleLoadGraphicsTab(event);
+//
+//            ObservableList<AccountBean> listAccountBeans = FXCollections.observableArrayList(account);
+//            table.setItems(listAccountBeans);
+//            table.refresh();
+//
+//            this.handleLoadGraphicsTab(event);
 
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
@@ -661,9 +691,9 @@ public class AccountController {
 //                    }
 //                    break;
             }
-            ObservableList<AccountBean> accountList = FXCollections.observableArrayList(account);
-            table.setItems(accountList);
-            table.refresh();
+//            ObservableList<AccountBean> accountList = FXCollections.observableArrayList(account);
+//            table.setItems(accountList);
+//            table.refresh();
 
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();

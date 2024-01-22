@@ -9,7 +9,7 @@ import model.rest.RecurrentRESTCliente;
  */
 public class RecurrentFactory {
 
-    public static RecurrentInterface getRecurrentREST() {
+    public static RecurrentInterface getFactory() {
         return new RecurrentRESTCliente();
     }
 }
