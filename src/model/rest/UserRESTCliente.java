@@ -5,9 +5,13 @@
  */
 package model.rest;
 
+import exceptions.CreateException;
+import exceptions.CredentialErrorException;
+import exceptions.DeleteException;
+import exceptions.SelectException;
+import exceptions.UpdateException;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -40,66 +44,66 @@ public class UserRESTCliente implements UserInterface {
     }
 
     @Override
-    public void createUser_XML(Object requestEntity) throws ClientErrorException {
+    public void createUser_XML(Object requestEntity) throws CreateException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
     @Override
-    public void createUser_JSON(Object requestEntity) throws ClientErrorException {
+    public void createUser_JSON(Object requestEntity) throws CreateException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
     @Override
-    public void updateUser_XML(Object requestEntity, String mail) throws ClientErrorException {
+    public void updateUser_XML(Object requestEntity, String mail) throws UpdateException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{mail})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
     @Override
-    public void updateUser_JSON(Object requestEntity, String mail) throws ClientErrorException {
+    public void updateUser_JSON(Object requestEntity, String mail) throws UpdateException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{mail})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
     @Override
-    public void deleteUser(String mail) throws ClientErrorException {
+    public void deleteUser(String mail) throws DeleteException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{mail})).request().delete();
     }
 
     @Override
-    public <T> T findUser_XML(GenericType<T> responseType, String mail) throws ClientErrorException {
+    public <T> T findUser_XML(GenericType<T> responseType, String mail) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{mail}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T findUser_JSON(GenericType<T> responseType, String mail) throws ClientErrorException {
+    public <T> T findUser_JSON(GenericType<T> responseType, String mail) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{mail}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
-    public <T> T loginUser_XML(GenericType<T> responseType, String mail, String passwd) throws ClientErrorException {
+    public <T> T loginUser_XML(GenericType<T> responseType, String mail, String passwd) throws SelectException, CredentialErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("login/{0}/{1}", new Object[]{mail, passwd}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T loginUser_JSON(GenericType<T> responseType, String mail, String passwd) throws ClientErrorException {
+    public <T> T loginUser_JSON(GenericType<T> responseType, String mail, String passwd) throws SelectException, CredentialErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("login/{0}/{1}", new Object[]{mail, passwd}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
-    public <T> T findAllUsers_XML(GenericType<T> responseType) throws ClientErrorException {
+    public <T> T findAllUsers_XML(GenericType<T> responseType) throws SelectException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T findAllUsers_JSON(GenericType<T> responseType) throws ClientErrorException {
+    public <T> T findAllUsers_JSON(GenericType<T> responseType) throws SelectException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }

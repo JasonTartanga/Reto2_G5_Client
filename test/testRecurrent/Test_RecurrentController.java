@@ -42,7 +42,7 @@ import org.testfx.framework.junit.ApplicationTest;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Test_RecurrentController extends ApplicationTest {
 
-    private RecurrentInterface rest = RecurrentFactory.getRecurrentREST();
+    private RecurrentInterface rest = RecurrentFactory.getFactory();
 
     private AccountBean account;
     private UserBean user;
@@ -64,6 +64,8 @@ public class Test_RecurrentController extends ApplicationTest {
             rec.initStage(root);
         } catch (IOException ex) {
             ex.printStackTrace();
+        } catch (SelectException ex) {
+            Logger.getLogger(Test_RecurrentController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

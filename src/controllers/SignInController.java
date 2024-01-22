@@ -2,9 +2,8 @@ package controllers;
 
 import cipher.Asimetric;
 import exceptions.CredentialErrorException;
-import exceptions.ServerErrorException;
+import exceptions.SelectException;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
@@ -32,7 +32,6 @@ import javafx.stage.Stage;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.GenericType;
-import model.entitys.AccountBean;
 import model.entitys.UserBean;
 import model.factory.UserFactory;
 import model.interfaces.UserInterface;
@@ -176,24 +175,15 @@ public class SignInController {
             thisStage.close();
 
         } catch (ProcessingException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido conectar con el servidor", ButtonType.OK);
-            alert.setHeaderText(null);
-            alert.showAndWait();
+            this.showMessage("No se ha podido conectar con el servidor", AlertType.ERROR);
         } catch (InternalServerErrorException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido encontrar a ese usuario", ButtonType.OK);
-            alert.setHeaderText(null);
-            alert.showAndWait();
+            this.showMessage("El email o la contraseña son incorrectas", AlertType.ERROR);
         } catch (CredentialErrorException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
-            alert.setHeaderText(null);
-            alert.showAndWait();
+            this.showMessage(e.getMessage(), AlertType.ERROR);
+        } catch (SelectException e) {
+            this.showMessage(e.getMessage(), AlertType.ERROR);
         } catch (Exception e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
-            alert.setHeaderText(null);
-            alert.showAndWait();
+            this.showMessage(e.getMessage(), AlertType.ERROR);
         }
     }
 
@@ -204,7 +194,8 @@ public class SignInController {
      * @param event evento que sucede al pulsarse el botón.
      */
     @FXML
-    protected void handleSignUpHyperlinkAction(ActionEvent event) {
+    protected void handleSignUpHyperlinkAction(ActionEvent event
+    ) {
         try {
             //Al pulsar sobre el HiperLink nos redirigirá a la ventana de SignUp.
 
@@ -215,8 +206,8 @@ public class SignInController {
             signUp.initStage(root);
             thisStage.close();
 
-        } catch (IOException ex) {
-            Logger.getLogger(SignInController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            this.showMessage(e.getMessage(), AlertType.ERROR);
         }
     }
 
@@ -228,7 +219,8 @@ public class SignInController {
      * @param event evento que sucede al pulsarse el botón.
      */
     @FXML
-    protected void handleMostrarContraseniaToggleButtonAction(ActionEvent event) {
+    protected void handleMostrarContraseniaToggleButtonAction(ActionEvent event
+    ) {
         if (tbtnPasswd.isSelected()) {
             //Al seleccionar el botón, se hará visible el TextField (txtShowPasswd) con el texto escrito en el PasswordField(txtPasswd)
             //y se hará invisible el PasswordField(txtPasswd). También se cambiará la imagen (ivTbntPasswd) del ToggleButton(tbtnPasswd)
@@ -257,7 +249,8 @@ public class SignInController {
      * @param event evento que sucede al pulsarse el botón.
      */
     @FXML
-    private void handleExitApplication(Event event) {
+    private void handleExitApplication(Event event
+    ) {
         try {
             event.consume();
             //Con esto vamos a crear una ventana de confirmación al pulsar el botón de salir
@@ -272,7 +265,7 @@ public class SignInController {
             }
 
         } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage() + ButtonType.OK).showAndWait();
+            this.showMessage(e.getMessage(), AlertType.ERROR);
         }
     }
 
@@ -283,5 +276,12 @@ public class SignInController {
      */
     public void setStage(Stage stage) {
         this.thisStage = stage;
+    }
+
+    public void showMessage(String message, AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setContentText(message);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 }
