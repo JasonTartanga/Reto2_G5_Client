@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package app;
 
-import controllers.AccountController;
+import controllers.SignInController;
 import java.io.IOException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -16,11 +16,18 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 /**
+ * Clase principal para inicializar la aplicación.
  *
- * @author poker
+ * @author Jessica, Jason e Ian.
  */
-public class MainController extends Application{
- 
+public class CashTracker extends Application {
+
+    /**
+     * Este metodo inicializa la aplicación abriendo la ventana de SIGN IN
+     *
+     * @param stage es el contenedor principal de la ventana.
+     */
+    @Override
     public void start(Stage stage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignIn.fxml"));
