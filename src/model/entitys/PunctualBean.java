@@ -22,6 +22,11 @@ public class PunctualBean extends ExpenseBean implements Serializable {
         this.importance = new SimpleObjectProperty<>(importance);
     }
 
+    public PunctualBean() {
+        super();
+        this.importance = new SimpleObjectProperty<>();
+    }
+
     //******************** GETTERS && SETTERS *********************/
     public Importance getImportance() {
         return this.importance.get();

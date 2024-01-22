@@ -10,7 +10,11 @@
     -fx-background-radius: 30px;    
 }
 
-.panel_datos {
+.round-button{
+    -fx-background-radius:50%;
+}
+
+.panel-datos {
     -fx-border-width: 2px;
     -fx-border-color: grey;
     -fx-border-radius: 10px;
