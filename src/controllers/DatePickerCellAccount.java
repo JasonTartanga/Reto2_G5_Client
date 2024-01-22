@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
 import java.text.SimpleDateFormat;
@@ -11,11 +6,11 @@ import java.util.Date;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import model.entitys.AccountBean;
-
+import model.entitys.RecurrentBean;
 
 /**
  *
- * @author Jessica
+ * @author Jason.
  */
 public class DatePickerCellAccount extends TableCell<AccountBean, Date> {
 
@@ -63,5 +58,4 @@ public class DatePickerCellAccount extends TableCell<AccountBean, Date> {
         setGraphic(null);
         super.cancelEdit();
     }
-
 }

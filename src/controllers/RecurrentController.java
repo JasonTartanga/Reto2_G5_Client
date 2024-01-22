@@ -1,10 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.SelectException;
+import exceptions.UpdateException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -20,10 +20,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -41,8 +43,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.FloatStringConverter;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
@@ -62,7 +64,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import org.apache.velocity.exception.ParseErrorException;
 
-
 /**
  *
  * @author Jason.
@@ -73,16 +74,16 @@ public class RecurrentController {
     private UserBean user;
     private AccountBean account;
 
-    private List<RecurrentBean> recurrentes;
+     List<RecurrentBean> recurrentes;
     private List<AccountBean> accountsUser;
 
-    private RecurrentInterface rest = RecurrentFactory.getRecurrentREST();
+    private final RecurrentInterface rest = RecurrentFactory.getFactory();
     private static final Logger log = Logger.getLogger(RecurrentController.class.getName());
 
     @FXML
     private Button btnCreate, btnDelete, btnRefresh, btnSwitch, btnReport, btnSearch;
     @FXML
-    private ComboBox cbAtribute, cbCondition, cbAccounts;
+    private ComboBox cbAtribute, cbCondition;
     @FXML
     private TextField tfSearch;
     @FXML
@@ -123,6 +124,7 @@ public class RecurrentController {
             thisStage = new Stage();
 
             thisStage.setScene(scene);
+            thisStage.initModality(Modality.APPLICATION_MODAL);
 
             //El título de la ventana es “Recurrent View”
             thisStage.setTitle("Recurrent View");
@@ -154,6 +156,9 @@ public class RecurrentController {
             btnReport.setVisible(true);
             btnReport.setDisable(false);
             btnReport.setOnAction(this::handleGenerateReport);
+            btnSwitch.setVisible(true);
+            btnSwitch.setDisable(false);
+            btnSwitch.setOnAction(this::handleSwitch);
             btnSearch.setVisible(true);
             btnSearch.setDisable(false);
             btnSearch.setOnAction(this::handleSearch);
@@ -191,57 +196,87 @@ public class RecurrentController {
             tcName.setCellValueFactory(new PropertyValueFactory<>("name"));
             tcName.setCellFactory(TextFieldTableCell.forTableColumn());
             tcName.setOnEditCommit(event -> {
-                RecurrentBean rec = event.getRowValue();
-                rec.setName(event.getNewValue());
-                rec.setAccount(account);
-                rest.updateRecurrent_XML(rec, rec.getUuid());
+                try {
+                    RecurrentBean rec = event.getRowValue();
+                    System.out.println("Editando el recurrente --> " + rec.toString());
+                    rec.setName(event.getNewValue());
+                    rec.setAccount(account);
+                    rest.updateRecurrent_XML(rec, rec.getUuid());
+                } catch (UpdateException ex) {
+                    this.showAlert(ex.getMessage(), AlertType.ERROR);
+                }
             });
 
             tcConcept.setCellValueFactory(new PropertyValueFactory<>("concept"));
             tcConcept.setCellFactory(TextFieldTableCell.forTableColumn());
             tcConcept.setOnEditCommit(event -> {
-                RecurrentBean rec = event.getRowValue();
-                rec.setConcept(event.getNewValue());
-                rec.setAccount(account);
-                rest.updateRecurrent_XML(rec, rec.getUuid());
+                try {
+                    RecurrentBean rec = event.getRowValue();
+                    rec.setConcept(event.getNewValue());
+                    rec.setAccount(account);
+                    rest.updateRecurrent_XML(rec, rec.getUuid());
+                } catch (UpdateException ex) {
+                    this.showAlert(ex.getMessage(), AlertType.ERROR);
+                }
             });
 
             tcAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
             tcAmount.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
             tcAmount.setOnEditCommit(event -> {
-                RecurrentBean rec = event.getRowValue();
-                rec.setAmount(event.getNewValue());
-                rec.setAccount(account);
-                rest.updateRecurrent_XML(rec, rec.getUuid());
+                try {
+                    RecurrentBean rec = event.getRowValue();
+                    Float previousAmount = rec.getAmount();
+                    rec.setAmount(event.getNewValue());
+                    Float changeAmount = previousAmount - rec.getAmount();
+                    account.setBalance(account.getBalance() - changeAmount);
+                    //rec.setAccount(account);
+
+                    rest.updateRecurrent_XML(rec, rec.getUuid());
+                    AccountFactory.getFactory().updateAccount_XML(account, account.getId());
+                } catch (UpdateException ex) {
+                    this.showAlert(ex.getMessage(), AlertType.ERROR);
+                }
             });
 
             //La columna de “tcFecha” está formada por una DatePicker y es editable.
             tcDate.setCellValueFactory(new PropertyValueFactory<>("date"));
             tcDate.setCellFactory(param -> new DatePickerCellRecurrent());
             tcDate.setOnEditCommit(event -> {
-                RecurrentBean rec = event.getRowValue();
-                rec.setDate(event.getNewValue());
-                rec.setAccount(account);
-                rest.updateRecurrent_XML(rec, rec.getUuid());
+                try {
+                    RecurrentBean rec = event.getRowValue();
+                    rec.setDate(event.getNewValue());
+                    rec.setAccount(account);
+                    rest.updateRecurrent_XML(rec, rec.getUuid());
+                } catch (UpdateException ex) {
+                    this.showAlert(ex.getMessage(), AlertType.ERROR);
+                }
             });
 
             //Las columnas de “tcCategory” y “tcPeriodicity” están formadas por ComboBox y son editables.
             tcCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
             tcCategory.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(Category.values())));
             tcCategory.setOnEditCommit(event -> {
-                RecurrentBean rec = event.getRowValue();
-                rec.setCategory(event.getNewValue());
-                rec.setAccount(account);
-                rest.updateRecurrent_XML(rec, rec.getUuid());
+                try {
+                    RecurrentBean rec = event.getRowValue();
+                    rec.setCategory(event.getNewValue());
+                    rec.setAccount(account);
+                    rest.updateRecurrent_XML(rec, rec.getUuid());
+                } catch (UpdateException ex) {
+                    this.showAlert(ex.getMessage(), AlertType.ERROR);
+                }
             });
 
             tcPeriodicity.setCellValueFactory(new PropertyValueFactory<>("periodicity"));
             tcPeriodicity.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(Period.values())));
             tcPeriodicity.setOnEditCommit(event -> {
-                RecurrentBean rec = event.getRowValue();
-                rec.setPeriodicity(event.getNewValue());
-                rec.setAccount(account);
-                rest.updateRecurrent_XML(rec, rec.getUuid());
+                try {
+                    RecurrentBean rec = event.getRowValue();
+                    rec.setPeriodicity(event.getNewValue());
+                    rec.setAccount(account);
+                    rest.updateRecurrent_XML(rec, rec.getUuid());
+                } catch (UpdateException ex) {
+                    this.showAlert(ex.getMessage(), AlertType.ERROR);
+                }
             });
 
             //La columna de “tcUuid” no será editable ya que se genera automáticamente.
@@ -262,29 +297,16 @@ public class RecurrentController {
             tabGraficos.setOnSelectionChanged(this::handleLoadGraphics);
             log.addHandler(new FileHandler("recurrent.log"));
 
-            //  recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
-            //  }, account.getId());
-            // handleRefreshTable(null);
-            //******************** ACCOUNTS ********************/
-            cbAccounts.setOnAction(this::setAccounts);
+            this.handleRefreshTable(null);
 
-            accountsUser = AccountFactory.getAccountREST().findAllAccountsByUser_XML(new GenericType<List<AccountBean>>() {
-            }, user.getMail());
-
-            for (AccountBean a : accountsUser) {
-                cbAccounts.getItems().add(a.getName());
-            }
-
-            cbAccounts.setValue(accountsUser.get(0).getName());
-            setAccounts(null);
             thisStage.show();
 
         } catch (IOException | SecurityException ex) {
-            new Alert(Alert.AlertType.ERROR, ex.getLocalizedMessage(), ButtonType.OK).showAndWait();
-            ex.printStackTrace();
+            this.showAlert(ex.getMessage(), AlertType.ERROR);
         }
     }
 
+    @FXML
     public void handleCreateRecurrent(ActionEvent event) {
         //Creará una nueva fila en el TableView con datos nulos excepto el id que se autogeneran.
         //Creará un nuevo grupo en la base de datos.
@@ -295,20 +317,19 @@ public class RecurrentController {
             });
 
             RecurrentBean rec = new RecurrentBean();
+            rec.setAccount(account);
             rest.createRecurrent_XML(rec);
             rec.setUuid(uuid + 1);
 
             table.getItems().add(rec);
             table.refresh();
 
-        } catch (Exception e) {
-            //En caso de error, saldrá una ventana informativa.
-            new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
-            log.severe(e.getLocalizedMessage());
-            e.printStackTrace();
+        } catch (CreateException | SelectException e) {
+            this.showAlert(e.getMessage(), AlertType.ERROR);
         }
     }
 
+    @FXML
     public void handleDeleteRecurrent(ActionEvent event) {
         //Para eliminar, haremos click en la TableView (table) sobre uno o varios accounts que queramos eliminar y clickeamos en el botón de eliminar de la parte superior de la ventana.
         //Validar que los campos no contienen datos y que en la TableView (table) se ha eliminado correctamente.
@@ -325,14 +346,12 @@ public class RecurrentController {
 
             table.refresh();
 
-        } catch (Exception e) {
-            //En caso de error saldrá una ventana informativa.
-            new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
-            log.severe(e.getMessage());
-            e.printStackTrace();
+        } catch (DeleteException e) {
+            this.showAlert(e.getMessage(), AlertType.ERROR);
         }
     }
 
+    @FXML
     public void handleRefreshTable(ActionEvent event) {
         try {
             log.info("Recargando la tabla");
@@ -346,74 +365,58 @@ public class RecurrentController {
 
             this.handleLoadGraphics(event);
 
-        } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
-            log.severe(e.getMessage());
-            e.printStackTrace();
+        } catch (SelectException e) {
+            this.showAlert(e.getMessage(), AlertType.ERROR);
         }
     }
 
+    @FXML
     public void handleSwitch(ActionEvent event) {
         log.info("Cambiando a PunctualView");
         try {
-            /*
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PunctualView.fxml"));
             Parent root = loader.load();
             PunctualController punctualController = loader.getController();
             punctualController.setStage(thisStage);
-            punctualController.setUser(user);
-            punctualController.setAccount(account);
+            //punctualController.setUser(user);
+            //punctualController.setAccount(account);
             punctualController.initStage(root);
             thisStage.close();
-             */
-        } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
-            log.severe(e.getMessage());
-            e.printStackTrace();
+
+        } catch (IOException e) {
+            this.showAlert(e.getMessage(), AlertType.ERROR);
         }
     }
 
+    @FXML
     public void handleGenerateReport(ActionEvent event) {
         log.info("Generando un reporte");
         try {
-            //LOGGER.info("Beginning printing action...");
-            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/report/RecurrentReport.jrxml"));
-
+            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/reports/RecurrentReport.jrxml"));
             JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<RecurrentBean>) this.table.getItems());
-
             Map<String, Object> parameters = new HashMap<>();
-            //parameters.put("ItemDataSource", dataItems);
-
             JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, dataItems);
 
             JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
             jasperViewer.setVisible(true);
 
-            /*
-             * <field name="uuid" class="java.lang.Long"/>
-             * <field name="name" class="java.lang.String"/>
-             * <field name="concept" class="java.lang.String"/>
-             * <field name="amount" class="java.lang.Float"/>
-             * <field name="date" class="java.util.Date"/>
-             * <field name="category" class="model.enums.Category"/>
-             * <field name="periodicity" class="model.enums.Period"/>
-             */
         } catch (JRException e) {
-            new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
-            log.severe(e.getMessage());
-            e.printStackTrace();
+            this.showAlert(e.getMessage(), AlertType.ERROR);
         }
     }
 
+    @FXML
     public void handleSearch(ActionEvent event) {
-        log.info("Buscando gasto recurrente con el siguiente filtro --> " + cbAtribute.getValue().toString());
+        log.log(Level.INFO, "Buscando gasto recurrente con el siguiente filtro --> {0}", cbAtribute.getValue().toString());
 
         try {
             switch (cbAtribute.getValue().toString()) {
                 case "Uuid":
                     if (validateUuid(tfSearch.getText())) {
-                        recurrentes = rest.findRecurrent_XML(new GenericType<List<RecurrentBean>>() {
-                        }, Long.parseLong(tfSearch.getText()));
+                        recurrentes.clear();
+                        recurrentes.add(rest.findRecurrent_XML(new GenericType<RecurrentBean>() {
+                        }, Long.parseLong(tfSearch.getText())));
                     }
                     break;
 
@@ -462,77 +465,14 @@ public class RecurrentController {
             table.setItems(recurrentesList);
             table.refresh();
 
-        } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
-            log.severe(e.getMessage());
-            e.printStackTrace();
+        } catch (SelectException | NumberFormatException e) {
+            this.showAlert(e.getMessage(), AlertType.ERROR);
         }
-    }
-
-    @FXML
-    private void handleLoadGraphics(Event event) {
-        try {
-            log.info("Cargando graficos.");
-
-            List<RecurrentBean> recurentes = rest.findRecurrentsByAccount_XML(new GenericType< List<RecurrentBean>>() {
-            }, account.getId());
-
-            Map<Category, Integer> categories = this.getCategoryDataGraphic(recurentes);
-            Map<Period, Integer> periodicities = this.getPeriodDataGraphic(recurentes);
-
-            ObservableList<PieChart.Data> categoryData = FXCollections.observableArrayList();
-            ObservableList<PieChart.Data> periodData = FXCollections.observableArrayList();
-
-            for (Map.Entry<Category, Integer> c : categories.entrySet()) {
-                categoryData.add(new PieChart.Data(c.getKey() + "", c.getValue()));
-            }
-            for (Map.Entry<Period, Integer> p : periodicities.entrySet()) {
-                periodData.add(new PieChart.Data(p.getKey() + "", p.getValue()));
-            }
-
-            pieCategory.getData().clear();
-            pieCategory.getData().addAll(categoryData);
-            piePeriodicity.getData().clear();
-            piePeriodicity.getData().addAll(periodData);
-
-        } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK).showAndWait();
-        }
-    }
-
-    private Map<Category, Integer> getCategoryDataGraphic(List<RecurrentBean> recurrentAccount) {
-        Map<Category, Integer> categories = new HashMap();
-
-        for (RecurrentBean r : recurrentAccount) {
-            if (!categories.containsKey(r.getCategory())) {
-                categories.put(r.getCategory(), 1);
-            } else {
-                int i = categories.get(r.getCategory()) + 1;
-                categories.replace(r.getCategory(), i);
-            }
-        }
-
-        return categories;
-    }
-
-    private Map<Period, Integer> getPeriodDataGraphic(List<RecurrentBean> recurrentAccount) {
-        Map<Period, Integer> categories = new HashMap();
-
-        for (RecurrentBean r : recurrentAccount) {
-            if (!categories.containsKey(r.getPeriodicity())) {
-                categories.put(r.getPeriodicity(), 1);
-            } else {
-                int i = categories.get(r.getPeriodicity()) + 1;
-                categories.replace(r.getPeriodicity(), i);
-            }
-        }
-
-        return categories;
     }
 
     public void handleChangeFilter(Event event) {
         try {
-            log.info("Cambiado el filtro a -->" + cbAtribute.getValue().toString());
+            log.log(Level.INFO, "Cambiado el filtro a -->{0}", cbAtribute.getValue().toString());
             //  List<RecurrentBean> recurrentes = null;
 
             switch (cbAtribute.getValue().toString()) {
@@ -598,9 +538,77 @@ public class RecurrentController {
                 default:
                     throw new Exception("No se ha seleccionado ningun filtro");
             }
-        } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK).showAndWait();
+        } catch (Exception e) {
+            this.showAlert(e.getMessage(), AlertType.ERROR);
         }
+    }
+
+    @FXML
+    private void handleLoadGraphics(Event event) {
+        try {
+            log.info("Cargando graficos.");
+
+            List<RecurrentBean> recurentes = rest.findRecurrentsByAccount_XML(new GenericType< List<RecurrentBean>>() {
+            }, account.getId());
+
+            Map<Category, Integer> categories = this.getCategoryDataGraphic(recurentes);
+            Map<Period, Integer> periodicities = this.getPeriodDataGraphic(recurentes);
+
+            ObservableList<PieChart.Data> categoryData = FXCollections.observableArrayList();
+            ObservableList<PieChart.Data> periodData = FXCollections.observableArrayList();
+
+            for (Map.Entry<Category, Integer> c : categories.entrySet()) {
+                categoryData.add(new PieChart.Data(c.getKey() + "", c.getValue()));
+            }
+            for (Map.Entry<Period, Integer> p : periodicities.entrySet()) {
+                periodData.add(new PieChart.Data(p.getKey() + "", p.getValue()));
+            }
+
+            pieCategory.getData().clear();
+            pieCategory.getData().addAll(categoryData);
+            piePeriodicity.getData().clear();
+            piePeriodicity.getData().addAll(periodData);
+
+        } catch (SelectException e) {
+            this.showAlert(e.getMessage(), AlertType.ERROR);
+        }
+    }
+
+    private Map<Category, Integer> getCategoryDataGraphic(List<RecurrentBean> recurrentAccount) {
+        Map<Category, Integer> categories = new HashMap();
+
+        for (RecurrentBean r : recurrentAccount) {
+            if (!categories.containsKey(r.getCategory())) {
+                categories.put(r.getCategory(), 1);
+            } else {
+                int i = categories.get(r.getCategory()) + 1;
+                categories.replace(r.getCategory(), i);
+            }
+        }
+
+        return categories;
+    }
+
+    private Map<Period, Integer> getPeriodDataGraphic(List<RecurrentBean> recurrentAccount) {
+        Map<Period, Integer> categories = new HashMap();
+
+        for (RecurrentBean r : recurrentAccount) {
+            if (!categories.containsKey(r.getPeriodicity())) {
+                categories.put(r.getPeriodicity(), 1);
+            } else {
+                int i = categories.get(r.getPeriodicity()) + 1;
+                categories.replace(r.getPeriodicity(), i);
+            }
+        }
+
+        return categories;
+    }
+
+    protected void showAlert(String message, AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(message);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 
     protected boolean validateUuid(String uuid) {
@@ -645,7 +653,7 @@ public class RecurrentController {
             }
 
         } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage() + ButtonType.OK).showAndWait();
+            this.showAlert(e.getMessage(), AlertType.ERROR);
         }
     }
 
@@ -659,24 +667,5 @@ public class RecurrentController {
 
     public void setAccount(AccountBean account) {
         this.account = account;
-    }
-
-    protected void setAccounts(Event event) {
-        try {
-            log.info("Cargando las cuentas.");
-
-            for (AccountBean account : accountsUser) {
-                if (account.getName().equalsIgnoreCase(cbAccounts.getValue().toString())) {
-                    this.account = account;
-                }
-            }
-            recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
-            }, account.getId());
-
-            this.handleRefreshTable(null);
-//            cargarGraficos(null);
-        } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK).showAndWait();
-        }
     }
 }

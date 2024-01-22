@@ -1,20 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.factory;
 
 import model.interfaces.RecurrentInterface;
-import model.rest.RecurrentFacadeREST;
+import model.rest.RecurrentRESTCliente;
 
 /**
  *
- * @author poker
+ * @author Jason.
  */
 public class RecurrentFactory {
 
-    public static RecurrentInterface getRecurrentREST() {
-        return new RecurrentFacadeREST();
+    public static RecurrentInterface getFactory() {
+        return new RecurrentRESTCliente();
     }
 }

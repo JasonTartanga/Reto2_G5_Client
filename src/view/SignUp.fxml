@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="fondoSignUp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" styleClass="fondo" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
+<AnchorPane fx:id="fondoSignUp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" styleClass="fondo" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignUpController">
    <children>
       <TextField fx:id="txtNombre" layoutX="577.0" layoutY="78.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce el nombre" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="45.0" />
       <TextField fx:id="txtEmail" layoutX="610.0" layoutY="150.0" prefHeight="26.0" prefWidth="325.0" promptText="Introduce el email" styleClass="textField" stylesheets="@../resources/style.css" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="109.4" />

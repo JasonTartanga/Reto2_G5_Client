@@ -3,26 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
+import exceptions.DeleteException;
+import exceptions.SelectException;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -38,14 +37,16 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseEvent;
+import static javafx.scene.input.KeyCode.T;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -53,11 +54,16 @@ import javafx.util.converter.FloatStringConverter;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
 import model.entitys.ExpenseBean;
+import model.entitys.Permissions;
 import model.entitys.RecurrentBean;
+import model.entitys.SharedBean;
 import model.entitys.UserBean;
 import model.enums.Divisa;
+import model.enums.Period;
 import model.enums.Plan;
 import model.factory.AccountFactory;
+import model.factory.SharedFactory;
+import model.factory.UserFactory;
 import model.interfaces.AccountInterface;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -77,15 +83,14 @@ public class AccountController {
 
     @FXML
     private Stage stage;
-    private AccountInterface aInterface = AccountFactory.getAccountREST();
-   
+    private AccountInterface aInterface = AccountFactory.getFactory();
     private AccountBean account;
     private UserBean user;
     private static final Logger log = Logger.getLogger(RecurrentController.class.getName());
-
-    //Declaramos los campos que utilizaremos en la ventana Account
+    List <AccountBean> listAccounts;
+    //Declaramos los camois que utilizaremos en la ventana Account
     @FXML
-    private Button btnCreate, btnDelete, btnRefresh, btnRecurrent, btnPunctual, btnReport, btnSearch;
+    private Button btnCreate, btnDelete, btnRefresh, btnRecurrent, btnPunctual, btnReport, btnSearch, btnPrueba;
 
     @FXML
     private TableView<AccountBean> table;
@@ -134,7 +139,7 @@ public class AccountController {
 
     //TODO: falta columna de asociados
     @FXML
-    private TableColumn<AccountBean, Long> tcAsociated;
+    private TableColumn<AccountBean, String> tcAsociated;
 
     @FXML
     private AnchorPane fondoAccount;
@@ -191,10 +196,12 @@ public class AccountController {
         btnRecurrent.setOnAction(this::handleButtonRecurrentAction);
 
         btnPunctual.setDisable(false);
-        btnPunctual.setOnAction(this::handleButtonPunctualAction);
+        //btnPunctual.setOnAction(this::handleButtonPunctualAction);
 
         btnReport.setDisable(false);
         btnReport.setOnAction(this::handleButtonInformeAction);
+
+        btnPrueba.setOnAction(this::abrirNM);
 
         //Los botones tendrán ToolTip con el mensaje correspondiente.
         btnCreate.setTooltip(new Tooltip("Inserta nueva fila"));
@@ -216,6 +223,8 @@ public class AccountController {
         tabCuentas.setDisable(false);
         tabGraficos.setDisable(false);
         tabGraficos.setOnSelectionChanged(this::handleLoadGraphicsTab);
+
+
         //La TableView (table) está siempre habilitada y será editable.
         table.setDisable(false);
         table.setVisible(true);
@@ -299,9 +308,50 @@ public class AccountController {
         });
 
         //La columna “Asociados” está formada por un ComboBox multi seleccionable y será editable.
-        tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tcAsociated.setCellValueFactory(new PropertyValueFactory<>("asociated"));
+        //tcAsociated.setCellFactory(TextFieldTableCell.forTableColumn());
+        tcAsociated.setOnEditStart(event -> {
+            try {
+                String asociated = this.abrirNM(null);
+
+                TablePosition<AccountBean, ?> editingCellPosition = table.getEditingCell();
+                if (editingCellPosition != null) {
+                    int row = editingCellPosition.getRow();
+                    TableColumn< AccountBean, ?> column = editingCellPosition.getTableColumn();
+
+                    // Actualizar el valor de la celda
+                    table.getItems().get(row).setAsociated(asociated);
+                    table.refresh();
+
+                    String[] emailArray = asociated.split(",\\s*");
+
+                    // Convertir el array a una List<String>
+                    List<String> emailList = Arrays.asList(emailArray);
+
+                    for (String string : emailList) {
+                        System.out.println("Parametros --> String: " + string + " account: " + event.getRowValue().getId() + " permission: " + Permissions.Autorizado);
+                        SharedBean shared = new SharedBean(string, event.getRowValue().getId(), Permissions.Autorizado);
+                        SharedFactory.getFactory().create_XML(shared);
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+//        tcAsociated.setOnEditCommit(event -> {
+//            try {
+//                //   AccountBean accountBean = event.getRowValue();
+//                //   accountBean.setPlan(event.getNewValue());
+//                //   aInterface.updateAccount_XML(accountBean, accountBean.getId());
+//            } catch (Exception e) {
+//
+//            }
+//        });
 
         //La columna de ID no será editable ya que se genera automáticamente.
+        tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
+
         table.getColumns().clear();
         table.getColumns().addAll(tcId, tcName, tcDescription, tcDate, tcBalance, tcDivisa, tcPlan, tcAsociated);
         table.setEditable(true);
@@ -311,7 +361,7 @@ public class AccountController {
         cbAtribute.setDisable(false);
         cbAtribute.setVisible(true);
         cbAtribute.getItems().addAll("ID", "Nombre", "Descripción", "Balance", "Divisa", "Plan");
-        //cbAtribute.setSelectionModel(this::handleActionAtributoSearch);
+        //cbAtribute.setOnAction(this::handleActionAtributoSearch);
 
         //El otro ComboBox es de condición (cbCondition) y estará deshabilitado pero visible hasta que el usuario seleccione
         //un dato en el ComboBox anterior.
@@ -345,6 +395,34 @@ public class AccountController {
         stage.show();
     }
 
+    public String abrirNM(ActionEvent event) {
+        String asociated = null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SelectAsociatedView.fxml"));
+            Parent root = loader.load();
+
+            SelectAsociatedController selectController = loader.getController();
+            Stage selectStage = new Stage();
+
+            // Set the stage for the SelectAsociatedController
+            selectController.setStage(selectStage);
+
+            // Load the list of users
+            List<UserBean> userList = UserFactory.getFactory().findAllUsers_XML(new GenericType<List<UserBean>>() {
+            });
+            selectController.handleLoadList(userList);
+
+            // Show the SelectAsociatedView and wait for user interaction
+            selectController.initStage(root);
+            asociated = selectController.getAsociated();
+        } catch (IOException ex) {
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SelectException ex) {
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return asociated;
+    }
+
     public void cargarTabla() {
         List<AccountBean> accounts = aInterface.findAllAccountsByUser_XML(new GenericType< List<AccountBean>>() {
         }, user.getMail());
@@ -362,7 +440,7 @@ public class AccountController {
     @FXML
     private void handleButtonCrearAction(ActionEvent event) {
         try {
-           Long id = aInterface.countAccount(new GenericType<Long>(){
+            Long id = aInterface.countAccount(new GenericType<Long>(){
             });
 
             AccountBean a = new AccountBean();
@@ -386,26 +464,23 @@ public class AccountController {
     //Seguido, saldrá del método del botón.
     @FXML
     private void handleEliminarButtonAction(ActionEvent event) {
-       
+        
+
         try {
-             AccountBean selectedAccount = (AccountBean) table.getSelectionModel().getSelectedItem();
-
-            try {
-                aInterface.deleteAccount(selectedAccount.getId());
-
-                table.getItems().remove(selectedAccount);
-                table.refresh();
-                 
-                throw new Exception("EL GRUPO DE GASTOS SE HA ELIMINADO CORRECTAMENTE");
-
-               
-            } catch (Exception e) {
-                new Alert(Alert.AlertType.INFORMATION, e.getMessage()).showAndWait();
-
+            
+            List <AccountBean>  selectedAccount = table.getSelectionModel().getSelectedItems();
+           
+            for (AccountBean a : selectedAccount) {
+                System.out.println(a.toString());
+                aInterface.deleteAccount(a.getId());
+                table.getItems().remove(a);
             }
+            
+            table.refresh();
+            //throw new Exception("EL GRUPO DE GASTOS SE HA ELIMINADO CORRECTAMENTE");
 
-        } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        } catch (DeleteException e) {
+            this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
         }
 
     }
@@ -416,8 +491,11 @@ public class AccountController {
     @FXML
     private void handleButtonActualizarAction(ActionEvent event) {
         try {
-
-            ObservableList<AccountBean> listAccountBeans = FXCollections.observableArrayList(account);
+            
+            listAccounts = aInterface.findAllAccountsByUser_XML(new GenericType<List<AccountBean>>() {
+            }, user.getMail());
+            
+            ObservableList<AccountBean> listAccountBeans = FXCollections.observableArrayList(listAccounts);
             table.setItems(listAccountBeans);
             table.refresh();
 
@@ -426,7 +504,6 @@ public class AccountController {
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
 
-            e.printStackTrace();
         }
     }
 
@@ -466,36 +543,43 @@ public class AccountController {
     @FXML
     private void handleButtonRecurrentAction(ActionEvent event) {
         try {
-            AccountBean acc = table.getSelectionModel().getSelectedItem();
-
-            if (acc != null) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
-            Parent root = loader.load();
-            RecurrentController rec = loader.getController();
-            rec.setStage(stage);
-            rec.initStage(root);;
-
-            }
+            
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RecurrentView.fxml"));
+                Parent root = loader.load();
+                RecurrentController recurrent = loader.getController();
+                recurrent.setStage(stage);
+                //recurrent.setAccount(acc);
+                recurrent.setUser(user);
+                recurrent.initStage(root);
+                stage.close();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @FXML
-    private void handleButtonPunctualAction(ActionEvent event) {
-        try {
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PunctualView.fxml"));
-            Parent root = loader.load();
-            PunctualController punctual = loader.getController();
-            punctual.setStage(stage);
-            punctual.initStage(root);
-            stage.close();
-
-        } catch (Exception e) {
-
-        }
-    }
+//    @FXML
+//    private void handleButtonPunctualAction(ActionEvent event) {
+//         try {
+//            
+//        //AccountBean acc = table.getSelectionModel().getSelectedItem();
+//             
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PunctualView.fxml"));
+//            
+//            PunctualController punctualController = loader.getController();
+//            punctualController.setStage(stage);
+//            //punctualController.setUser(user);
+//            //punctualController.setAccount(account);
+//            punctualController.initStage(root);
+//            stage.close();
+//
+//            
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
+//        }
+//    }
 
     //COMBOBOX ATRIBUTO:
     //Para filtrar, haremos click en el ComboBox de filtrado llamado Atributo (cbAtribute) sobre el tipo que queramos.
@@ -516,16 +600,19 @@ public class AccountController {
     //Cuando se pulsa el botón dependiendo el tipo de filtraje, realizará la consulta correspondiente a la base de datos y nos mostrará en la tabla.
     //En caso de error saldrá un alerta informativa usando una excepción (SelectException).
     //Seguido, saldrá del método del botón.
+   
     @FXML
     private void handleActionAtributoSearch(ActionEvent event) {
 
         //Object newValue = new Object();
         switch (cbAtribute.getValue().toString()) {
-            case ("Id"):
+            case "ID":
                 cbCondition.setDisable(true);
                 tfSearch.setDisable(false);
                 btnSearch.setDisable(false);
-                //cargarId();
+                cbCondition.setPromptText("Condicion");
+                tfSearch.setText("");
+                cargarId();
                 break;
             case ("Nombre"):
                 cbCondition.setDisable(true);
@@ -537,11 +624,16 @@ public class AccountController {
                 cbCondition.setDisable(true);
                 tfSearch.setDisable(false);
                 btnSearch.setDisable(false);
+                cbCondition.setPromptText("Condicion");
+                tfSearch.setText("");
                 //cargarDescripcion();
                 break;
             case ("Balance"):
                 cbCondition.setDisable(false);
                 tfSearch.setDisable(true);
+                cbCondition.getItems().setAll("Mayor que...", "Menor que...");
+                cbCondition.setPromptText("Rango...");
+                tfSearch.setText("");
                 btnSearch.setDisable(false);
                 //cargarIntensidad();
                 break;
@@ -549,14 +641,16 @@ public class AccountController {
                 cbCondition.setDisable(false);
                 tfSearch.setDisable(true);
                 btnSearch.setDisable(false);
-                cbCondition.getItems().setAll(FXCollections.observableArrayList(Plan.values()));
+                cbCondition.getItems().setAll(FXCollections.observableArrayList(Divisa.values()));
                 //cargarIntensidad();
                 break;
             case ("Plan"):
-                cbCondition.setDisable(false);
-                tfSearch.setDisable(true);
-                btnSearch.setDisable(false);
-                cbCondition.getItems().setAll(FXCollections.observableArrayList(Plan.values()));
+                 cbCondition.setDisable(false);
+                    tfSearch.setDisable(true);
+                    btnSearch.setDisable(false);
+                    cbCondition.getItems().setAll(FXCollections.observableArrayList(Plan.values()));
+                    cbCondition.setPromptText("Periodicidad...");
+                    tfSearch.setText("");
             //cargarFiltroObjetivo();
 
         }
@@ -564,61 +658,60 @@ public class AccountController {
 
     public void handleSearch(ActionEvent event) {
         // log.info("Buscando gasto recurrente con el siguiente filtro --> " + cbAtribute.getValue().toString());
-        List<AccountBean> listAccount;
+       // List<AccountBean> listAccount;
         try {
             switch (cbAtribute.getValue().toString()) {
-                case "Id":
+                case "ID":
                     if (validateId(tfSearch.getText())) {
-                        listAccount = aInterface.findAccount_XML(new GenericType<List<AccountBean>>() {
+                        listAccounts.clear();
+                        listAccounts = aInterface.findAccount_XML(new GenericType<List<AccountBean>>() {
                         }, Long.parseLong(tfSearch.getText()));
-                        cargarId();
+                        
                     }
                     break;
 
                 case "Nombre":
                     if (!tfSearch.getText().isEmpty()) {
-                        listAccount = aInterface.filterAccountsByName_XML(new GenericType<List<AccountBean>>() {
+                        listAccounts = aInterface.filterAccountsByName_XML(new GenericType<List<AccountBean>>() {
                         }, tfSearch.getText(), user.getMail());
-                        cargarNombre();
                     }
                     break;
 
                 case "Descripción":
                     if (!tfSearch.getText().isEmpty()) {
-                        listAccount = aInterface.filterAccountsByDescription_XML(new GenericType<List<AccountBean>>() {
+                        listAccounts = aInterface.filterAccountsByDescription_XML(new GenericType<List<AccountBean>>() {
                         }, tfSearch.getText(), user.getMail());
-                        cargarDescripcion();
                     }
                     break;
 
                 case "Balance":
                     if (validateBalance(tfSearch.getText())) {
                         if (cbCondition.getValue().toString().equalsIgnoreCase("Mayor que...")) {
-                            listAccount = aInterface.filterAccountsWithHigherBalance_XML(new GenericType<List<AccountBean>>() {
+                            listAccounts = aInterface.filterAccountsWithHigherBalance_XML(new GenericType<List<AccountBean>>() {
                             }, Float.parseFloat(tfSearch.getText()), user.getMail());
 
                         } else if (cbCondition.getValue().toString().equalsIgnoreCase("Menor que...")) {
-                            listAccount = aInterface.filterAccountsWithLowerBalance_XML(new GenericType<List<AccountBean>>() {
+                            listAccounts = aInterface.filterAccountsWithLowerBalance_XML(new GenericType<List<AccountBean>>() {
                             }, Float.parseFloat(tfSearch.getText()), user.getMail());
                         }
-                        cargarBalance();
                     }
                     break;
 
-//                case "Plan":
-//                    if (!cbCondition.getValue().toString().equalsIgnoreCase("Plan...")) {
-//                        account = aInterface.filterAccountsByPlan_XML(new GenericType<List<AccountBean>>() {
-//                        }, Plan.valueOf(cbCondition.getValue().toString()), account.getId());
-//                    }
-//                    break;
-//                case "Divisa":
-//                    if (!cbCondition.getValue().toString().equalsIgnoreCase("Divisa...")) {
-//                        listAccount = aInterface.filterAccountsByDivisa_XML(new GenericType<List<AccountBean>>() {
-//                        }, Divisa.valueOf(cbCondition.getValue().toString()));
-//                    }
-//                    break;
+                case "Plan":
+                    if (!cbCondition.getValue().toString().equalsIgnoreCase("Plan...")) {
+                        listAccounts = aInterface.filterAccountsByPlan_XML(new GenericType<List<AccountBean>>() {
+                        }, Plan.valueOf(cbCondition.getValue().toString()), user.getMail());
+                    }
+                    break;
+                case "Divisa":
+                    if (!cbCondition.getValue().toString().equalsIgnoreCase("Divisa...")) {
+                        listAccounts = aInterface.filterAccountsByDivisa_XML(new GenericType<List<AccountBean>>() {
+                        }, Divisa.valueOf(cbCondition.getValue().toString()), user.getMail());
+                    }
+                    break;
+               
             }
-            ObservableList<AccountBean> accountList = FXCollections.observableArrayList(account);
+            ObservableList<AccountBean> accountList = FXCollections.observableArrayList(listAccounts);
             table.setItems(accountList);
             table.refresh();
 
@@ -709,17 +802,10 @@ public class AccountController {
 
     }
 
-//    private ObservableList<AccountBean> cargarPlan() {
-//         ObservableList<AccountBean> listAccount;
-//        List<AccountBean> listDescrip;
-//        listDescrip = aInterface.filterAccountsByPlan_XML(new GenericType<List<AccountBean>>() {
-//        }, cbCondition.getValue(), user.getMail());
-//        listAccount = FXCollections.observableArrayList(listDescrip);
-//        table.setItems(listAccount);
-//        table.refresh();
-//        return listAccount;
-//
-//    }
+    private ObservableList<AccountBean> cargarPlan() {
+        return null;
+
+    }
 
     //TABLEVIEW
     //Se podrá poner el foco en una de las celdas y modificarla escribiendo o borrando algo.
@@ -747,8 +833,8 @@ public class AccountController {
             ObservableList<PieChart.Data> planChartData = FXCollections.observableArrayList();
             ObservableList<PieChart.Data> expensesChartData = FXCollections.observableArrayList();
 
-            for (Map.Entry<Plan, Integer> entry : planData.entrySet()) {
-                planChartData.add(new PieChart.Data(entry.getKey() + "", entry.getValue()));
+            for (Map.Entry<Plan, Integer> p : planData.entrySet()) {
+                planChartData.add(new PieChart.Data(p.getKey() + "", p.getValue()));
             }
 
             for (Map.Entry<String, Integer> entry : expensesData.entrySet()) {
@@ -768,9 +854,7 @@ public class AccountController {
     private Map<String, Integer> getTotalExpenses(List<AccountBean> accounts) {
         List<ExpenseBean> allExpenses = null;
 
-        for (AccountBean a : accounts) {
-            //allExpenses.addAll(ExpenseFactory);
-        }
+        
 
         Map<String, Integer> expenseType = new HashMap<>();
 
@@ -840,6 +924,13 @@ public class AccountController {
 
     public void setUser(UserBean user) {
         this.user = user;
+    }
+    
+     protected void showAlert(String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(message);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 
 }

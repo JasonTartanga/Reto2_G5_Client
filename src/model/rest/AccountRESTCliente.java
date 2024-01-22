@@ -1,4 +1,3 @@
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,7 +5,6 @@
  */
 package model.rest;
 
-import exceptions.SelectException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -26,7 +24,7 @@ import model.interfaces.AccountInterface;
  *        client.close();
  * </pre>
  *
- * @author Jessica.
+ * @author Jason.
  */
 public class AccountRESTCliente implements AccountInterface {
 
@@ -188,20 +186,14 @@ public class AccountRESTCliente implements AccountInterface {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    
-
-
     public void close() {
         client.close();
     }
 
-    @Override
+     @Override
     public <T> T countAccount(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("countAccount", new Object[]{}));
         return resource.request().get(responseType);    }
-
-    
-   
 
 }
