@@ -3,9 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package controllers;
 
-import static java.lang.Math.log;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +22,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,6 +45,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,7 +55,6 @@ import model.entitys.AccountBean;
 import model.entitys.ExpenseBean;
 import model.entitys.RecurrentBean;
 import model.entitys.UserBean;
-import model.enums.Category;
 import model.enums.Divisa;
 import model.enums.Plan;
 import model.factory.AccountFactory;
@@ -62,23 +67,23 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import org.apache.velocity.exception.ParseErrorException;
-import sun.net.www.content.audio.aiff;
 
 /**
  * Controlador de la ventana de Account
+ *
  * @author Jessica
  */
 public class AccountController {
 
     @FXML
     private Stage stage;
-    private AccountInterface aInterface;
-    //private User user;
-    AccountBean account;
-    UserBean user;
+    private AccountInterface aInterface = AccountFactory.getAccountREST();
+   
+    private AccountBean account;
+    private UserBean user;
     private static final Logger log = Logger.getLogger(RecurrentController.class.getName());
 
-    //Declaramos los camois que utilizaremos en la ventana Account
+    //Declaramos los campos que utilizaremos en la ventana Account
     @FXML
     private Button btnCreate, btnDelete, btnRefresh, btnRecurrent, btnPunctual, btnReport, btnSearch;
 
@@ -116,7 +121,7 @@ public class AccountController {
     private TableColumn<AccountBean, String> tcDescription;
 
     @FXML
-    private TableColumn<AccountBean, String> tcDivisa;
+    private TableColumn<AccountBean, Divisa> tcDivisa;
 
     @FXML
     private TableColumn<AccountBean, Date> tcDate;
@@ -171,7 +176,7 @@ public class AccountController {
         fondoAccount.setDisable(false);
         fondoAccount.setVisible(true);
 
-        //El botón crear (btnCreate), eliminar (btnDelete), cargar (btnRefresh), el de gastos recurrentes (bntRecurrent), 
+        //El botón crear (btnCreate), eliminar (btnDelete), cargar (btnRefresh), el de gastos recurrentes (bntRecurrent),
         //el de gastos puntuales (btnPunctual) y el de informe (btnReport) están habilitados y visibles.
         btnCreate.setDisable(false);
         btnCreate.setOnAction(this::handleButtonCrearAction);
@@ -191,7 +196,7 @@ public class AccountController {
         btnReport.setDisable(false);
         btnReport.setOnAction(this::handleButtonInformeAction);
 
-        //Los botones tendrán ToolTip con el mensaje correspondiente. 
+        //Los botones tendrán ToolTip con el mensaje correspondiente.
         btnCreate.setTooltip(new Tooltip("Inserta nueva fila"));
         btnDelete.setTooltip(new Tooltip("Elimina los gastos seleccionados"));
         btnRefresh.setTooltip(new Tooltip("Actualiza la tabla"));
@@ -224,7 +229,7 @@ public class AccountController {
             try {
                 AccountBean accountBean = event.getRowValue();
                 accountBean.setName(event.getNewValue());
-                aInterface.updateAccount_XML(accountBean);
+                aInterface.updateAccount_XML(accountBean, accountBean.getId());
             } catch (Exception e) {
 
             }
@@ -237,7 +242,7 @@ public class AccountController {
             try {
                 AccountBean accountBean = event.getRowValue();
                 accountBean.setDescription(event.getNewValue());
-                aInterface.updateAccount_XML(accountBean);
+                aInterface.updateAccount_XML(accountBean, accountBean.getId());
             } catch (Exception e) {
 
             }
@@ -250,7 +255,7 @@ public class AccountController {
             try {
                 AccountBean accountBean = event.getRowValue();
                 accountBean.setBalance(event.getNewValue());
-                aInterface.updateAccount_XML(accountBean);
+                aInterface.updateAccount_XML(accountBean, accountBean.getId());
             } catch (Exception e) {
 
             }
@@ -263,18 +268,18 @@ public class AccountController {
         tcDate.setOnEditCommit(event -> {
             AccountBean accountBean = event.getRowValue();
             accountBean.setDate(event.getNewValue());
-            aInterface.updateAccount_XML(accountBean);
+            aInterface.updateAccount_XML(accountBean, accountBean.getId());
         });
 
         //Las columnas de “Divisa” y “Plan” están formadas por ComboBox y son editables.
         //La columna de “Divisa” tendrá un ComboBox con todas las divisas y podrá seleccionar la que el usuario quiera.
         tcDivisa.setCellValueFactory(new PropertyValueFactory<>("divisa"));
-        tcDivisa.setCellFactory(ComboBoxTableCell.forTableColumn());
+        tcDivisa.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(Divisa.values())));
         tcDivisa.setOnEditCommit(event -> {
             try {
                 AccountBean accountBean = event.getRowValue();
                 accountBean.setDivisa(event.getNewValue());
-                aInterface.updateAccount_XML(accountBean);
+                aInterface.updateAccount_XML(accountBean, accountBean.getId());
             } catch (Exception e) {
 
             }
@@ -287,7 +292,7 @@ public class AccountController {
             try {
                 AccountBean accountBean = event.getRowValue();
                 accountBean.setPlan(event.getNewValue());
-                aInterface.updateAccount_XML(accountBean);
+                aInterface.updateAccount_XML(accountBean, accountBean.getId());
             } catch (Exception e) {
 
             }
@@ -308,7 +313,7 @@ public class AccountController {
         cbAtribute.getItems().addAll("ID", "Nombre", "Descripción", "Balance", "Divisa", "Plan");
         //cbAtribute.setSelectionModel(this::handleActionAtributoSearch);
 
-        //El otro ComboBox es de condición (cbCondition) y estará deshabilitado pero visible hasta que el usuario seleccione 
+        //El otro ComboBox es de condición (cbCondition) y estará deshabilitado pero visible hasta que el usuario seleccione
         //un dato en el ComboBox anterior.
         cbCondition.setVisible(true);
         cbCondition.setDisable(true);
@@ -322,19 +327,31 @@ public class AccountController {
         btnSearch.setVisible(true);
         btnSearch.setOnAction(this::handleSearch);
 
-        //El MenuBar (menu) está habilitado y visible siempre y será el común utilizado para todas las ventanas, creado anteriormente en una ventana individual.    
+        //El MenuBar (menu) está habilitado y visible siempre y será el común utilizado para todas las ventanas, creado anteriormente en una ventana individual.
         menuBar.setDisable(false);
         menuBar.setVisible(true);
 
         //CONTEXTMENU
-        //Cuando se pulse click derecho sobre la tableView se verá un menú de contexto con un menu (menú) que tendrá 
-        //dos menu items (miCreate) que llamara al mismo método que el botón btnCreate  y (miDelete) que llamara 
-        //al mismo método que btnDelete. Y habrá otros dos menu items separado por menuItemSeparators, (miRefresh) 
+        //Cuando se pulse click derecho sobre la tableView se verá un menú de contexto con un menu (menú) que tendrá
+        //dos menu items (miCreate) que llamara al mismo método que el botón btnCreate  y (miDelete) que llamara
+        //al mismo método que btnDelete. Y habrá otros dos menu items separado por menuItemSeparators, (miRefresh)
         //y (miReport) que llamaran a los mismos métodos que (btnRefresh) y (btnReport) respectivamente
         miCreate.setOnAction(this::handleButtonCrearAction);
         miDelete.setOnAction(this::handleEliminarButtonAction);
         miRefresh.setOnAction(this::handleButtonActualizarAction);
         miReport.setOnAction(this::handleButtonInformeAction);
+
+        this.cargarTabla();
+        stage.show();
+    }
+
+    public void cargarTabla() {
+        List<AccountBean> accounts = aInterface.findAllAccountsByUser_XML(new GenericType< List<AccountBean>>() {
+        }, user.getMail());
+
+        ObservableList accountsList = FXCollections.observableArrayList(accounts);
+        table.getItems().setAll(accountsList);
+        table.refresh();
 
     }
 
@@ -345,12 +362,13 @@ public class AccountController {
     @FXML
     private void handleButtonCrearAction(ActionEvent event) {
         try {
-            Long id = aInterface.find_XML(new GenericType<Long>() {
-            }, account.getId());
+           Long id = aInterface.countAccount(new GenericType<Long>(){
+            });
 
             AccountBean a = new AccountBean();
+            aInterface.createAccount_XML(a);
             a.setId(id + 1);
-
+            
             table.getItems().add(a);
             table.refresh();
 
@@ -362,22 +380,25 @@ public class AccountController {
         }
     }
 
-    //BTN ELIMINAR: Para eliminar, haremos click en la TableView (table) sobre uno o varios gastos recurrentes que queramos eliminar y 
-    //clickeamos en el botón de eliminar de la parte superior de la ventana. 
+    //BTN ELIMINAR: Para eliminar, haremos click en la TableView (table) sobre uno o varios gastos recurrentes que queramos eliminar y
+    //clickeamos en el botón de eliminar de la parte superior de la ventana.
     //Se eliminarán los gastos y si sucede algún error, saldrá un mensaje de error. Para ello usaremos la excepción (DeleteException).
     //Seguido, saldrá del método del botón.
     @FXML
     private void handleEliminarButtonAction(ActionEvent event) {
-        AccountBean selectedAccount = (AccountBean) table.getSelectionModel().getSelectedItem();
-
+       
         try {
+             AccountBean selectedAccount = (AccountBean) table.getSelectionModel().getSelectedItem();
+
             try {
                 aInterface.deleteAccount(selectedAccount.getId());
 
                 table.getItems().remove(selectedAccount);
-
+                table.refresh();
+                 
                 throw new Exception("EL GRUPO DE GASTOS SE HA ELIMINADO CORRECTAMENTE");
 
+               
             } catch (Exception e) {
                 new Alert(Alert.AlertType.INFORMATION, e.getMessage()).showAndWait();
 
@@ -409,7 +430,7 @@ public class AccountController {
         }
     }
 
-    //BTN INFORME: Para obtener el informe, haremos click en el botón de informe (btnReport) del panel principal (fondoAccount). 
+    //BTN INFORME: Para obtener el informe, haremos click en el botón de informe (btnReport) del panel principal (fondoAccount).
     //Validar que las cuentas estén informadas.
     //En caso de que todos los datos sean correctos se procederá a visualizar el informe.
     //Si no es correcto, saldrá un mensaje de error. Para ello usaremos una excepción.
@@ -445,16 +466,18 @@ public class AccountController {
     @FXML
     private void handleButtonRecurrentAction(ActionEvent event) {
         try {
+            AccountBean acc = table.getSelectionModel().getSelectedItem();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RecurrentView.fxml"));
+            if (acc != null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
             Parent root = loader.load();
-            RecurrentController recurrent = loader.getController();
-            recurrent.setStage(stage);
-            recurrent.initStage(root);
-            stage.close();
+            RecurrentController rec = loader.getController();
+            rec.setStage(stage);
+            rec.initStage(root);;
 
+            }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -475,17 +498,17 @@ public class AccountController {
     }
 
     //COMBOBOX ATRIBUTO:
-    //Para filtrar, haremos click en el ComboBox de filtrado llamado Atributo (cbAtribute) sobre el tipo que queramos.  
+    //Para filtrar, haremos click en el ComboBox de filtrado llamado Atributo (cbAtribute) sobre el tipo que queramos.
     //Los tipos de filtro serán: Id/Nombre/Plan/Balance/Divisa/Descripción.
     //Validar que en la tabla aparecen los grupos por el tipo de filtrado.
     //COMBOBOX CONDICION
-    //El ComboBox (cbCondition) estará deshabilitado hasta que el usuario elija un atributo en el ComboBox anterior 
+    //El ComboBox (cbCondition) estará deshabilitado hasta que el usuario elija un atributo en el ComboBox anterior
     //que habilite este, eso pasaría una vez que el usuario escoja Importe/Divisa/Plan.
     //Si se ha elegido importe, nos dará a elegir entre mayor que/ menor que/ igual que….
     //Si es la divisa, aparecerán todas las disponibles en un ComboBox.
     //Si es el plan, aparecerán todos los planes de la enumeración.
-    //TEXTFIELD BUSCAR    
-    //El TextField (tfSearch) estará deshabilitado hasta que el usuario elija un atributo en el ComboBox anterior que habilite 
+    //TEXTFIELD BUSCAR
+    //El TextField (tfSearch) estará deshabilitado hasta que el usuario elija un atributo en el ComboBox anterior que habilite
     //este, eso pasaría una vez que el usuario escoja Nombre/Descripción/Balance.
     //Se podrá escribir el valor que queramos.
     //En caso de no existir dicho dato, saldrá una alerta informando.
@@ -538,29 +561,33 @@ public class AccountController {
 
         }
     }
-      public void handleSearch(ActionEvent event) {
-       // log.info("Buscando gasto recurrente con el siguiente filtro --> " + cbAtribute.getValue().toString());
-      List<AccountBean> listAccount;
+
+    public void handleSearch(ActionEvent event) {
+        // log.info("Buscando gasto recurrente con el siguiente filtro --> " + cbAtribute.getValue().toString());
+        List<AccountBean> listAccount;
         try {
             switch (cbAtribute.getValue().toString()) {
                 case "Id":
                     if (validateId(tfSearch.getText())) {
-                        listAccount = aInterface.find_XML(new GenericType<List<AccountBean>>() {
+                        listAccount = aInterface.findAccount_XML(new GenericType<List<AccountBean>>() {
                         }, Long.parseLong(tfSearch.getText()));
+                        cargarId();
                     }
                     break;
 
                 case "Nombre":
                     if (!tfSearch.getText().isEmpty()) {
                         listAccount = aInterface.filterAccountsByName_XML(new GenericType<List<AccountBean>>() {
-                        }, tfSearch.getText());
+                        }, tfSearch.getText(), user.getMail());
+                        cargarNombre();
                     }
                     break;
 
                 case "Descripción":
                     if (!tfSearch.getText().isEmpty()) {
                         listAccount = aInterface.filterAccountsByDescription_XML(new GenericType<List<AccountBean>>() {
-                        }, tfSearch.getText());
+                        }, tfSearch.getText(), user.getMail());
+                        cargarDescripcion();
                     }
                     break;
 
@@ -568,22 +595,22 @@ public class AccountController {
                     if (validateBalance(tfSearch.getText())) {
                         if (cbCondition.getValue().toString().equalsIgnoreCase("Mayor que...")) {
                             listAccount = aInterface.filterAccountsWithHigherBalance_XML(new GenericType<List<AccountBean>>() {
-                            }, Float.parseFloat(tfSearch.getText()));
+                            }, Float.parseFloat(tfSearch.getText()), user.getMail());
 
                         } else if (cbCondition.getValue().toString().equalsIgnoreCase("Menor que...")) {
                             listAccount = aInterface.filterAccountsWithLowerBalance_XML(new GenericType<List<AccountBean>>() {
-                            }, Float.parseFloat(tfSearch.getText()));
+                            }, Float.parseFloat(tfSearch.getText()), user.getMail());
                         }
+                        cargarBalance();
                     }
                     break;
 
 //                case "Plan":
 //                    if (!cbCondition.getValue().toString().equalsIgnoreCase("Plan...")) {
-//                        account = aInterface.fil(new GenericType<List<AccountBean>>() {
-//                        }, Category.valueOf(cbCondition.getValue().toString()), account.getId());
+//                        account = aInterface.filterAccountsByPlan_XML(new GenericType<List<AccountBean>>() {
+//                        }, Plan.valueOf(cbCondition.getValue().toString()), account.getId());
 //                    }
 //                    break;
-
 //                case "Divisa":
 //                    if (!cbCondition.getValue().toString().equalsIgnoreCase("Divisa...")) {
 //                        listAccount = aInterface.filterAccountsByDivisa_XML(new GenericType<List<AccountBean>>() {
@@ -601,8 +628,8 @@ public class AccountController {
             e.printStackTrace();
         }
     }
-      
-      protected boolean validateId(String id) {
+
+    protected boolean validateId(String id) {
         boolean valido = true;
         try {
             Long.parseLong(id);
@@ -612,7 +639,7 @@ public class AccountController {
         return valido;
     }
 
-       protected boolean validateBalance(String balance) {
+    protected boolean validateBalance(String balance) {
         boolean valido = true;
         try {
             Float.parseFloat(balance);
@@ -631,11 +658,12 @@ public class AccountController {
 //            table.refresh();
 //            return listAccount;
 //        }
+
     private ObservableList<AccountBean> cargarId() {
         ObservableList<AccountBean> listAccount;
         List<AccountBean> todosAccount;
-        todosAccount = aInterface.find_XML(new GenericType<List<AccountBean>>() {
-        } , Long.parseLong(tfSearch.getText()));
+        todosAccount = aInterface.findAccount_XML(new GenericType<List<AccountBean>>() {
+        }, Long.parseLong(tfSearch.getText()));
         listAccount = FXCollections.observableArrayList(todosAccount);
         table.setItems(listAccount);
         table.refresh();
@@ -646,7 +674,7 @@ public class AccountController {
         ObservableList<AccountBean> listAccount;
         List<AccountBean> listNombres;
         listNombres = aInterface.filterAccountsByName_XML(new GenericType<List<AccountBean>>() {
-        }, tfSearch.getText());
+        }, tfSearch.getText(), user.getMail());
         listAccount = FXCollections.observableArrayList(listNombres);
         table.setItems(listAccount);
         table.refresh();
@@ -657,7 +685,7 @@ public class AccountController {
         ObservableList<AccountBean> listAccount;
         List<AccountBean> listDescrip;
         listDescrip = aInterface.filterAccountsByDescription_XML(new GenericType<List<AccountBean>>() {
-        }, tfSearch.getText());
+        }, tfSearch.getText(), user.getMail());
         listAccount = FXCollections.observableArrayList(listDescrip);
         table.setItems(listAccount);
         table.refresh();
@@ -673,7 +701,7 @@ public class AccountController {
         ObservableList<AccountBean> listAccount;
         List<AccountBean> listDescrip;
         listDescrip = aInterface.filterAccountsByDivisa_XML(new GenericType<List<AccountBean>>() {
-        }, tfSearch.getText());
+        }, Divisa.valueOf(cbCondition.getValue().toString()), user.getMail());
         listAccount = FXCollections.observableArrayList(listDescrip);
         table.setItems(listAccount);
         table.refresh();
@@ -681,21 +709,28 @@ public class AccountController {
 
     }
 
-    private ObservableList<AccountBean> cargarPlan() {
-        return null;
-
-    }
+//    private ObservableList<AccountBean> cargarPlan() {
+//         ObservableList<AccountBean> listAccount;
+//        List<AccountBean> listDescrip;
+//        listDescrip = aInterface.filterAccountsByPlan_XML(new GenericType<List<AccountBean>>() {
+//        }, cbCondition.getValue(), user.getMail());
+//        listAccount = FXCollections.observableArrayList(listDescrip);
+//        table.setItems(listAccount);
+//        table.refresh();
+//        return listAccount;
+//
+//    }
 
     //TABLEVIEW
     //Se podrá poner el foco en una de las celdas y modificarla escribiendo o borrando algo.
     //Pulsando la tecla enter se confirmaron los cambios.
-    //En caso de que se pulse la tecla esc, el foco saldrá de la celda y se cancelan los cambios, 
+    //En caso de que se pulse la tecla esc, el foco saldrá de la celda y se cancelan los cambios,
     //Si el foco cambia sin haberle dado a ninguno de los anteriores botones los cambios se cancelaran.
-    //Los filtrados en la tabla se realizarán mediante los métodos que previamente se hayan realizado y comprobando que los 
-    //datos que aparecen son correctos al filtrado.  
+    //Los filtrados en la tabla se realizarán mediante los métodos que previamente se hayan realizado y comprobando que los
+    //datos que aparecen son correctos al filtrado.
     //En caso de error saldrá una ventana informativa con una excepción (SelectException).
     //TAB GRAFICOS
-    //Al hacer clic sobre el tab de gráficos, se nos abrirá el segundo apartado con los gráficos de los gastos de los grupos que tiene el usuario.   
+    //Al hacer clic sobre el tab de gráficos, se nos abrirá el segundo apartado con los gráficos de los gastos de los grupos que tiene el usuario.
     //En caso de error nos saldrá una ventana informativa.
     @FXML
     private void handleLoadGraphicsTab(Event event) {
@@ -730,15 +765,13 @@ public class AccountController {
         }
     }
 
-   
-
     private Map<String, Integer> getTotalExpenses(List<AccountBean> accounts) {
         List<ExpenseBean> allExpenses = null;
-        
+
         for (AccountBean a : accounts) {
             //allExpenses.addAll(ExpenseFactory);
         }
-        
+
         Map<String, Integer> expenseType = new HashMap<>();
 
         for (ExpenseBean e : allExpenses) {
@@ -749,7 +782,7 @@ public class AccountController {
                     int i = expenseType.get("Recurrentes" + 1);
                     expenseType.replace("Recurrentes", i);
                 }
-                
+
             } else {
                 if (!expenseType.containsKey("Puntuales")) {
                     expenseType.put("Puntuales", 1);
@@ -758,7 +791,7 @@ public class AccountController {
                     expenseType.replace("Puntuales", i);
                 }
             }
-        }        
+        }
         return expenseType;
     }
 
@@ -779,8 +812,8 @@ public class AccountController {
 
     //CERRAR VENTANA
     //Pedir confirmación al usuario para salir:
-    //Si el usuario confirma, saldrá de la aplicación. 
-    //Si no confirma, mantenerse en la ventana. 
+    //Si el usuario confirma, saldrá de la aplicación.
+    //Si no confirma, mantenerse en la ventana.
     @FXML
     private void handleExitApplication(Event event) {
         try {
@@ -803,6 +836,10 @@ public class AccountController {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void setUser(UserBean user) {
+        this.user = user;
     }
 
 }

@@ -62,6 +62,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import org.apache.velocity.exception.ParseErrorException;
 
+
 /**
  *
  * @author Jason.
@@ -267,7 +268,7 @@ public class RecurrentController {
             //******************** ACCOUNTS ********************/
             cbAccounts.setOnAction(this::setAccounts);
 
-            accountsUser = AccountFactory.getFactory().findAllAccountsByUser_XML(new GenericType<List<AccountBean>>() {
+            accountsUser = AccountFactory.getAccountREST().findAllAccountsByUser_XML(new GenericType<List<AccountBean>>() {
             }, user.getMail());
 
             for (AccountBean a : accountsUser) {

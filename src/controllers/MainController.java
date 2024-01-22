@@ -23,11 +23,11 @@ public class MainController extends Application{
  
     public void start(Stage stage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignIn.fxml"));
             Parent root = loader.load();
-            AccountController account = loader.getController();
-            account.setStage(stage);
-            account.initStage(root);
+            SignInController signIn = loader.getController();
+            signIn.setStage(stage);
+            signIn.initStage(root);
 
         } catch (IOException ex) {
             new Alert(Alert.AlertType.ERROR, ex.getLocalizedMessage(), ButtonType.OK).showAndWait();
