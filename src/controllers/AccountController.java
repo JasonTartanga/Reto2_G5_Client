@@ -190,7 +190,7 @@ public class AccountController {
         btnDelete.setOnAction(this::handleEliminarButtonAction);
 
         btnRefresh.setDisable(false);
-        btnRefresh.setOnAction(this::handleButtonActualizarAction);
+        btnRefresh.setOnAction(this::cargarTabla);
 
         btnRecurrent.setDisable(false);
         btnRecurrent.setOnAction(this::handleButtonRecurrentAction);
@@ -360,8 +360,8 @@ public class AccountController {
         //El filtrado es mediante un ComboBox (cbAtribute) y podrá filtrarse por “Id/ Nombre/ Plan/ Balance/ Divisa/ Descripción”. Está visible y habilitado siempre .
         cbAtribute.setDisable(false);
         cbAtribute.setVisible(true);
-        cbAtribute.getItems().addAll("ID", "Nombre", "Descripción", "Balance", "Divisa", "Plan");
-        //cbAtribute.setOnAction(this::handleActionAtributoSearch);
+        cbAtribute.getItems().addAll("Id", "Nombre", "Descripción", "Balance", "Divisa", "Plan");
+        cbAtribute.setOnAction(this::handleActionAtributoSearch);
 
         //El otro ComboBox es de condición (cbCondition) y estará deshabilitado pero visible hasta que el usuario seleccione
         //un dato en el ComboBox anterior.
@@ -388,10 +388,10 @@ public class AccountController {
         //y (miReport) que llamaran a los mismos métodos que (btnRefresh) y (btnReport) respectivamente
         miCreate.setOnAction(this::handleButtonCrearAction);
         miDelete.setOnAction(this::handleEliminarButtonAction);
-        miRefresh.setOnAction(this::handleButtonActualizarAction);
+        miRefresh.setOnAction(this::cargarTabla);
         miReport.setOnAction(this::handleButtonInformeAction);
 
-        this.cargarTabla();
+        this.cargarTabla(null);
         stage.show();
     }
 
@@ -423,7 +423,10 @@ public class AccountController {
         return asociated;
     }
 
-    public void cargarTabla() {
+    //BTN ACTUALIZAR: Al pulsar el botón volverá a cargar la tabla con los datos actualizados.
+    //En caso de error, saldrá una ventana informativa.
+    //Seguido, saldrá del método del botón.
+    public void cargarTabla(ActionEvent event) {
         List<AccountBean> accounts = aInterface.findAllAccountsByUser_XML(new GenericType< List<AccountBean>>() {
         }, user.getMail());
 
@@ -485,28 +488,8 @@ public class AccountController {
 
     }
 
-    //BTN ACTUALIZAR: Al pulsar el botón volverá a cargar la tabla con los datos actualizados.
-    //En caso de error, saldrá una ventana informativa.
-    //Seguido, saldrá del método del botón.
-    @FXML
-    private void handleButtonActualizarAction(ActionEvent event) {
-        try {
-            
-            listAccounts = aInterface.findAllAccountsByUser_XML(new GenericType<List<AccountBean>>() {
-            }, user.getMail());
-            
-            ObservableList<AccountBean> listAccountBeans = FXCollections.observableArrayList(listAccounts);
-            table.setItems(listAccountBeans);
-            table.refresh();
-
-            this.handleLoadGraphicsTab(event);
-
-        } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, e.getLocalizedMessage(), ButtonType.OK).showAndWait();
-
-        }
-    }
-
+  
+    
     //BTN INFORME: Para obtener el informe, haremos click en el botón de informe (btnReport) del panel principal (fondoAccount).
     //Validar que las cuentas estén informadas.
     //En caso de que todos los datos sean correctos se procederá a visualizar el informe.
@@ -515,8 +498,8 @@ public class AccountController {
     @FXML
     private void handleButtonInformeAction(ActionEvent event) {
         try {
-            //LOGGER.info("Beginning printing action...");
-            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/report/AccountReport.jrxml"));
+            LOGGER.info("Beginning printing action...");
+            JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/reports/AccountReport.jrxml"));
 
             JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<AccountBean>) this.table.getItems());
 
@@ -602,11 +585,11 @@ public class AccountController {
     //Seguido, saldrá del método del botón.
    
     @FXML
-    private void handleActionAtributoSearch(ActionEvent event) {
+    private void handleActionAtributoSearch(Event event) {
 
         //Object newValue = new Object();
         switch (cbAtribute.getValue().toString()) {
-            case "ID":
+            case "Id":
                 cbCondition.setDisable(true);
                 tfSearch.setDisable(false);
                 btnSearch.setDisable(false);
@@ -630,7 +613,7 @@ public class AccountController {
                 break;
             case ("Balance"):
                 cbCondition.setDisable(false);
-                tfSearch.setDisable(true);
+                tfSearch.setDisable(false);
                 cbCondition.getItems().setAll("Mayor que...", "Menor que...");
                 cbCondition.setPromptText("Rango...");
                 tfSearch.setText("");
@@ -639,14 +622,14 @@ public class AccountController {
                 break;
             case ("Divisa"):
                 cbCondition.setDisable(false);
-                tfSearch.setDisable(true);
+                tfSearch.setDisable(false);
                 btnSearch.setDisable(false);
                 cbCondition.getItems().setAll(FXCollections.observableArrayList(Divisa.values()));
                 //cargarIntensidad();
                 break;
             case ("Plan"):
                  cbCondition.setDisable(false);
-                    tfSearch.setDisable(true);
+                    tfSearch.setDisable(false);
                     btnSearch.setDisable(false);
                     cbCondition.getItems().setAll(FXCollections.observableArrayList(Plan.values()));
                     cbCondition.setPromptText("Periodicidad...");
@@ -785,11 +768,7 @@ public class AccountController {
         return listAccount;
     }
 
-    private ObservableList<AccountBean> cargarBalance() {
-        return null;
-
-    }
-
+    
     private ObservableList<AccountBean> cargarDivisa() {
         ObservableList<AccountBean> listAccount;
         List<AccountBean> listDescrip;
