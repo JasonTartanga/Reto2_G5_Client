@@ -41,6 +41,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
@@ -107,10 +108,12 @@ public class RecurrentController {
     @FXML
     private TableColumn<RecurrentBean, Period> tcPeriodicity;
 
-    @FXML
-    private MenuBar menuBar;
+//    @FXML
+//    private MenuBar menuBar;
     @FXML
     private MenuItem miCreate, miDelete, miRefresh, miReport;
+    @FXML
+    private MenuBarController menuBarController = new MenuBarController();
 
     @FXML
     private PieChart pieCategory, piePeriodicity;
@@ -140,8 +143,10 @@ public class RecurrentController {
             lblFilter.setVisible(true);
 
             //El menuBar estará visible y habilitado y será el común utilizado para todas las ventanas, creado anteriormente en una ventana individual.
-            menuBar.setVisible(true);
-            menuBar.setDisable(false);
+//            menuBar.setVisible(true);
+            //          menuBar.setDisable(false);
+            menuBarController.setUser(user);
+            menuBarController.setStage(thisStage);
 
             //El botón crear (btnCreate), eliminar (btnDelete), cargar (btnRefresh) el de gastos puntuales (btnSwitch) y el de informe (btnReport) están habilitados y visibles.
             btnCreate.setVisible(true);
@@ -298,6 +303,7 @@ public class RecurrentController {
             log.addHandler(new FileHandler("recurrent.log"));
 
             this.handleRefreshTable(null);
+            thisStage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
 
             thisStage.show();
 

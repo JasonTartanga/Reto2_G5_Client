@@ -45,6 +45,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -142,10 +143,10 @@ public class AccountController {
     private AnchorPane fondoAccount;
 
     @FXML
-    private MenuBar menuBar;
+    private MenuItem miCreate, miDelete, miRefresh, miReport;
 
     @FXML
-    private MenuItem miCreate, miDelete, miRefresh, miReport;
+    private MenuBarController menuBarController = new MenuBarController();
 
     @FXML
     ObservableList<AccountBean> listAccount;
@@ -162,21 +163,25 @@ public class AccountController {
         LOGGER.info("Initializing Account stage");
         Scene scene = new Scene(root);
 
+        stage = new Stage();
+        stage.setScene(scene);
         //El título de la ventana es “Account View”
         stage.setTitle("Account View");
 
         //La ventana no es redimensionable.
-        Stage stage = new Stage();
         stage.setResizable(false);
 
         //aInterface = AccountFactory.getFactory();
         //La ventana es una ventana modal.
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
 
         //En la ventana tenemos un panel principal (fondoAccount).
         fondoAccount.setDisable(false);
         fondoAccount.setVisible(true);
+
+        //El menuBar estará visible y habilitado y será el común utilizado para todas las ventanas, creado anteriormente en una ventana individual.
+        menuBarController.setStage(stage);
+        menuBarController.setUser(user);
 
         //El botón crear (btnCreate), eliminar (btnDelete), cargar (btnRefresh), el de gastos recurrentes (bntRecurrent),
         //el de gastos puntuales (btnPunctual) y el de informe (btnReport) están habilitados y visibles.
@@ -373,9 +378,8 @@ public class AccountController {
         btnSearch.setOnAction(this::handleSearch);
 
         //El MenuBar (menu) está habilitado y visible siempre y será el común utilizado para todas las ventanas, creado anteriormente en una ventana individual.
-        menuBar.setDisable(false);
-        menuBar.setVisible(true);
-
+//        menuBar.setDisable(false);
+//        menuBar.setVisible(true);
         //CONTEXTMENU
         //Cuando se pulse click derecho sobre la tableView se verá un menú de contexto con un menu (menú) que tendrá
         //dos menu items (miCreate) que llamara al mismo método que el botón btnCreate  y (miDelete) que llamara
@@ -385,6 +389,8 @@ public class AccountController {
         miDelete.setOnAction(this::handleEliminarButtonAction);
         miRefresh.setOnAction(this::handleButtonActualizarAction);
         miReport.setOnAction(this::handleButtonInformeAction);
+
+        stage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
 
         this.cargarTabla();
         stage.show();

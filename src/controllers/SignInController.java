@@ -124,6 +124,8 @@ public class SignInController {
             }
         });
 
+        thisStage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
+
         txtEmail.setText("jason@gmail.com");
         txtPasswd.setText("abcd*1234");
         thisStage.show();
@@ -183,6 +185,7 @@ public class SignInController {
         } catch (SelectException e) {
             this.showMessage(e.getMessage(), AlertType.ERROR);
         } catch (Exception e) {
+            e.printStackTrace();
             this.showMessage(e.getMessage(), AlertType.ERROR);
         }
     }
@@ -194,8 +197,7 @@ public class SignInController {
      * @param event evento que sucede al pulsarse el botón.
      */
     @FXML
-    protected void handleSignUpHyperlinkAction(ActionEvent event
-    ) {
+    protected void handleSignUpHyperlinkAction(ActionEvent event) {
         try {
             //Al pulsar sobre el HiperLink nos redirigirá a la ventana de SignUp.
 
@@ -219,8 +221,7 @@ public class SignInController {
      * @param event evento que sucede al pulsarse el botón.
      */
     @FXML
-    protected void handleMostrarContraseniaToggleButtonAction(ActionEvent event
-    ) {
+    protected void handleMostrarContraseniaToggleButtonAction(ActionEvent event) {
         if (tbtnPasswd.isSelected()) {
             //Al seleccionar el botón, se hará visible el TextField (txtShowPasswd) con el texto escrito en el PasswordField(txtPasswd)
             //y se hará invisible el PasswordField(txtPasswd). También se cambiará la imagen (ivTbntPasswd) del ToggleButton(tbtnPasswd)
@@ -249,8 +250,7 @@ public class SignInController {
      * @param event evento que sucede al pulsarse el botón.
      */
     @FXML
-    private void handleExitApplication(Event event
-    ) {
+    private void handleExitApplication(Event event) {
         try {
             event.consume();
             //Con esto vamos a crear una ventana de confirmación al pulsar el botón de salir
