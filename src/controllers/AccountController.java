@@ -48,6 +48,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import static javafx.scene.input.KeyCode.T;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.FloatStringConverter;
@@ -181,6 +182,10 @@ public class AccountController {
         fondoAccount.setDisable(false);
         fondoAccount.setVisible(true);
 
+//        //Se añade el MenuBar.fxml a nuestra ventana.            
+//        HBox hBoxMenu = (HBox) root.getChildrenUnmodifiable().get(0);            
+//        //Get the menu bar from the children of the layout got before             
+//        MenuBar menuBar = (MenuBar) hBoxMenu.getChildren().get(0);
         //El botón crear (btnCreate), eliminar (btnDelete), cargar (btnRefresh), el de gastos recurrentes (bntRecurrent),
         //el de gastos puntuales (btnPunctual) y el de informe (btnReport) están habilitados y visibles.
         btnCreate.setDisable(false);
@@ -594,8 +599,8 @@ public class AccountController {
                 tfSearch.setDisable(false);
                 btnSearch.setDisable(false);
                 cbCondition.setPromptText("Condicion");
-                tfSearch.setText("");
-                cargarId();
+                //tfSearch.setText("");
+                //cargarId();
                 break;
             case ("Nombre"):
                 cbCondition.setDisable(true);
@@ -647,8 +652,8 @@ public class AccountController {
                 case "ID":
                     if (validateId(tfSearch.getText())) {
                         listAccounts.clear();
-                        listAccounts = aInterface.findAccount_XML(new GenericType<List<AccountBean>>() {
-                        }, Long.parseLong(tfSearch.getText()));
+                        listAccounts.add(aInterface.findAccount_XML(new GenericType<AccountBean>() {
+                        }, Long.parseLong(tfSearch.getText())));
                         
                     }
                     break;
