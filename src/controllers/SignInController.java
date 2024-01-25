@@ -165,7 +165,7 @@ public class SignInController {
             user.setPassword(Asimetric.cipherPassword(txtPasswd.getText()));
 
             UserInterface ui = UserFactory.getFactory();
-            ui.loginUser_XML(new GenericType<UserBean>() {
+            user = ui.loginUser_XML(new GenericType<UserBean>() {
             }, user.getMail(), user.getPassword());
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));

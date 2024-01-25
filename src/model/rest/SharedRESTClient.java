@@ -40,6 +40,7 @@ public class SharedRESTClient implements SharedInterface {
 
     @Override
     public void create_XML(Object requestEntity) throws CreateException {
+        System.out.println("Enviando shared al servidor --> " + requestEntity.toString());
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 

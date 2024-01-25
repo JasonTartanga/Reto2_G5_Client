@@ -35,6 +35,13 @@ public class MenuBarController {
     @FXML
     private MenuItem miInicio, miChangePassword, miHelp, miLogout, miClose;
 
+//    public MenuBarController() {
+//        miInicio.setOnAction(this::handleMainMenu);
+//        miChangePassword.setOnAction(this::handleChangePasswordMenu);
+//        miHelp.setOnAction(this::handleHelpMenu);
+//        miLogout.setOnAction(this::handleLogoutMenu);
+//        miClose.setOnAction(this::handleCloseMenu);
+//    }
     @FXML
     private void handleMainMenu(ActionEvent action) {
         log.info("Menu item de inicio pulsado");

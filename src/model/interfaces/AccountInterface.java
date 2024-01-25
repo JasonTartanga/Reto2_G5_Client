@@ -5,6 +5,7 @@
  */
 package model.interfaces;
 
+import exceptions.DeleteException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -62,6 +63,8 @@ public interface AccountInterface {
 
     public <T> T filterAccountsWithHigherBalance_JSON(GenericType<T> responseType, Float balance, String mail) throws ClientErrorException;
 
-    public void deleteAccount(Long id) throws ClientErrorException;
+    public void deleteAccount(Long id) throws DeleteException;
+
+    public <T> T countAccount(GenericType<T> responseType) throws ClientErrorException;
 
 }

@@ -163,7 +163,9 @@ public class AccountRESTCliente implements AccountInterface {
 
     @Override
     public void createAccount_XML(Object requestEntity) throws ClientErrorException {
+        System.out.println("Prueba");
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+        System.out.println(webTarget.getUri());
     }
 
     @Override
@@ -184,6 +186,13 @@ public class AccountRESTCliente implements AccountInterface {
     @Override
     public void updateAccount_JSON(Object requestEntity, Long id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
+    }
+
+    @Override
+    public <T> T countAccount(GenericType<T> responseType) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("countAccount", new Object[]{}));
+        return resource.request().get(responseType);
     }
 
     public void close() {

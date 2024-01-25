@@ -172,7 +172,7 @@ public class RecurrentController {
             btnCreate.setTooltip(new Tooltip("Inserta nueva fila"));
             btnDelete.setTooltip(new Tooltip("Elimina los gastos seleccionados"));
             btnRefresh.setTooltip(new Tooltip("Actualiza la tabla"));
-            btnSwitch.setTooltip(new Tooltip("Ver gastos recurrentes"));
+            btnSwitch.setTooltip(new Tooltip("Ver gastos puntuales"));
             btnReport.setTooltip(new Tooltip("Genera un reporte"));
             btnSearch.setTooltip(new Tooltip("Buscar gastos recurrentes"));
 

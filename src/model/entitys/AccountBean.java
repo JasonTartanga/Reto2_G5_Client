@@ -169,4 +169,9 @@ public class AccountBean {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "AccountBean{" + "id=" + id + ", name=" + name + ", description=" + description + ", divisa=" + divisa + ", date=" + date + ", balance=" + balance + ", plan=" + plan + ", asociated=" + asociated + ", shared=" + shared + ", expenses=" + expenses + '}';
+    }
 }
