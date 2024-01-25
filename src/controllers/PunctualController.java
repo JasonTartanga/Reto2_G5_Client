@@ -19,9 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.entitys.AccountBean;
 import model.entitys.PunctualBean;
-import model.entitys.UserBean;
 import model.enums.Importance;
 
 /**
@@ -110,13 +108,5 @@ public class PunctualController {
     //El botón de buscar (btnSearch) estará habilitado y visible.
     void setStage(Stage stage) {
         this.thisStage = stage;
-    }
-
-    void setAccount(AccountBean acc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    void setUser(UserBean user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

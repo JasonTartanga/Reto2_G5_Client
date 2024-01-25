@@ -1,7 +1,8 @@
 package model.entitys;
 
-import model.enums.Permissions;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -14,51 +15,36 @@ public class SharedBean {
     private static final long serialVersionUID = 1L;
 
     //******************** ATRIBUTOS *********************/
-    private final SimpleObjectProperty<SharedIdBean> sharedId;
-    private final SimpleObjectProperty<UserBean> user;
-    private final SimpleObjectProperty<AccountBean> account;
+    private final SimpleStringProperty mail;
+    private final SimpleLongProperty id;
     private final SimpleObjectProperty<Permissions> permisions;
 
-    public SharedBean(SharedIdBean sharedId, UserBean user, AccountBean account, Permissions permisions) {
-        this.sharedId = new SimpleObjectProperty<>(sharedId);
-        this.user = new SimpleObjectProperty<>(user);
-        this.account = new SimpleObjectProperty<>(account);
+    public SharedBean(String mail, Long id, Permissions permisions) {
+        this.mail = new SimpleStringProperty(mail);
+        this.id = new SimpleLongProperty(id);
         this.permisions = new SimpleObjectProperty<>(permisions);
     }
 
     public SharedBean() {
-        this.sharedId = new SimpleObjectProperty<>();
-        this.user = new SimpleObjectProperty<>();
-        this.account = new SimpleObjectProperty<>();
+        this.mail = new SimpleStringProperty();
+        this.id = new SimpleLongProperty();
         this.permisions = new SimpleObjectProperty<>();
     }
 
-    public SharedBean(String string, Long id, model.entitys.Permissions permissions) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getMail() {
+        return this.mail.get();
     }
 
-    public SharedIdBean getSharedId() {
-        return this.sharedId.get();
+    public void setMail(String mail) {
+        this.mail.set(mail);
     }
 
-    public void setSharedId(SharedIdBean sharedId) {
-        this.sharedId.set(sharedId);
+    public Long getId() {
+        return this.id.get();
     }
 
-    public UserBean getUser() {
-        return this.user.get();
-    }
-
-    public void setUser(UserBean user) {
-        this.user.set(user);
-    }
-
-    public AccountBean getAccount() {
-        return this.account.get();
-    }
-
-    public void setAccount(AccountBean account) {
-        this.account.set(account);
+    public void setId(Long id) {
+        this.id.set(id);
     }
 
     public Permissions getPermissions() {
@@ -68,10 +54,4 @@ public class SharedBean {
     public void setPermissions(Permissions permissions) {
         this.permisions.set(permissions);
     }
-
-    @Override
-    public String toString() {
-        return "SharedBean{" + "sharedId=" + sharedId + ", user=" + user + ", account=" + account + ", permisions=" + permisions + '}';
-    }
-
 }

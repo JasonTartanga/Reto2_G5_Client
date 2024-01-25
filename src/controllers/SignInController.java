@@ -169,7 +169,7 @@ public class SignInController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
             Parent root = loader.load();
             AccountController acc = loader.getController();
-            acc.setStage(new Stage());
+            acc.setStage(thisStage);
             acc.setUser(user);
             acc.initStage(root);
             thisStage.close();
@@ -183,7 +183,6 @@ public class SignInController {
         } catch (SelectException e) {
             this.showMessage(e.getMessage(), AlertType.ERROR);
         } catch (Exception e) {
-            e.printStackTrace();
             this.showMessage(e.getMessage(), AlertType.ERROR);
         }
     }

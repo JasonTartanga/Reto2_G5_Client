@@ -1,4 +1,4 @@
-/*
+  /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -227,7 +227,7 @@ public class AccountController {
         //El primer Tab es es del “Accounts” (tabCuentas) y en él hay una TableView.
         tabCuentas.setDisable(false);
         tabGraficos.setDisable(false);
-        tabGraficos.setOnSelectionChanged(this::handleLoadGraphicsTab);
+        
 
 
         //La TableView (table) está siempre habilitada y será editable.
@@ -396,6 +396,8 @@ public class AccountController {
         miRefresh.setOnAction(this::cargarTabla);
         miReport.setOnAction(this::handleButtonInformeAction);
 
+        tabGraficos.setOnSelectionChanged(this::handleLoadGraphicsTab);
+        
         this.cargarTabla(null);
         stage.show();
     }
@@ -489,6 +491,7 @@ public class AccountController {
 
         } catch (DeleteException e) {
             this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
+             e.printStackTrace();
         }
 
     }
@@ -519,6 +522,7 @@ public class AccountController {
             //If there is an error show message and
             //log it.
             System.out.println("Error");
+             ex.printStackTrace();
         }
 
     }
@@ -546,28 +550,28 @@ public class AccountController {
         }
     }
 
-//    @FXML
-//    private void handleButtonPunctualAction(ActionEvent event) {
-//         try {
-//            
-//        //AccountBean acc = table.getSelectionModel().getSelectedItem();
-//             
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PunctualView.fxml"));
-//            
-//            PunctualController punctualController = loader.getController();
-//            punctualController.setStage(stage);
-//            //punctualController.setUser(user);
-//            //punctualController.setAccount(account);
-//            punctualController.initStage(root);
-//            stage.close();
-//
-//            
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//
-//        }
-//    }
+    @FXML
+    private void handleButtonPunctualAction(ActionEvent event) {
+         try {
+            
+        //AccountBean acc = table.getSelectionModel().getSelectedItem();
+             
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PunctualView.fxml"));
+            
+            PunctualController punctualController = loader.getController();
+            punctualController.setStage(stage);
+            //punctualController.setUser(user);
+            //punctualController.setAccount(account);
+        //    punctualController.initStage(root);
+            stage.close();
+
+            
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
 
     //COMBOBOX ATRIBUTO:
     //Para filtrar, haremos click en el ComboBox de filtrado llamado Atributo (cbAtribute) sobre el tipo que queramos.

@@ -1,4 +1,4 @@
-  package controllers;
+package controllers;
 
 import exceptions.CreateException;
 import exceptions.DeleteException;
@@ -74,7 +74,7 @@ public class RecurrentController {
     private UserBean user;
     private AccountBean account;
 
-     List<RecurrentBean> recurrentes;
+    private List<RecurrentBean> recurrentes;
     private List<AccountBean> accountsUser;
 
     private final RecurrentInterface rest = RecurrentFactory.getFactory();
