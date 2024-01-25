@@ -116,7 +116,7 @@ public class ExpenseBean implements Serializable {
 
     @Override
     public String toString() {
-        return "ExpenseBean{" + "uuid=" + uuid + ", name=" + name + ", concept=" + concept + ", amount=" + amount + ", date=" + date + ", account=" + account + '}';
+        return "ExpenseBean{" + "uuid=" + uuid + ", name=" + name + ", concept=" + concept + ", amount=" + amount + ", date=" + date + ", account=" + account.toString() + '}';
     }
 
 }

@@ -4,11 +4,20 @@ package controllers;
  *
  * @author Jason.
  */
+import java.io.IOException;
+import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Stage;
 
 public class MenuBarController {
 
@@ -19,52 +28,88 @@ public class MenuBarController {
     @FXML
     private MenuItem miInicio, miChangePassword, miHelp, miLogout, miClose;
 
-    public void innitStage() {
+    public void initStage(Parent root) {
         miInicio.setOnAction(this::handleMainMenu);
+        miChangePassword.setOnAction(this::handleChangePasswordMenu);
+        miHelp.setOnAction(this::handleHelpMenu);
+        miLogout.setOnAction(this::handleLogoutMenu);
+        miClose.setOnAction(this::handleCloseMenu);
+
+        log.info("InntStage");
     }
 
     @FXML
-    private void handleMenuItemAction(ActionEvent event) {
-        if (event.getSource() == miInicio) {
-            log.info("Menu item de inicio pulsado");
-            this.handleMainMenu(event);
+    public void handleMainMenu(ActionEvent action) {
+        log.info("Menu item de inicio pulsado");
 
-        } else if (event.getSource() == miChangePassword) {
-            log.info("Menu item de cambiar contraseña pulsado");
-            this.handleChangePasswordMenu(event);
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
+//            Parent root = loader.load();
+//            AccountController account = loader.getController();
+//            account.setStage(stage);
+//            account.setUser(user);
+//            account.initStage(root);
+//        } catch (IOException ex) {
+//            Logger.getLogger(MenuBarController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    }
 
-        } else if (event.getSource() == miHelp) {
-            log.info("Menu item de ayuda pulsado");
-            this.handleHelpMenu(event);
+    @FXML
+    public void handleChangePasswordMenu(ActionEvent action) {
+        log.info("Menu item de cambiar contraseña pulsado");
 
-        } else if (event.getSource() == miLogout) {
-            log.info("Menu item de cerrar sesion pulsado");
-            this.handleLogoutMenu(event);
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ForgotPassword.fxml"));
+//            Parent root = loader.load();
+//            ForgotPasswordController forgotPassword = loader.getController();
+//            forgotPassword.setStage(new Stage());
+//            forgotPassword.initStage(root);
+//        } catch (IOException ex) {
+//            Logger.getLogger(MenuBarController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    }
 
-        } else if (event.getSource() == miClose) {
-            log.info("Menu item de cerrar aplicacion pulsado");
-            this.handleCloseMenu(event);
+    @FXML
+    public void handleHelpMenu(ActionEvent action) {
+        log.info("Menu item de ayuda pulsado");
 
+    }
+
+    @FXML
+    public void handleLogoutMenu(ActionEvent action) {
+        log.info("Menu item de cerrar sesion pulsado");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Signin.fxml"));
+            Parent root = loader.load();
+            SignInController signIn = loader.getController();
+            signIn.setStage(new Stage());
+            signIn.initStage(root);
+
+        } catch (IOException ex) {
+            Logger.getLogger(MenuBarController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void handleMainMenu(ActionEvent action) {
-
-    }
-
-    public void handleChangePasswordMenu(ActionEvent action) {
-
-    }
-
-    public void handleHelpMenu(ActionEvent action) {
-
-    }
-
-    public void handleLogoutMenu(ActionEvent action) {
-
-    }
-
+    @FXML
     public void handleCloseMenu(ActionEvent action) {
+        log.info("Menu item de cerrar aplicacion pulsado");
 
+        try {
+            action.consume();
+            //Con esto vamos a crear una ventana de confirmación al pulsar el botón de salir
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Seguro que deseas salir?");
+            alert.setHeaderText(null);
+
+            //Con este Optional<ButtonType> creamos botones de Ok y cancelar
+            Optional<ButtonType> action2 = alert.showAndWait();
+            //Si le da a OK el programa dejará de existir, se cierra por completo
+            if (action2.get() == ButtonType.OK) {
+                Platform.exit();
+            }
+
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage() + ButtonType.OK).showAndWait();
+        }
     }
 }

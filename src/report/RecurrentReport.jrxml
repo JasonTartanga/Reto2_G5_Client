@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="50ab64c0-0f25-4308-b9dc-0b23267febd8">
-	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.zoom" value="1.4641000000000013"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="461"/>
-        <field name="uuid" class="java.lang.Long"/>
-        <field name="name" class="java.lang.String"/>
-        <field name="concept" class="java.lang.String"/>
-        <field name="amount" class="java.lang.Float"/>
-        <field name="date" class="java.util.Date"/>
-        <field name="category" class="model.enums.Category"/>
-        <field name="periodicity" class="model.enums.Period"/>
-	
-        <background>
+	<property name="ireport.y" value="0"/>
+	<field name="uuid" class="java.lang.Long"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="concept" class="java.lang.String"/>
+	<field name="amount" class="java.lang.Float"/>
+	<field name="date" class="java.util.Date"/>
+	<field name="category" class="model.enums.Category"/>
+	<field name="periodicity" class="model.enums.Period"/>
+	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
@@ -90,7 +89,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch">
+		<band height="29" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="50" height="16" uuid="4cb77b67-6d3c-47db-b418-e142d30246d0"/>
 				<textFieldExpression><![CDATA[$F{uuid}]]></textFieldExpression>
@@ -127,18 +126,13 @@
 	<pageFooter>
 		<band height="54" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="34" width="555" height="20" uuid="50479cf6-32b8-4fca-9c80-6e65cfe8f101"/>
+				<reportElement x="0" y="34" width="538" height="20" uuid="50479cf6-32b8-4fca-9c80-6e65cfe8f101"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch">
-			<textField evaluationTime="Report">
-				<reportElement x="608" y="22" width="40" height="20" uuid="4893f7ae-6587-42d6-b372-f88c4556235e"/>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-		</band>
+		<band height="42" splitType="Stretch"/>
 	</summary>
 </jasperReport>

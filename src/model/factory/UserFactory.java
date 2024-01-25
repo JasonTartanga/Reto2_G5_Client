@@ -1,7 +1,7 @@
 package model.factory;
 
 import model.interfaces.UserInterface;
-import model.rest.UserFacadeREST;
+import model.rest.UserRESTCliente;
 
 /**
  *
@@ -10,6 +10,6 @@ import model.rest.UserFacadeREST;
 public class UserFactory {
 
     public static UserInterface getFactory() {
-        return new UserFacadeREST();
+        return new UserRESTCliente();
     }
 }

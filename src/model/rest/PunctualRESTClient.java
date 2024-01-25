@@ -5,6 +5,10 @@
  */
 package model.rest;
 
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.SelectException;
+import exceptions.UpdateException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -36,95 +40,95 @@ public class PunctualRESTClient implements PunctualInterface {
         webTarget = client.target(BASE_URI).path("entitys.punctual");
     }
 
-    public <T> T filterPunctualsByConcept_XML(GenericType<T> responseType, String concept, Long account_id) throws ClientErrorException {
+    public <T> T filterPunctualsByConcept_XML(GenericType<T> responseType, String concept, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsByConcept/{0}/{1}", new Object[]{concept, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T filterPunctualsByConcept_JSON(GenericType<T> responseType, String concept, Long account_id) throws ClientErrorException {
+    public <T> T filterPunctualsByConcept_JSON(GenericType<T> responseType, String concept, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsByConcept/{0}/{1}", new Object[]{concept, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T filterPunctualsByImportance_XML(GenericType<T> responseType, Importance importance, Long account_id) throws ClientErrorException {
+    public <T> T filterPunctualsByImportance_XML(GenericType<T> responseType, Importance importance, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualByImportance/{0}/{1}", new Object[]{importance, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T filterPunctualsByImportance_JSON(GenericType<T> responseType, Importance importance, Long account_id) throws ClientErrorException {
+    public <T> T filterPunctualsByImportance_JSON(GenericType<T> responseType, Importance importance, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualByImportance/{0}/{1}", new Object[]{importance, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findPunctualsByAccount_XML(GenericType<T> responseType, Long uuid) throws ClientErrorException {
+    public <T> T findPunctualsByAccount_XML(GenericType<T> responseType, Long uuid) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("findPunctualsByAccount/{0}", new Object[]{uuid}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findPunctualsByAccount_JSON(GenericType<T> responseType, Long uuid) throws ClientErrorException {
+    public <T> T findPunctualsByAccount_JSON(GenericType<T> responseType, Long uuid) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("findPunctualsByAccount/{0}", new Object[]{uuid}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T filterPunctualsByName_XML(GenericType<T> responseType, String name, Long account_id) throws ClientErrorException {
+    public <T> T filterPunctualsByName_XML(GenericType<T> responseType, String name, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsByName/{0}/{1}", new Object[]{name, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T filterPunctualsByName_JSON(GenericType<T> responseType, String name, Long account_id) throws ClientErrorException {
+    public <T> T filterPunctualsByName_JSON(GenericType<T> responseType, String name, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsByName/{0}/{1}", new Object[]{name, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T filterPunctualsWithHigherAmount_XML(GenericType<T> responseType, String amount, Long account_id) throws ClientErrorException {
+    public <T> T filterPunctualsWithHigherAmount_XML(GenericType<T> responseType, float amount, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsWithHigherAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T filterPunctualsWithHigherAmount_JSON(GenericType<T> responseType, String amount, Long account_id) throws ClientErrorException {
+    public <T> T filterPunctualsWithHigherAmount_JSON(GenericType<T> responseType, float amount, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsWithHigherAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T filterPunctualsWithLowerAmount_XML(GenericType<T> responseType, String amount, Long account_id) throws ClientErrorException {
+    public <T> T filterPunctualsWithLowerAmount_XML(GenericType<T> responseType, float amount, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsWithLowerAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T filterPunctualsWithLowerAmount_JSON(GenericType<T> responseType, String amount, Long account_id) throws ClientErrorException {
+    public <T> T filterPunctualsWithLowerAmount_JSON(GenericType<T> responseType, float amount, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsWithLowerAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public void createPunctual_XML(Object requestEntity) throws ClientErrorException {
+    public void createPunctual_XML(Object requestEntity) throws CreateException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
-    public void createPunctual_JSON(Object requestEntity) throws ClientErrorException {
+    public void createPunctual_JSON(Object requestEntity) throws CreateException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public void updatePunctual_XML(Object requestEntity, Long uuid) throws ClientErrorException {
+    public void updatePunctual_XML(Object requestEntity, Long uuid) throws UpdateException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{uuid})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
-    public void updatePunctual_JSON(Object requestEntity, Long uuid) throws ClientErrorException {
+    public void updatePunctual_JSON(Object requestEntity, Long uuid) throws UpdateException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{uuid})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T findPunctual_XML(GenericType<T> responseType, Long uuid) throws ClientErrorException {
+    public <T> T findPunctual_XML(GenericType<T> responseType, Long uuid) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{uuid}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -136,7 +140,7 @@ public class PunctualRESTClient implements PunctualInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public void deletePunctual(Long uuid) throws ClientErrorException {
+    public void deletePunctual(Long uuid) throws DeleteException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{uuid})).request().delete();
     }
 

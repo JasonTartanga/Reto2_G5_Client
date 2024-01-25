@@ -23,172 +23,169 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="fondoPuncutal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <HBox id="hBox" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="1280.0">
-         <children>
-            <HBox id="hBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="1280.0">
-               <children>
-                  <MenuBar id="menuBar" prefHeight="26.0" prefWidth="1280.0">
+<AnchorPane fx:id="fondoPuncutal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PunctualController">
+    <children>
+        <HBox id="hBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="1280.0">
+            <children>
+                <MenuBar id="menuBar" fx:id="menuBar" prefHeight="26.0" prefWidth="1280.0">
                     <menus>
-                      <Menu id="menuInicio" mnemonicParsing="false" text="Inicio">
-                        <items>
-                          <MenuItem id="menuItemInicio" mnemonicParsing="false" text="Inicio" />
-                        </items>
-                      </Menu>
-                        <Menu id="menuInicio" mnemonicParsing="false" text="Perfil">
-                           <items>
-                              <MenuItem id="menuItemCambiarContraseña" mnemonicParsing="false" text="Cambiar contraseña" />
-                           </items>
+                        <Menu id="menuInicio" fx:id="mInicio" mnemonicParsing="false" text="Inicio">
+                            <items>
+                                <MenuItem id="menuItemInicio" fx:id="miInicio" mnemonicParsing="false" onAction="#handleMainMenu" text="Inicio" />
+                            </items>
                         </Menu>
-                      <Menu id="menuAyuda" mnemonicParsing="false" text="Ayuda">
-                        <items>
-                          <MenuItem id="menuItemAyuda" mnemonicParsing="false" text="Contenidos de ayuda" />
-                        </items>
-                      </Menu>
-                      <Menu id="menuSalir" mnemonicParsing="false" text="Salir">
-                        <items>
-                          <MenuItem id="menuItemCerrarSesion" mnemonicParsing="false" text="Cerrar Sesion" />
-                              <MenuItem id="menuItemSalir" mnemonicParsing="false" text="Salir" />
-                        </items>
-                      </Menu>
+                        <Menu id="menuInicio" fx:id="mPerfil" mnemonicParsing="false" text="Perfil">
+                            <items>
+                                <MenuItem id="menuItemCambiarContraseña" fx:id="miChangePassword" mnemonicParsing="false" text="Cambiar contraseña" />
+                            </items>
+                        </Menu>
+                        <Menu id="menuAyuda" fx:id="mAyuda" mnemonicParsing="false" text="Ayuda">
+                            <items>
+                                <MenuItem id="menuItemAyuda" fx:id="miHelp" mnemonicParsing="false" text="Contenidos de ayuda" />
+                            </items>
+                        </Menu>
+                        <Menu id="menuSalir" fx:id="mSalir" mnemonicParsing="false" text="Salir">
+                            <items>
+                                <MenuItem id="menuItemCerrarSesion" fx:id="miLogout" mnemonicParsing="false" text="Cerrar Sesion" />
+                                <MenuItem id="menuItemSalir" fx:id="miClose" mnemonicParsing="false" text="Salir" />
+                            </items>
+                        </Menu>
                     </menus>
-                  </MenuBar>
-               </children>
-            </HBox>
-         </children>
-      </HBox>
-      <Button fx:id="btnCreate" layoutX="52.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
-         <graphic>
-            <ImageView fx:id="imgCreate" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../resources/img/table_row_add.png" />
-               </image>
-            </ImageView>
-         </graphic>
-         <tooltip>
-            <Tooltip fx:id="ttCreate" text="Inserta nueva fila" />
-         </tooltip>
-      </Button>
-      <Button fx:id="btnDelete" layoutX="134.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
-         <graphic>
-            <ImageView fx:id="imgDelete" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../resources/img/table_row_delete.png" />
-               </image>
-            </ImageView>
-         </graphic>
-         <tooltip>
-            <Tooltip fx:id="ttDelete" text="Elimina los gastos seleccionados" />
-         </tooltip>
-      </Button>
-      <Button fx:id="btnRefresh" layoutX="216.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
-         <graphic>
-            <ImageView fx:id="imgRefresh" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../resources/img/table_refresh.png" />
-               </image>
-            </ImageView>
-         </graphic>
-         <tooltip>
-            <Tooltip fx:id="ttRefresh" text="Actualiza la tabla" />
-         </tooltip>
-      </Button>
-      <Separator fx:id="sp1" layoutX="298.0" layoutY="40.0" orientation="VERTICAL" prefHeight="64.0" prefWidth="10.0" />
-      <Button fx:id="btnSwitch" layoutX="343.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
-         <graphic>
-            <ImageView fx:id="imgSwitch" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../resources/img/recurrente.png" />
-               </image>
-            </ImageView>
-         </graphic>
-         <tooltip>
-            <Tooltip fx:id="ttSwitch" text="Ver gastos recurrentes" />
-         </tooltip>
-      </Button>
-      <Separator fx:id="sp2" layoutX="430.0" layoutY="40.0" orientation="VERTICAL" prefHeight="64.0" prefWidth="10.0" />
-      <Button fx:id="btnReport" layoutX="480.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
-         <graphic>
-            <ImageView fx:id="imgReport" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../resources/img/report.png" />
-               </image>
-            </ImageView>
-         </graphic>
-         <tooltip>
-            <Tooltip fx:id="ttReport" text="Genera un reporte" />
-         </tooltip>
-      </Button>
-      <Separator layoutX="562.0" layoutY="40.0" orientation="VERTICAL" prefHeight="64.0" prefWidth="10.0" />
-      <Label fx:id="lblFilter" layoutX="587.0" layoutY="60.0" text="Filter">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <ComboBox fx:id="cbAttribute" layoutX="646.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" promptText="Atributo" styleClass="textField" />
-      <ComboBox fx:id="cbCondition" layoutX="821.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" promptText="Condicion" styleClass="textField" />
-      <TextField fx:id="tfSearch" layoutX="996.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" styleClass="textField" />
-      <Button fx:id="btnSearch" layoutX="1171.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
-         <graphic>
-            <ImageView fx:id="imgSearch" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../resources/img/view.png" />
-               </image>
-            </ImageView>
-         </graphic></Button>
-      <TabPane fx:id="tabPane" layoutX="50.0" layoutY="114.0" prefHeight="578.0" prefWidth="1180.0" tabClosingPolicy="UNAVAILABLE">
-         <tabs>
-            <Tab fx:id="tabPuntuales" text="Gastos Puntuales">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="528.0" prefWidth="1180.0">
-                     <children>
-                        <TableView fx:id="table" prefHeight="531.0" prefWidth="1178.0">
-                           <columns>
-                              <TableColumn id="tbUuid" fx:id="tcUuid" prefWidth="196.0" text="UUID" />
-                              <TableColumn id="tbNombre" fx:id="tcName" prefWidth="196.0" text="Nombre" />
-                              <TableColumn id="tbConcepto" fx:id="tcConcept" prefWidth="196.0" text="Concepto" />
-                              <TableColumn id="tbImporte" fx:id="tcAmount" prefWidth="196.0" text="Importe" />
-                              <TableColumn id="tbFecha" fx:id="tcDate" prefWidth="196.0" text="Fecha" />
-                              <TableColumn id="tbImportancia" fx:id="tcCategory" prefWidth="196.0" text="Importancia" />
-                           </columns>
-                           <contextMenu>
-                              <ContextMenu fx:id="contextMenu">
-                                 <items>
-                                    <Menu mnemonicParsing="false" text="Editar">
-                                      <items>
-                                        <MenuItem fx:id="miCreate" mnemonicParsing="false" text="Añadir fila" />
-                                          <MenuItem fx:id="miDelete" mnemonicParsing="false" text="Eliminar fila" />
-                                      </items>
-                                    </Menu>
-                                    <SeparatorMenuItem mnemonicParsing="false" />
-                                    <MenuItem fx:id="miRefresh" mnemonicParsing="false" text="Actualizar" />
-                                    <SeparatorMenuItem mnemonicParsing="false" />
-                                    <MenuItem fx:id="miReport" mnemonicParsing="false" text="Generar reporte" />
-                                 </items>
-                              </ContextMenu>
-                           </contextMenu>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-            <Tab fx:id="tabGrafico" onSelectionChanged="#cargarGraficos" text="Graficos">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="410.0" prefWidth="960.0">
-                     <children>
-                        <PieChart fx:id="pieCategory" layoutY="1.0" prefHeight="553.0" prefWidth="570.0" />
-                        <PieChart fx:id="piePeriodicity" layoutX="612.0" layoutY="-3.0" prefHeight="552.0" prefWidth="570.0" />
-                        <PieChart fx:id="gImportance" layoutX="8.0" layoutY="1.0" prefHeight="552.0" prefWidth="1172.0" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-         </tabs>
-      </TabPane>
-   </children>
-   <stylesheets>
-      <URL value="@../resources/style.css" />
-      <URL value="@../Documents/NetBeansProjects/Reto2_G5_Client/src/resources/style.css" />
-   </stylesheets>
+                </MenuBar>
+            </children>
+        </HBox>
+        <Button fx:id="btnCreate" layoutX="52.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+            <graphic>
+                <ImageView fx:id="imgCreate" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../resources/img/table_row_add.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip fx:id="ttCreate" text="Inserta nueva fila" />
+            </tooltip>
+        </Button>
+        <Button fx:id="btnDelete" layoutX="134.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+            <graphic>
+                <ImageView fx:id="imgDelete" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../resources/img/table_row_delete.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip fx:id="ttDelete" text="Elimina los gastos seleccionados" />
+            </tooltip>
+        </Button>
+        <Button fx:id="btnRefresh" layoutX="216.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+            <graphic>
+                <ImageView fx:id="imgRefresh" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../resources/img/table_refresh.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip fx:id="ttRefresh" text="Actualiza la tabla" />
+            </tooltip>
+        </Button>
+        <Separator fx:id="sp1" layoutX="298.0" layoutY="40.0" orientation="VERTICAL" prefHeight="64.0" prefWidth="10.0" />
+        <Button fx:id="btnSwitch" layoutX="343.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+            <graphic>
+                <ImageView fx:id="imgSwitch" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../resources/img/cambiar.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip fx:id="ttSwitch" text="Ver gastos recurrentes" />
+            </tooltip>
+        </Button>
+        <Separator fx:id="sp2" layoutX="430.0" layoutY="40.0" orientation="VERTICAL" prefHeight="64.0" prefWidth="10.0" />
+        <Button fx:id="btnReport" layoutX="480.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+            <graphic>
+                <ImageView fx:id="imgReport" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../resources/img/report.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip fx:id="ttReport" text="Genera un reporte" />
+            </tooltip>
+        </Button>
+        <Separator layoutX="562.0" layoutY="40.0" orientation="VERTICAL" prefHeight="64.0" prefWidth="10.0" />
+        <Label fx:id="lblFilter" layoutX="587.0" layoutY="60.0" text="Filter">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <ComboBox fx:id="cbAttribute" layoutX="646.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" promptText="Atributo" styleClass="textField" />
+        <ComboBox fx:id="cbCondition" layoutX="821.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" promptText="Condicion" styleClass="textField" />
+        <TextField fx:id="tfSearch" layoutX="996.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" styleClass="textField" />
+        <Button fx:id="btnSearch" layoutX="1171.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+            <graphic>
+                <ImageView fx:id="imgSearch" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../resources/img/view.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <TabPane fx:id="tabPane" layoutX="50.0" layoutY="114.0" prefHeight="578.0" prefWidth="1180.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab fx:id="tabPuntuales" text="Gastos Puntuales">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="528.0" prefWidth="1180.0">
+                            <children>
+                                <TableView fx:id="table" prefHeight="531.0" prefWidth="1178.0">
+                                    <columns>
+                                        <TableColumn id="tbUuid" fx:id="tcUuid" prefWidth="196.0" text="UUID" />
+                                        <TableColumn id="tbNombre" fx:id="tcName" prefWidth="196.0" text="Nombre" />
+                                        <TableColumn id="tbConcepto" fx:id="tcConcept" prefWidth="196.0" text="Concepto" />
+                                        <TableColumn id="tbImporte" fx:id="tcAmount" prefWidth="196.0" text="Importe" />
+                                        <TableColumn id="tbFecha" fx:id="tcDate" prefWidth="196.0" text="Fecha" />
+                                        <TableColumn id="tbImportancia" fx:id="tcCategory" prefWidth="196.0" text="Importancia" />
+                                    </columns>
+                                    <contextMenu>
+                                        <ContextMenu fx:id="contextMenu">
+                                            <items>
+                                                <Menu mnemonicParsing="false" text="Editar">
+                                                    <items>
+                                                        <MenuItem fx:id="miCreate" mnemonicParsing="false" text="Añadir fila" />
+                                                        <MenuItem fx:id="miDelete" mnemonicParsing="false" text="Eliminar fila" />
+                                                    </items>
+                                                </Menu>
+                                                <SeparatorMenuItem mnemonicParsing="false" />
+                                                <MenuItem fx:id="miRefresh" mnemonicParsing="false" text="Actualizar" />
+                                                <SeparatorMenuItem mnemonicParsing="false" />
+                                                <MenuItem fx:id="miReport" mnemonicParsing="false" text="Generar reporte" />
+                                            </items>
+                                        </ContextMenu>
+                                    </contextMenu>
+                                </TableView>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab fx:id="tabGrafico" text="Graficos">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="410.0" prefWidth="960.0">
+                            <children>
+                                <PieChart fx:id="pieCategory" layoutY="1.0" prefHeight="553.0" prefWidth="570.0" />
+                                <PieChart fx:id="piePeriodicity" layoutX="612.0" layoutY="-3.0" prefHeight="552.0" prefWidth="570.0" />
+                                <PieChart fx:id="gImportance" layoutX="8.0" layoutY="1.0" prefHeight="552.0" prefWidth="1172.0" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+    <stylesheets>
+        <URL value="@../resources/style.css" />
+        <URL value="@../Documents/NetBeansProjects/Reto2_G5_Client/src/resources/style.css" />
+    </stylesheets>
 </AnchorPane>
