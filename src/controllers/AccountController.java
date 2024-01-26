@@ -33,12 +33,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -47,9 +45,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import static javafx.scene.input.KeyCode.T;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.FloatStringConverter;
@@ -62,13 +58,11 @@ import model.entitys.SharedBean;
 import model.entitys.SharedIdBean;
 import model.entitys.UserBean;
 import model.enums.Divisa;
-import model.enums.Period;
 import model.enums.Plan;
 import model.factory.AccountFactory;
 import model.factory.SharedFactory;
 import model.factory.UserFactory;
 import model.interfaces.AccountInterface;
-import model.interfaces.SharedInterface;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -435,7 +429,11 @@ public class AccountController {
             aInterface.createAccount_XML(account);
             account.setId(id + 1);
 
-            SharedBean shared = new SharedBean(new SharedIdBean(user.getMail(), id + 1), user, account, Permissions.Creador);
+            AccountBean newAccount = aInterface.findAccount_XML(new GenericType<AccountBean>() {
+            }, id + 1);
+
+            System.out.println("New account --> " + newAccount.toString());
+            SharedBean shared = new SharedBean(new SharedIdBean(user.getMail(), newAccount.getId()), user, newAccount, Permissions.Creador);
             SharedFactory.getFactory().create_XML(shared);
 
             table.getItems().add(account);

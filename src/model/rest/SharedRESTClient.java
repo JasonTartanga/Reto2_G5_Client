@@ -9,6 +9,7 @@ import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.SelectException;
 import exceptions.UpdateException;
+import java.util.ResourceBundle;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -31,7 +32,7 @@ public class SharedRESTClient implements SharedInterface {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/Reto2_G5_Server/webresources";
+    private static final String BASE_URI = ResourceBundle.getBundle("resources.config").getString("BASE_URI");
 
     public SharedRESTClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();

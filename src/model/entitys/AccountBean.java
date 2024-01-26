@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 import model.enums.Divisa;
 import model.enums.Plan;

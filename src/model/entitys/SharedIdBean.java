@@ -2,17 +2,16 @@ package model.entitys;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Jason.
  */
-@XmlRootElement(name = "sharedId")
 public class SharedIdBean {
 
-    private final SimpleStringProperty mail;
     private final SimpleLongProperty id;
+
+    private final SimpleStringProperty mail;
 
     public SharedIdBean(String mail, Long id) {
         this.mail = new SimpleStringProperty(mail);

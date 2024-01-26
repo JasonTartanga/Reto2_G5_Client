@@ -1,8 +1,6 @@
 package model.entitys;
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -15,23 +13,39 @@ public class SharedBean {
     private static final long serialVersionUID = 1L;
 
     //******************** ATRIBUTOS *********************/
-    private final SimpleObjectProperty<SharedIdBean> sharedId;
+    private final SimpleObjectProperty<SharedIdBean> idShared;
     private final SimpleObjectProperty<AccountBean> account;
     private final SimpleObjectProperty<UserBean> user;
     private final SimpleObjectProperty<Permissions> permisions;
 
     public SharedBean(SharedIdBean sharedId, UserBean user, AccountBean account, Permissions permisions) {
-        this.user = new SimpleObjectProperty<>(user);
+        this.idShared = new SimpleObjectProperty<>(sharedId);
         this.account = new SimpleObjectProperty<>(account);
+        this.user = new SimpleObjectProperty<>(user);
         this.permisions = new SimpleObjectProperty<>(permisions);
-        this.sharedId = new SimpleObjectProperty<>(sharedId);
     }
 
     public SharedBean() {
-        this.user = new SimpleObjectProperty<>();
+        this.idShared = new SimpleObjectProperty<>();
         this.account = new SimpleObjectProperty<>();
+        this.user = new SimpleObjectProperty<>();
         this.permisions = new SimpleObjectProperty<>();
-        this.sharedId = new SimpleObjectProperty<>();
+    }
+
+    public SharedIdBean getIdShared() {
+        return this.idShared.get();
+    }
+
+    public void setIdShared(SharedIdBean idShared) {
+        this.idShared.set(idShared);
+    }
+
+    public AccountBean getAccount() {
+        return this.account.get();
+    }
+
+    public void setAccount(AccountBean account) {
+        this.account.set(account);
     }
 
     public UserBean getUser() {
@@ -42,14 +56,6 @@ public class SharedBean {
         this.user.set(user);
     }
 
-    public AccountBean getAccountBean() {
-        return this.account.get();
-    }
-
-    public void setAccount(AccountBean account) {
-        this.account.set(account);
-    }
-
     public Permissions getPermissions() {
         return this.permisions.get();
     }
@@ -58,17 +64,9 @@ public class SharedBean {
         this.permisions.set(permissions);
     }
 
-    public SharedIdBean getSharedIdBean() {
-        return this.sharedId.get();
-    }
-
-    public void setSharedId(SharedIdBean sharedId) {
-        this.sharedId.set(sharedId);
-    }
-
     @Override
     public String toString() {
-        return "SharedBean{" + "user=" + user + ", account=" + account + ", permisions=" + permisions + ", sharedId=" + sharedId + '}';
+        return "SharedBean{" + "idShared=" + idShared + ", account=" + account + ", user=" + user + ", permisions=" + permisions + '}';
     }
 
 }
