@@ -12,6 +12,7 @@ import exceptions.SelectException;
 import exceptions.UpdateException;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -105,6 +106,20 @@ public class UserRESTCliente implements UserInterface {
     @Override
     public <T> T findAllUsers_JSON(GenericType<T> responseType) throws SelectException {
         WebTarget resource = webTarget;
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+
+    @Override
+    public <T> T findEmail_XML(GenericType<T> responseType, String mail) throws SelectException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{mail}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    @Override
+    public <T> T findEmail_JSON(GenericType<T> responseType, String mail) throws SelectException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{mail}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 

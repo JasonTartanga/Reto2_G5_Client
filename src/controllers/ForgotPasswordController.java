@@ -5,12 +5,7 @@
  */
 package controllers;
 
-import exceptions.CreateException;
-import exceptions.SelectException;
-import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,12 +20,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.ws.rs.core.GenericType;
-import model.entitys.PunctualBean;
-import model.entitys.RecurrentBean;
 import model.entitys.UserBean;
-import model.factory.PunctualFactory;
 import model.factory.UserFactory;
-import model.interfaces.PunctualInterface;
 import model.interfaces.UserInterface;
 
 /**
@@ -40,7 +31,6 @@ import model.interfaces.UserInterface;
 public class ForgotPasswordController {
 
     private UserInterface userInter = UserFactory.getFactory();
-    private List<UserBean> user;
 
     private Stage thisStage;
     @FXML
@@ -113,7 +103,7 @@ public class ForgotPasswordController {
 
     @FXML
     public void handleEnviar(ActionEvent event) {
-        UserBean user = null;
+
         try {
 
             event.consume();
@@ -125,12 +115,8 @@ public class ForgotPasswordController {
             Optional<ButtonType> action = alert.showAndWait();
             //Si le da a OK el programa dejará de existir, se cierra por completo
             if (action.get() == ButtonType.OK) {
-                if (txtEmail.getText().equals(user.getMail())) {
-                    userInter.findUser_XML(new GenericType<Long>() {
-                    }, txtEmail.getText());
-                } else {
-
-                }
+                UserBean user = userInter.findEmail_XML(new GenericType<UserBean>() {
+                }, txtEmail.getText());
             }
 
         } catch (Exception e) {

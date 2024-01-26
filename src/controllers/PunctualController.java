@@ -316,7 +316,7 @@ public class PunctualController {
         //Para eliminar, haremos click en la TableView (table) sobre uno o varios accounts que queramos eliminar y clickeamos en el botón de eliminar de la parte superior de la ventana.
         //Validar que los campos no contienen datos y que en la TableView (table) se ha eliminado correctamente.
 
-        log.info("Eliminando uno o varios gastos recurrentes");
+        log.info("Eliminando uno o varios gastos puntuales");
         try {
             List<PunctualBean> punctuals = table.getSelectionModel().getSelectedItems();
 
@@ -361,8 +361,6 @@ public class PunctualController {
             Parent root = loader.load();
             PunctualController punctualController = loader.getController();
             punctualController.setStage(thisStage);
-            //punctualController.setUser(user);
-            //punctualController.setAccount(account);
             punctualController.initStage(root);
             thisStage.close();
 

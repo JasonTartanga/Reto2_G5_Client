@@ -5,6 +5,7 @@ import exceptions.CredentialErrorException;
 import exceptions.DeleteException;
 import exceptions.SelectException;
 import exceptions.UpdateException;
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 
@@ -35,4 +36,8 @@ public interface UserInterface {
     public <T> T findAllUsers_XML(GenericType<T> responseType) throws SelectException;
 
     public <T> T findAllUsers_JSON(GenericType<T> responseType) throws SelectException;
+
+    public <T> T findEmail_XML(GenericType<T> responseType, String mail) throws SelectException;
+
+    public <T> T findEmail_JSON(GenericType<T> responseType, String mail) throws SelectException;
 }
