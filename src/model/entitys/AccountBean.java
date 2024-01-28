@@ -143,14 +143,23 @@ public class AccountBean {
         this.asociated.set(asociated);
     }
 
-    //******************** METODOS *********************/
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + Objects.hashCode(this.description);
+        hash = 97 * hash + Objects.hashCode(this.divisa);
+        hash = 97 * hash + Objects.hashCode(this.date);
+        hash = 97 * hash + Objects.hashCode(this.balance);
+        hash = 97 * hash + Objects.hashCode(this.plan);
+        hash = 97 * hash + Objects.hashCode(this.asociated);
+        hash = 97 * hash + Objects.hashCode(this.shared);
+        hash = 97 * hash + Objects.hashCode(this.expenses);
         return hash;
     }
 
+    //******************** METODOS *********************/
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -164,6 +173,33 @@ public class AccountBean {
         }
         final AccountBean other = (AccountBean) obj;
         if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.description, other.description)) {
+            return false;
+        }
+        if (!Objects.equals(this.divisa, other.divisa)) {
+            return false;
+        }
+        if (!Objects.equals(this.date, other.date)) {
+            return false;
+        }
+        if (!Objects.equals(this.balance, other.balance)) {
+            return false;
+        }
+        if (!Objects.equals(this.plan, other.plan)) {
+            return false;
+        }
+        if (!Objects.equals(this.asociated, other.asociated)) {
+            return false;
+        }
+        if (!Objects.equals(this.shared, other.shared)) {
+            return false;
+        }
+        if (!Objects.equals(this.expenses, other.expenses)) {
             return false;
         }
         return true;

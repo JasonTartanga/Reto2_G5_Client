@@ -108,6 +108,10 @@ public class SignInController {
 
         //El HiperLink (hlSignUp) para moverse a la ventana de registro estará visible.
         hlSignUp.setVisible(true);
+        hlSignUp.setOnAction(this::handleSignUpHyperlinkAction);
+
+        hlForgotPasswd.setVisible(true);
+        hlForgotPasswd.setOnAction(this::handleForgotPassword);
 
         //El Label de información (lblCuenta) estará visible.
         //lblCuenta.setVisible(true);
@@ -206,6 +210,29 @@ public class SignInController {
             SignUpController signUp = loader.getController();
             signUp.setStage(thisStage);
             signUp.initStage(root);
+            thisStage.close();
+
+        } catch (IOException e) {
+            this.showMessage(e.getMessage(), AlertType.ERROR);
+        }
+    }
+
+    /**
+     * Cuando se pulse en el hyperlink de crear cuenta abre la ventana signUp y
+     * cierra esta.
+     *
+     * @param event evento que sucede al pulsarse el botón.
+     */
+    @FXML
+    protected void handleForgotPassword(ActionEvent event) {
+        try {
+            //Al pulsar sobre el HiperLink nos redirigirá a la ventana de SignUp.
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ForgotPassword.fxml"));
+            Parent root = loader.load();
+            ForgotPasswordController forgotPassword = loader.getController();
+            forgotPassword.setStage(thisStage);
+            forgotPassword.initStage(root);
             thisStage.close();
 
         } catch (IOException e) {

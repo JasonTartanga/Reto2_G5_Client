@@ -35,4 +35,6 @@ public interface UserInterface {
     public <T> T findAllUsers_XML(GenericType<T> responseType) throws SelectException;
 
     public <T> T findAllUsers_JSON(GenericType<T> responseType) throws SelectException;
+
+    public <T> T forgotPassword(GenericType<T> responseType, String mail) throws SelectException;
 }

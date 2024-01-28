@@ -9,39 +9,39 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class SharedIdBean {
 
-    private final SimpleLongProperty id;
+    private final SimpleLongProperty accountId;
+    private final SimpleStringProperty userMail;
 
-    private final SimpleStringProperty mail;
+    public SharedIdBean(Long accountId, String userMail) {
+        this.accountId = new SimpleLongProperty(accountId);
+        this.userMail = new SimpleStringProperty(userMail);
 
-    public SharedIdBean(String mail, Long id) {
-        this.mail = new SimpleStringProperty(mail);
-        this.id = new SimpleLongProperty(id);
     }
 
     public SharedIdBean() {
-        this.mail = new SimpleStringProperty();
-        this.id = new SimpleLongProperty();
+        this.accountId = new SimpleLongProperty();
+        this.userMail = new SimpleStringProperty();
     }
 
-    public String getMail() {
-        return this.mail.get();
+    public Long getAccountId() {
+        return this.accountId.get();
     }
 
-    public void setMail(String mail) {
-        this.mail.set(mail);
+    public void setAccountId(Long accountId) {
+        this.accountId.set(accountId);
     }
 
-    public Long getId() {
-        return this.id.get();
+    public String getUserMail() {
+        return this.userMail.get();
     }
 
-    public void setId(Long id) {
-        this.id.set(id);
+    public void setUserMail(String userMail) {
+        this.userMail.set(userMail);
     }
 
     @Override
     public String toString() {
-        return "SharedIdBean{" + "mail=" + mail + ", id=" + id + '}';
+        return "SharedIdBean{" + "accountId=" + accountId + ", userMail=" + userMail + '}';
     }
 
 }

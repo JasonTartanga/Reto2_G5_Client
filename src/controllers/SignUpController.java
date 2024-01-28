@@ -163,6 +163,8 @@ public class SignUpController {
 
             }
         });
+        stage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
+
         //Mostramos la ventana
         stage.show();
 

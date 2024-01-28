@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entitys.UserBean;
@@ -40,6 +41,8 @@ public class SelectAsociatedController {
 
         list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         btn.setOnAction(this::handleSelectNames);
+
+        stage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
 
         stage.showAndWait();
     }

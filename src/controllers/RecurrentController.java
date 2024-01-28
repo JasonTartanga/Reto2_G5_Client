@@ -108,8 +108,6 @@ public class RecurrentController {
     @FXML
     private TableColumn<RecurrentBean, Period> tcPeriodicity;
 
-//    @FXML
-//    private MenuBar menuBar;
     @FXML
     private MenuItem miCreate, miDelete, miRefresh, miReport;
     @FXML
@@ -385,8 +383,8 @@ public class RecurrentController {
             Parent root = loader.load();
             PunctualController punctualController = loader.getController();
             punctualController.setStage(thisStage);
-            //punctualController.setUser(user);
-            //punctualController.setAccount(account);
+            punctualController.setUser(user);
+            punctualController.setAccount(account);
             punctualController.initStage(root);
             thisStage.close();
 

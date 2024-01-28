@@ -7,7 +7,6 @@
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
@@ -20,40 +19,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="fondoPuncutal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PunctualController">
     <children>
-        <HBox id="hBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="1280.0">
-            <children>
-                <MenuBar id="menuBar" fx:id="menuBar" prefHeight="26.0" prefWidth="1280.0">
-                    <menus>
-                        <Menu id="menuInicio" fx:id="mInicio" mnemonicParsing="false" text="Inicio">
-                            <items>
-                                <MenuItem id="menuItemInicio" fx:id="miInicio" mnemonicParsing="false" onAction="#handleMainMenu" text="Inicio" />
-                            </items>
-                        </Menu>
-                        <Menu id="menuInicio" fx:id="mPerfil" mnemonicParsing="false" text="Perfil">
-                            <items>
-                                <MenuItem id="menuItemCambiarContraseña" fx:id="miChangePassword" mnemonicParsing="false" text="Cambiar contraseña" />
-                            </items>
-                        </Menu>
-                        <Menu id="menuAyuda" fx:id="mAyuda" mnemonicParsing="false" text="Ayuda">
-                            <items>
-                                <MenuItem id="menuItemAyuda" fx:id="miHelp" mnemonicParsing="false" text="Contenidos de ayuda" />
-                            </items>
-                        </Menu>
-                        <Menu id="menuSalir" fx:id="mSalir" mnemonicParsing="false" text="Salir">
-                            <items>
-                                <MenuItem id="menuItemCerrarSesion" fx:id="miLogout" mnemonicParsing="false" text="Cerrar Sesion" />
-                                <MenuItem id="menuItemSalir" fx:id="miClose" mnemonicParsing="false" text="Salir" />
-                            </items>
-                        </Menu>
-                    </menus>
-                </MenuBar>
-            </children>
-        </HBox>
+        <fx:include fx:id="menuBar" source="MenuBar.fxml" />
         <Button fx:id="btnCreate" layoutX="52.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
             <graphic>
                 <ImageView fx:id="imgCreate" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
@@ -95,7 +65,7 @@
             <graphic>
                 <ImageView fx:id="imgSwitch" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../resources/img/cambiar.png" />
+                        <Image url="@../resources/img/switch.png" />
                     </image>
                 </ImageView>
             </graphic>
@@ -122,7 +92,7 @@
                 <Font size="14.0" />
             </font>
         </Label>
-        <ComboBox fx:id="cbAttribute" layoutX="646.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" promptText="Atributo" styleClass="textField" />
+        <ComboBox fx:id="cbAtribute" layoutX="646.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" promptText="Atributo" styleClass="textField" />
         <ComboBox fx:id="cbCondition" layoutX="821.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" promptText="Condicion" styleClass="textField" />
         <TextField fx:id="tfSearch" layoutX="996.0" layoutY="55.0" prefHeight="30.0" prefWidth="150.0" styleClass="textField" />
         <Button fx:id="btnSearch" layoutX="1171.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
@@ -147,7 +117,7 @@
                                         <TableColumn id="tbConcepto" fx:id="tcConcept" prefWidth="196.0" text="Concepto" />
                                         <TableColumn id="tbImporte" fx:id="tcAmount" prefWidth="196.0" text="Importe" />
                                         <TableColumn id="tbFecha" fx:id="tcDate" prefWidth="196.0" text="Fecha" />
-                                        <TableColumn id="tbImportancia" fx:id="tcCategory" prefWidth="196.0" text="Importancia" />
+                                        <TableColumn id="tbImportancia" fx:id="tcImportance" prefWidth="196.0" text="Importancia" />
                                     </columns>
                                     <contextMenu>
                                         <ContextMenu fx:id="contextMenu">
@@ -174,9 +144,7 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="410.0" prefWidth="960.0">
                             <children>
-                                <PieChart fx:id="pieCategory" layoutY="1.0" prefHeight="553.0" prefWidth="570.0" />
-                                <PieChart fx:id="piePeriodicity" layoutX="612.0" layoutY="-3.0" prefHeight="552.0" prefWidth="570.0" />
-                                <PieChart fx:id="gImportance" layoutX="8.0" layoutY="1.0" prefHeight="552.0" prefWidth="1172.0" />
+                                <PieChart fx:id="pieImportance" layoutX="8.0" layoutY="1.0" prefHeight="552.0" prefWidth="1172.0" />
                             </children>
                         </AnchorPane>
                     </content>

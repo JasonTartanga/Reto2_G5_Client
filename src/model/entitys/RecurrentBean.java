@@ -2,6 +2,7 @@ package model.entitys;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javafx.beans.property.SimpleObjectProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 import model.enums.Category;
@@ -51,7 +52,36 @@ public class RecurrentBean extends ExpenseBean implements Serializable {
         this.category.set(category);
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 61 * hash + Objects.hashCode(this.periodicity);
+        hash = 61 * hash + Objects.hashCode(this.category);
+        return hash;
+    }
+
     //******************** METODOS *********************/
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RecurrentBean other = (RecurrentBean) obj;
+        if (!Objects.equals(this.periodicity, other.periodicity)) {
+            return false;
+        }
+        if (!Objects.equals(this.category, other.category)) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         return super.toString() + "Recurrent{" + "periodicity=" + periodicity + ", category=" + category + '}';

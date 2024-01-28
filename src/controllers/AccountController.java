@@ -8,6 +8,7 @@ package controllers;
 import exceptions.DeleteException;
 import exceptions.SelectException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -45,6 +46,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -53,6 +55,7 @@ import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
 import model.entitys.ExpenseBean;
 import model.entitys.Permissions;
+import model.entitys.PunctualBean;
 import model.entitys.RecurrentBean;
 import model.entitys.SharedBean;
 import model.entitys.SharedIdBean;
@@ -60,9 +63,13 @@ import model.entitys.UserBean;
 import model.enums.Divisa;
 import model.enums.Plan;
 import model.factory.AccountFactory;
+import model.factory.PunctualFactory;
+import model.factory.RecurrentFactory;
 import model.factory.SharedFactory;
 import model.factory.UserFactory;
 import model.interfaces.AccountInterface;
+import model.interfaces.PunctualInterface;
+import model.interfaces.RecurrentInterface;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -145,6 +152,7 @@ public class AccountController {
     @FXML
     private MenuItem miCreate, miDelete, miRefresh, miReport;
 
+    private MenuBarController menuBarController = new MenuBarController();
     @FXML
     ObservableList<AccountBean> listAccount;
 
@@ -180,6 +188,9 @@ public class AccountController {
 //        HBox hBoxMenu = (HBox) root.getChildrenUnmodifiable().get(0);
 //        //Get the menu bar from the children of the layout got before
 //        MenuBar menuBar = (MenuBar) hBoxMenu.getChildren().get(0);
+        menuBarController.setStage(stage);
+        menuBarController.setUser(user);
+
         //El botón crear (btnCreate), eliminar (btnDelete), cargar (btnRefresh), el de gastos recurrentes (bntRecurrent),
         //el de gastos puntuales (btnPunctual) y el de informe (btnReport) están habilitados y visibles.
         btnCreate.setDisable(false);
@@ -381,6 +392,7 @@ public class AccountController {
         miReport.setOnAction(this::handleButtonInformeAction);
 
         tabGraficos.setOnSelectionChanged(this::handleLoadGraphicsTab);
+        stage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
 
         this.handleRefreshTable(null);
         stage.show();
@@ -429,18 +441,15 @@ public class AccountController {
             aInterface.createAccount_XML(account);
             account.setId(id + 1);
 
-            AccountBean newAccount = aInterface.findAccount_XML(new GenericType<AccountBean>() {
-            }, id + 1);
-
-            System.out.println("New account --> " + newAccount.toString());
-            SharedBean shared = new SharedBean(new SharedIdBean(user.getMail(), newAccount.getId()), user, newAccount, Permissions.Creador);
+            SharedBean shared = new SharedBean(new SharedIdBean(account.getId(), user.getMail()), account, user, Permissions.Creador);
             SharedFactory.getFactory().create_XML(shared);
 
             table.getItems().add(account);
             table.refresh();
 
         } catch (Exception e) {
-            this.showAlert(e.getMessage(), AlertType.ERROR);
+            e.printStackTrace();
+            this.showAlert(e.getLocalizedMessage(), AlertType.ERROR);
         }
     }
 
@@ -542,14 +551,15 @@ public class AccountController {
                 Parent root = loader.load();
                 PunctualController punctual = loader.getController();
                 punctual.setStage(stage);
-                //punctual.setAccount(acc);
-                // punctual.setUser(user);
+                punctual.setAccount(acc);
+                punctual.setUser(user);
                 punctual.initStage(root);
                 stage.close();
             } else {
                 this.showAlert("Selecciona un account para mostrar sus gastos puntuales", Alert.AlertType.INFORMATION);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             this.showAlert(e.getMessage(), AlertType.ERROR);
         }
     }
@@ -801,32 +811,48 @@ public class AccountController {
             gExpenses.getData().addAll(expensesChartData);
 
         } catch (Exception e) {
+            e.printStackTrace();
             this.showAlert(e.getMessage(), AlertType.ERROR);
         }
     }
 
     private Map<String, Integer> getTotalExpenses(List<AccountBean> accounts) {
-        List<ExpenseBean> allExpenses = null;
+        RecurrentInterface ri = RecurrentFactory.getFactory();
+        PunctualInterface pi = PunctualFactory.getFactory();
 
         Map<String, Integer> expenseType = new HashMap<>();
+        try {
+            List<RecurrentBean> recurrentes = new ArrayList<>();
+            List<PunctualBean> puntuales = new ArrayList<>();
 
-        for (ExpenseBean e : allExpenses) {
-            if (e instanceof RecurrentBean) {
+            for (AccountBean a : accounts) {
+                recurrentes.addAll(ri.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
+                }, a.getId()));
+
+                puntuales.addAll(pi.findPunctualsByAccount_XML(new GenericType<List<PunctualBean>>() {
+                }, a.getId()));
+            }
+
+            for (RecurrentBean r : recurrentes) {
                 if (!expenseType.containsKey("Recurrentes")) {
                     expenseType.put("Recurrentes", 1);
                 } else {
-                    int i = expenseType.get("Recurrentes" + 1);
+                    int i = expenseType.get("Recurrentes") + 1;
                     expenseType.replace("Recurrentes", i);
                 }
+            }
 
-            } else {
+            for (PunctualBean p : puntuales) {
                 if (!expenseType.containsKey("Puntuales")) {
                     expenseType.put("Puntuales", 1);
                 } else {
-                    int i = expenseType.get("Puntuales" + 1);
+                    int i = expenseType.get("Puntuales") + 1;
                     expenseType.replace("Puntuales", i);
                 }
             }
+
+        } catch (SelectException e) {
+            this.showAlert(e.getMessage(), AlertType.NONE);
         }
         return expenseType;
     }

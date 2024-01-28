@@ -18,10 +18,10 @@ public class SharedBean {
     private final SimpleObjectProperty<UserBean> user;
     private final SimpleObjectProperty<Permissions> permisions;
 
-    public SharedBean(SharedIdBean sharedId, UserBean user, AccountBean account, Permissions permisions) {
+    public SharedBean(SharedIdBean sharedId, AccountBean account, UserBean user, Permissions permisions) {
         this.idShared = new SimpleObjectProperty<>(sharedId);
-        this.account = new SimpleObjectProperty<>(account);
         this.user = new SimpleObjectProperty<>(user);
+        this.account = new SimpleObjectProperty<>(account);
         this.permisions = new SimpleObjectProperty<>(permisions);
     }
 
