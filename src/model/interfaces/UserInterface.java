@@ -40,4 +40,12 @@ public interface UserInterface {
     public <T> T findEmail_XML(GenericType<T> responseType, String mail) throws SelectException;
 
     public <T> T findEmail_JSON(GenericType<T> responseType, String mail) throws SelectException;
+
+    public <T> T findPasswd_XML(GenericType<T> responseType, String passwd) throws SelectException;
+
+    public <T> T findPasswd_JSON(GenericType<T> responseType, String passwd) throws SelectException;
+
+    public <T> T findPasswdAndSendMail_XML(GenericType<T> responseType, String mail, String passwd) throws SelectException;
+
+    public <T> T findPasswdAndSendMail_JSON(GenericType<T> responseType, String mail, String passwd) throws SelectException;
 }

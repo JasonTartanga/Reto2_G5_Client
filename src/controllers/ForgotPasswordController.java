@@ -105,7 +105,9 @@ public class ForgotPasswordController {
     public void handleEnviar(ActionEvent event) {
 
         try {
-
+            if (txtEmail.getText().isEmpty()) {
+                throw new Exception("Por favor, rellene el campo del mail");
+            }
             event.consume();
             //Con esto vamos a crear una ventana de confirmación al pulsar el botón de email
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Seguro que deseas enviar un email?");
@@ -117,6 +119,13 @@ public class ForgotPasswordController {
             if (action.get() == ButtonType.OK) {
                 UserBean user = userInter.findEmail_XML(new GenericType<UserBean>() {
                 }, txtEmail.getText());
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignIn.fxml"));
+                Parent root = loader.load();
+                SignInController signIn = loader.getController();
+                signIn.setStage(thisStage);
+                signIn.initStage(root);
+                thisStage.close();
+
             }
 
         } catch (Exception e) {
