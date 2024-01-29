@@ -478,7 +478,7 @@ public class AccountController {
 
         try {
             
-            List <AccountBean>  selectedAccount = table.getSelectionModel().getSelectedItems();
+            List <AccountBean> selectedAccount = table.getSelectionModel().getSelectedItems();
            
             for (AccountBean a : selectedAccount) {
                 System.out.println(a.toString());
