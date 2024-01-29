@@ -41,6 +41,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
@@ -75,7 +76,7 @@ public class PunctualController {
 
     private List<PunctualBean> punctuals;
     private List<AccountBean> accountsUser;
-    private PunctualInterface puncInt = PunctualFactory.getPunctualExpenseREST();
+    private PunctualInterface puncInt = PunctualFactory.getFactory();
     private static final Logger log = Logger.getLogger(PunctualController.class.getName());
 
     @FXML
@@ -104,15 +105,15 @@ public class PunctualController {
     private TableColumn<PunctualBean, Importance> tcImportance;
 
     @FXML
-    private MenuBar menuBar;
-    @FXML
     private MenuItem miCreate, miDelete, miRefresh, miReport;
+    @FXML
+    private MenuBarController menuBarController = new MenuBarController();
 
     @FXML
     private PieChart pieImportance;
 
     @FXML
-    private Tab tabPunctuals, tabGrafics;
+    private Tab tabPunctuals, tabGrafico;
 
     public void initStage(Parent root) {
         try {
@@ -136,8 +137,8 @@ public class PunctualController {
             lblFilter.setVisible(true);
 
             //El menuBar estará visible y habilitado y será el común utilizado para todas las ventanas, creado anteriormente en una ventana individual.
-            menuBar.setVisible(true);
-            menuBar.setDisable(false);
+            menuBarController.setStage(thisStage);
+            menuBarController.setUser(user);
 
             //El botón crear (btnCreate), eliminar (btnDelete), cargar (btnRefresh) el de gastos puntuales (btnSwitch) y el de informe (btnReport) están habilitados y visibles.
             btnCreate.setVisible(true);
@@ -276,10 +277,12 @@ public class PunctualController {
             miRefresh.setOnAction(this::handleRefreshTable);
             miReport.setOnAction(this::handleGenerateReport);
 
-            tabGrafics.setOnSelectionChanged(this::handleLoadGraphics);
+            tabGrafico.setOnSelectionChanged(this::handleLoadGraphics);
             log.addHandler(new FileHandler("punctual.log"));
 
             this.handleRefreshTable(null);
+
+            thisStage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
 
             thisStage.show();
 
@@ -354,14 +357,16 @@ public class PunctualController {
 
     @FXML
     public void handleSwitch(ActionEvent event) {
-        log.info("Cambiando a PunctualView");
+        log.info("Cambiando a RecurrentView");
         try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PunctualView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RecurrentView.fxml"));
             Parent root = loader.load();
-            PunctualController punctualController = loader.getController();
-            punctualController.setStage(thisStage);
-            punctualController.initStage(root);
+            RecurrentController recurrentController = loader.getController();
+            recurrentController.setStage(thisStage);
+            recurrentController.setUser(user);
+            recurrentController.setAccount(account);
+            recurrentController.initStage(root);
             thisStage.close();
 
         } catch (IOException e) {

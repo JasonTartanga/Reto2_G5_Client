@@ -16,6 +16,7 @@ import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import model.entitys.UserBean;
 import model.interfaces.UserInterface;
 
 /**

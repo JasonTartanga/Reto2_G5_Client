@@ -16,71 +16,79 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
+import model.entitys.UserBean;
 
 public class MenuBarController {
 
     private static final Logger log = Logger.getLogger(MenuBarController.class.getName());
 
+    private Stage stage;
+    private UserBean user;
+
+    @FXML
+    private MenuBar menuBar;
     @FXML
     private Menu mInicio, mPerfil, mAyuda, mSalir;
     @FXML
     private MenuItem miInicio, miChangePassword, miHelp, miLogout, miClose;
 
-    public void initStage(Parent root) {
-        miInicio.setOnAction(this::handleMainMenu);
-        miChangePassword.setOnAction(this::handleChangePasswordMenu);
-        miHelp.setOnAction(this::handleHelpMenu);
-        miLogout.setOnAction(this::handleLogoutMenu);
-        miClose.setOnAction(this::handleCloseMenu);
-
-        log.info("InntStage");
-    }
-
+//    public MenuBarController() {
+//        miInicio.setOnAction(this::handleMainMenu);
+//        miChangePassword.setOnAction(this::handleChangePasswordMenu);
+//        miHelp.setOnAction(this::handleHelpMenu);
+//        miLogout.setOnAction(this::handleLogoutMenu);
+//        miClose.setOnAction(this::handleCloseMenu);
+//    }
     @FXML
-    public void handleMainMenu(ActionEvent action) {
+    private void handleMainMenu(ActionEvent action) {
         log.info("Menu item de inicio pulsado");
 
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
-//            Parent root = loader.load();
-//            AccountController account = loader.getController();
-//            account.setStage(stage);
-//            account.setUser(user);
-//            account.initStage(root);
-//        } catch (IOException ex) {
-//            Logger.getLogger(MenuBarController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            ((Stage) this.menuBar.getScene().getWindow()).close();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
+            Parent root = loader.load();
+            AccountController account = loader.getController();
+            account.setStage(stage);
+            account.setUser(user);
+            account.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuBarController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
-    public void handleChangePasswordMenu(ActionEvent action) {
+    private void handleChangePasswordMenu(ActionEvent action) {
         log.info("Menu item de cambiar contraseña pulsado");
 
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ForgotPassword.fxml"));
-//            Parent root = loader.load();
-//            ForgotPasswordController forgotPassword = loader.getController();
-//            forgotPassword.setStage(new Stage());
-//            forgotPassword.initStage(root);
-//        } catch (IOException ex) {
-//            Logger.getLogger(MenuBarController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            ((Stage) this.menuBar.getScene().getWindow()).close();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ChangePassword.fxml"));
+            Parent root = loader.load();
+            ChangePasswordController changePassword = loader.getController();
+            changePassword.setStage(new Stage());
+            changePassword.setUser(user);
+            changePassword.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuBarController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
-    public void handleHelpMenu(ActionEvent action) {
+    private void handleHelpMenu(ActionEvent action) {
         log.info("Menu item de ayuda pulsado");
 
     }
 
     @FXML
-    public void handleLogoutMenu(ActionEvent action) {
+    private void handleLogoutMenu(ActionEvent action) {
         log.info("Menu item de cerrar sesion pulsado");
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Signin.fxml"));
+            ((Stage) this.menuBar.getScene().getWindow()).close();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignIn.fxml"));
             Parent root = loader.load();
             SignInController signIn = loader.getController();
             signIn.setStage(new Stage());
@@ -92,7 +100,7 @@ public class MenuBarController {
     }
 
     @FXML
-    public void handleCloseMenu(ActionEvent action) {
+    private void handleCloseMenu(ActionEvent action) {
         log.info("Menu item de cerrar aplicacion pulsado");
 
         try {
@@ -111,5 +119,13 @@ public class MenuBarController {
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage() + ButtonType.OK).showAndWait();
         }
+    }
+
+    public void setUser(UserBean user) {
+        this.user = user;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }

@@ -8,6 +8,7 @@ import exceptions.UpdateException;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import model.entitys.UserBean;
 
 /**
  *
@@ -48,4 +49,5 @@ public interface UserInterface {
     public <T> T findPasswdAndSendMail_XML(GenericType<T> responseType, String mail, String passwd) throws SelectException;
 
     public <T> T findPasswdAndSendMail_JSON(GenericType<T> responseType, String mail, String passwd) throws SelectException;
+
 }

@@ -36,6 +36,8 @@ public class ChangePasswordController {
 
     private UserInterface userInter = UserFactory.getFactory();
 
+    private UserBean user;
+
     private Stage thisStage;
     @FXML
     private TextField txtShowPasswd1, txtShowPasswd2, txtShowPasswd3;
@@ -165,17 +167,9 @@ public class ChangePasswordController {
             Optional<ButtonType> action = alert.showAndWait();
             //Si le da a OK el programa dejará de existir, se cierra por completo
             if (action.get() == ButtonType.OK) {
-                UserBean user = new UserBean();
-                //user.setPassword(Asimetric.cipherPassword(txtPasswd2.getText()));
-                //userInter.updateUser_XML(user, user.getMail());
-                //String passwdViejaCifrada = Asimetric.cipherPassword(txtPasswd1.getText());
-                //String passwdNuevaCifrada = Asimetric.cipherPassword(txtPasswd2.getText());
-                //UserBean user = userInter.findPasswd_XML(new GenericType<UserBean>() {
-                //}, passwdViejaCifrada, passwdNuevaCifrada);
+
                 String passwdCifrada = Asimetric.cipherPassword(txtPasswd2.getText());
-                //UserBean user = userInter.findPasswd_XML(new GenericType<UserBean>() {
-                //}, passwdCifrada);
-                user = userInter.findPasswdAndSendMail_XML(new GenericType<UserBean>() {
+                userInter.findPasswdAndSendMail_XML(new GenericType<UserBean>() {
                 }, user.getMail(), passwdCifrada);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignIn.fxml"));
                 Parent root = loader.load();
@@ -268,6 +262,10 @@ public class ChangePasswordController {
 
     public void setStage(Stage stage) {
         this.thisStage = stage;
+    }
+
+    public void setUser(UserBean user) {
+        this.user = user;
     }
 
 }
