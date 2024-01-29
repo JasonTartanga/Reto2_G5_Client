@@ -2,6 +2,7 @@ package model.entitys;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -96,19 +97,44 @@ public class ExpenseBean implements Serializable {
     //******************** METODOS *********************/
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (uuid != null ? uuid.hashCode() : 0);
+        int hash = 7;
+        hash = 73 * hash + Objects.hashCode(this.uuid);
+        hash = 73 * hash + Objects.hashCode(this.name);
+        hash = 73 * hash + Objects.hashCode(this.concept);
+        hash = 73 * hash + Objects.hashCode(this.amount);
+        hash = 73 * hash + Objects.hashCode(this.date);
+        hash = 73 * hash + Objects.hashCode(this.account);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ExpenseBean)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        ExpenseBean other = (ExpenseBean) object;
-        if ((this.uuid == null && other.uuid != null) || (this.uuid != null && !this.uuid.equals(other.uuid))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ExpenseBean other = (ExpenseBean) obj;
+        if (!Objects.equals(this.uuid, other.uuid)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.concept, other.concept)) {
+            return false;
+        }
+        if (!Objects.equals(this.amount, other.amount)) {
+            return false;
+        }
+        if (!Objects.equals(this.date, other.date)) {
+            return false;
+        }
+        if (!Objects.equals(this.account, other.account)) {
             return false;
         }
         return true;

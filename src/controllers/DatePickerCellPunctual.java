@@ -5,18 +5,17 @@ import java.time.ZoneId;
 import java.util.Date;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
-import model.entitys.AccountBean;
-import model.entitys.RecurrentBean;
+import model.entitys.PunctualBean;
 
 /**
  *
- * @author Jason.
+ * @author Ian.
  */
-public class DatePickerCellAccount extends TableCell<AccountBean, Date> {
+public class DatePickerCellPunctual extends TableCell<PunctualBean, Date> {
 
     private DatePicker datePicker;
 
-    DatePickerCellAccount() {
+    DatePickerCellPunctual() {
     }
 
     @Override

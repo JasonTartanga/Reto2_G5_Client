@@ -5,6 +5,7 @@
  */
 package model.rest;
 
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -30,7 +31,7 @@ public class AccountRESTCliente implements AccountInterface {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/Reto2_G5_Server/webresources";
+    private static final String BASE_URI = ResourceBundle.getBundle("resources.config").getString("BASE_URI");
 
     public AccountRESTCliente() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
@@ -163,7 +164,9 @@ public class AccountRESTCliente implements AccountInterface {
 
     @Override
     public void createAccount_XML(Object requestEntity) throws ClientErrorException {
+        System.out.println("Prueba");
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+        System.out.println(webTarget.getUri());
     }
 
     @Override
@@ -186,14 +189,16 @@ public class AccountRESTCliente implements AccountInterface {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
+    @Override
+    public <T> T countAccount(GenericType<T> responseType) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("countAccount", new Object[]{}));
+        return resource.request().get(responseType);
+    }
+
     public void close() {
         client.close();
     }
 
-     @Override
-    public <T> T countAccount(GenericType<T> responseType) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("countAccount", new Object[]{}));
-        return resource.request().get(responseType);    }
-
+     
 }

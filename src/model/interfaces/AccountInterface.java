@@ -64,7 +64,7 @@ public interface AccountInterface {
     public <T> T filterAccountsWithHigherBalance_JSON(GenericType<T> responseType, Float balance, String mail) throws ClientErrorException;
 
     public void deleteAccount(Long id) throws DeleteException;
-    
-     public <T> T countAccount(GenericType<T> responseType) throws ClientErrorException;
+
+    public <T> T countAccount(GenericType<T> responseType) throws ClientErrorException;
 
 }
