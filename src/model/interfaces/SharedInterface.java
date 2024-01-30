@@ -7,6 +7,7 @@ import exceptions.UpdateException;
 import javax.ws.rs.core.GenericType;
 
 /**
+ * Es la interfaz para la entidad Shared.
  *
  * @author Jason.
  */

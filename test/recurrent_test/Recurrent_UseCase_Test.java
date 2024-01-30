@@ -282,42 +282,42 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
         verifyThat(tfSearch, isDisabled());
 
         clickOn(cbAtribute);
-        clickOn("Uuid");
+        clickOn("Uuid:");
 
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isDisabled());
         verifyThat(tfSearch, isEnabled());
 
         clickOn(cbAtribute);
-        clickOn("Nombre");
+        clickOn("Nombre:");
 
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isDisabled());
         verifyThat(tfSearch, isEnabled());
 
         clickOn(cbAtribute);
-        clickOn("Concepto");
+        clickOn("Concepto:");
 
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isDisabled());
         verifyThat(tfSearch, isEnabled());
 
         clickOn(cbAtribute);
-        clickOn("Importe");
+        clickOn("Importe:");
 
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isEnabled());
         verifyThat(tfSearch, isEnabled());
 
         clickOn(cbAtribute);
-        clickOn("Naturaleza");
+        clickOn("Naturaleza:");
 
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isEnabled());
         verifyThat(tfSearch, isDisabled());
 
         clickOn(cbAtribute);
-        clickOn("Periodicidad");
+        clickOn("Periodicidad:");
 
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isEnabled());
@@ -328,27 +328,181 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
     @Ignore
     public void test9_handleSearch() {
         boolean iguales = true;
+
+        int randomRecurrent;
+
+        List<RecurrentBean> allRecurrents;
+        List<RecurrentBean> databaseList;
+        ObservableList<RecurrentBean> tableList;
+
         try {
-            Long id = ri.countExpenses(new GenericType<Long>() {
-            });
+            allRecurrents = ri.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
+            }, account.getId());
 
-            RecurrentBean rec = ri.findRecurrent_XML(new GenericType<RecurrentBean>() {
-            }, id);
-
+            //Buscar por UUID.
+            randomRecurrent = generateRandomNumber(0, allRecurrents.size() - 1);
             clickOn(cbAtribute);
-            clickOn("Uuid");
-
+            clickOn("Uuid:");
             clickOn(tfSearch);
-            write(id + "");
-
+            write(allRecurrents.get(randomRecurrent).getUuid() + "");
             clickOn(btnSearch);
 
-            ObservableList<RecurrentBean> recurrentes = table.getItems();
-            if (!rec.getUuid().equals(recurrentes.get(0).getUuid())) {
+            RecurrentBean databaseRecurrent = ri.findRecurrent_XML(new GenericType<RecurrentBean>() {
+            }, allRecurrents.get(randomRecurrent).getUuid());
+
+            tableList = table.getItems();
+
+            if (!tableList.get(0).getUuid().equals(databaseRecurrent.getUuid())) {
                 iguales = false;
             }
 
-            assertEquals("No se ha buscado correctamente",
+            assertEquals("Busqueda por uuid a fallado",
+                    true, iguales);
+
+            //Buscar por NOMBRE:
+            randomRecurrent = generateRandomNumber(0, allRecurrents.size() - 1);
+            clickOn(cbAtribute);
+            clickOn("Nombre:");
+            clickOn(tfSearch);
+            write(allRecurrents.get(randomRecurrent).getName() + "");
+            clickOn(btnSearch);
+
+            databaseList = ri.filterRecurrentsByName_XML(new GenericType<List<RecurrentBean>>() {
+            }, allRecurrents.get(randomRecurrent).getName(), account.getId());
+
+            tableList = table.getItems();
+            assertEquals("No hay la misma cantidad de recurrentes",
+                    databaseList.size(), tableList.size());
+
+            for (int i = 0; i < tableList.size(); i++) {
+                if (!tableList.get(i).getName().equals(databaseList.get(i).getName())) {
+                    iguales = false;
+                }
+            }
+
+            assertEquals("Busqueda por uuid a fallado",
+                    true, iguales);
+
+            //Buscar por CONCEPTO:
+            randomRecurrent = generateRandomNumber(0, allRecurrents.size() - 1);
+            clickOn(cbAtribute);
+            clickOn("Concepto:");
+            clickOn(tfSearch);
+            write(allRecurrents.get(randomRecurrent).getConcept() + "");
+            clickOn(btnSearch);
+
+            databaseList = ri.filterRecurrentsByConcept_XML(new GenericType<List<RecurrentBean>>() {
+            }, allRecurrents.get(randomRecurrent).getConcept(), account.getId());
+
+            tableList = table.getItems();
+            assertEquals("No hay la misma cantidad de recurrentes",
+                    databaseList.size(), tableList.size());
+
+            for (int i = 0; i < tableList.size(); i++) {
+                if (!tableList.get(i).getConcept().equals(databaseList.get(i).getConcept())) {
+                    iguales = false;
+                }
+            }
+
+            assertEquals("Busqueda por uuid a fallado",
+                    true, iguales);
+
+            //Buscar por IMPORTE MAYOR:
+            randomRecurrent = generateRandomNumber(0, allRecurrents.size() - 1);
+            clickOn(cbAtribute);
+            clickOn("Importe:");
+            clickOn(cbCondition);
+            clickOn("Mayor que...");
+            clickOn(tfSearch);
+            write(allRecurrents.get(randomRecurrent).getAmount() - 1 + "");
+            clickOn(btnSearch);
+
+            databaseList = ri.filterRecurrentsWithHigherAmount_XML(new GenericType<List<RecurrentBean>>() {
+            }, allRecurrents.get(randomRecurrent).getAmount() - 1, account.getId());
+
+            tableList = table.getItems();
+            assertEquals("No hay la misma cantidad de recurrentes",
+                    databaseList.size(), tableList.size());
+
+            for (int i = 0; i < tableList.size(); i++) {
+                if (!tableList.get(i).getAmount().equals(databaseList.get(i).getAmount())) {
+                    iguales = false;
+                }
+            }
+
+            assertEquals("Busqueda por uuid a fallado",
+                    true, iguales);
+
+            //Buscar por IMPORTE MENOR:
+            randomRecurrent = generateRandomNumber(0, allRecurrents.size() - 1);
+            clickOn(cbCondition);
+            clickOn("Menor que...");
+            clickOn(tfSearch);
+            doubleClickOn(tfSearch);
+            write(allRecurrents.get(randomRecurrent).getAmount() + 1 + "");
+            clickOn(btnSearch);
+
+            databaseList = ri.filterRecurrentsWithLowerAmount_XML(new GenericType<List<RecurrentBean>>() {
+            }, allRecurrents.get(randomRecurrent).getAmount() + 1, account.getId());
+
+            tableList = table.getItems();
+            assertEquals("No hay la misma cantidad de recurrentes",
+                    databaseList.size(), tableList.size());
+
+            for (int i = 0; i < tableList.size(); i++) {
+                if (!tableList.get(i).getAmount().equals(databaseList.get(i).getAmount())) {
+                    iguales = false;
+                }
+            }
+
+            assertEquals("Busqueda por uuid a fallado",
+                    true, iguales);
+
+            //Buscar por NATURALEZA:
+            clickOn(cbAtribute);
+            clickOn("Naturaleza:");
+            clickOn(cbCondition);
+            System.out.println();
+            clickOn(allRecurrents.get(0).getCategory() + "");
+            clickOn(btnSearch);
+
+            databaseList = ri.filterRecurrentsByCategory_XML(new GenericType<List<RecurrentBean>>() {
+            }, allRecurrents.get(0).getCategory(), account.getId());
+
+            tableList = table.getItems();
+            assertEquals("No hay la misma cantidad de recurrentes",
+                    databaseList.size(), tableList.size());
+
+            for (int i = 0; i < tableList.size(); i++) {
+                if (!tableList.get(i).getCategory().equals(databaseList.get(i).getCategory())) {
+                    iguales = false;
+                }
+            }
+
+            assertEquals("Busqueda por uuid a fallado",
+                    true, iguales);
+
+            //Buscar por PERIODICIDAD:
+            clickOn(cbAtribute);
+            clickOn("Periodicidad:");
+            clickOn(cbCondition);
+            clickOn(allRecurrents.get(0).getPeriodicity() + "");
+            clickOn(btnSearch);
+
+            databaseList = ri.filterRecurrentsByPeriodicity_XML(new GenericType<List<RecurrentBean>>() {
+            }, allRecurrents.get(0).getPeriodicity(), account.getId());
+
+            tableList = table.getItems();
+            assertEquals("No hay la misma cantidad de recurrentes",
+                    databaseList.size(), tableList.size());
+
+            for (int i = 0; i < tableList.size(); i++) {
+                if (!tableList.get(i).getPeriodicity().equals(databaseList.get(i).getPeriodicity())) {
+                    iguales = false;
+                }
+            }
+
+            assertEquals("Busqueda por uuid a fallado",
                     true, iguales);
         } catch (SelectException ex) {
             Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);

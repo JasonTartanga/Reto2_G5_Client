@@ -9,6 +9,7 @@ import model.enums.Category;
 import model.enums.Period;
 
 /**
+ * Es la interfaz para la entidad Recurrent.
  *
  * @author Jason.
  */

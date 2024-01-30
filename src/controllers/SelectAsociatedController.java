@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import model.entitys.UserBean;
 
 /**
+ * Esta clase es el controlador de la ventana que permite elegir la N:M en la
+ * ventana AccountView.
  *
  * @author Jason.
  */
@@ -30,6 +32,11 @@ public class SelectAsociatedController {
 
     private String asociated;
 
+    /**
+     * Inicializa la ventana.
+     *
+     * @param root el nodo padre.
+     */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
 
@@ -47,6 +54,12 @@ public class SelectAsociatedController {
         stage.showAndWait();
     }
 
+    /**
+     * Formatea todos los mails de los UserBean para que este en un mismo String
+     * pero separado por comas.
+     *
+     * @param event
+     */
     public void handleSelectNames(ActionEvent event) {
         asociated = null;
         List<String> nombres = list.getSelectionModel().getSelectedItems();
@@ -63,6 +76,11 @@ public class SelectAsociatedController {
         stage.close();
     }
 
+    /**
+     * Carga los mails de los UserBean posibles en el ListView.
+     *
+     * @param usuarios
+     */
     public void handleLoadList(List<UserBean> usuarios) {
         List<String> names = new ArrayList<>();
 
@@ -74,10 +92,20 @@ public class SelectAsociatedController {
         list.refresh();
     }
 
+    /**
+     * Consigue todos los asociados.
+     *
+     * @return los asociados.
+     */
     public String getAsociated() {
         return asociated;
     }
 
+    /**
+     * Consigue el AccountBean cuyos RecurrentBean vamos a gestionar.
+     *
+     * @param stage el AccountBean.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }

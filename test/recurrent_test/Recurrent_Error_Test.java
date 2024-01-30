@@ -168,101 +168,46 @@ public class Recurrent_Error_Test extends ApplicationTest {
 
     @Test
     //@Ignore
-    public void test5_handleRefreshTable() {
-        try {
-            clickOn(btnRefresh);
-
-            ObservableList<RecurrentBean> tableList = table.getItems();
-
-            for (RecurrentBean t : tableList) {
-                System.out.println("tableList --> " + t);
-            }
-
-            ObservableList<RecurrentBean> databaseList = FXCollections.observableArrayList(ri.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
-            }, account.getId()));
-
-            for (RecurrentBean d : databaseList) {
-                System.out.println("databaseList --> " + d);
-            }
-            assertEquals("Los datos de la base de datos no coinciden con los de la tabla",
-                    tableList, databaseList);
-
-        } catch (SelectException ex) {
-            Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @Test
-    @Ignore
-    public void test7_handleFilterChange() {
-        verifyThat(cbAtribute, isEnabled());
-        verifyThat(cbCondition, isDisabled());
-        verifyThat(tfSearch, isDisabled());
-
-        clickOn(cbAtribute);
-        clickOn("Uuid");
-
-        verifyThat(cbAtribute, isEnabled());
-        verifyThat(cbCondition, isDisabled());
-        verifyThat(tfSearch, isEnabled());
-
-        clickOn(cbAtribute);
-        clickOn("Nombre");
-
-        verifyThat(cbAtribute, isEnabled());
-        verifyThat(cbCondition, isDisabled());
-        verifyThat(tfSearch, isEnabled());
-
-        clickOn(cbAtribute);
-        clickOn("Concepto");
-
-        verifyThat(cbAtribute, isEnabled());
-        verifyThat(cbCondition, isDisabled());
-        verifyThat(tfSearch, isEnabled());
-
-        clickOn(cbAtribute);
-        clickOn("Importe");
-
-        verifyThat(cbAtribute, isEnabled());
-        verifyThat(cbCondition, isEnabled());
-        verifyThat(tfSearch, isEnabled());
-
-        clickOn(cbAtribute);
-        clickOn("Naturaleza");
-
-        verifyThat(cbAtribute, isEnabled());
-        verifyThat(cbCondition, isEnabled());
-        verifyThat(tfSearch, isDisabled());
-
-        clickOn(cbAtribute);
-        clickOn("Periodicidad");
-
-        verifyThat(cbAtribute, isEnabled());
-        verifyThat(cbCondition, isEnabled());
-        verifyThat(tfSearch, isDisabled());
-    }
-
-    @Test
-    @Ignore
     public void test9_handleSearch() {
+        boolean iguales = true;
+
+        int randomRecurrent;
+
+        List<RecurrentBean> allRecurrents;
+        List<RecurrentBean> databaseList;
+        ObservableList<RecurrentBean> tableList;
+
         try {
-            Long id = ri.countExpenses(new GenericType<Long>() {
-            });
+            allRecurrents = ri.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
+            }, account.getId());
 
-            RecurrentBean rec = ri.findRecurrent_XML(new GenericType<RecurrentBean>() {
-            }, id);
-
+            //Buscar por IMPORTE MAYOR:
+            randomRecurrent = generateRandomNumber(0, allRecurrents.size() - 1);
             clickOn(cbAtribute);
-            clickOn("Uuid");
-
+            clickOn("Importe:");
+            clickOn(cbCondition);
+            clickOn("Mayor que...");
             clickOn(tfSearch);
-            write(id + "");
-
+            write("aksjdvjaowee");
             clickOn(btnSearch);
-            assertEquals("No se ha buscado correctamente",
-                    rec, table.getItems().get(0));
-        } catch (SelectException ex) {
-            Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
+
+            databaseList = ri.filterRecurrentsWithHigherAmount_XML(new GenericType<List<RecurrentBean>>() {
+            }, Float.parseFloat(tfSearch.getText()), account.getId());
+
+            tableList = table.getItems();
+            assertEquals("No hay la misma cantidad de recurrentes",
+                    databaseList.size(), tableList.size());
+
+            for (int i = 0; i < tableList.size(); i++) {
+                if (!tableList.get(i).getAmount().equals(databaseList.get(i).getAmount())) {
+                    iguales = false;
+                }
+            }
+
+            verifyThat("Error", isVisible());
+
+        } catch (SelectException e) {
+            Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 

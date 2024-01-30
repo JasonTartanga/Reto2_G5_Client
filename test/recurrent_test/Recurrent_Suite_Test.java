@@ -13,7 +13,7 @@ import org.junit.runners.Suite;
  * @author Jason.
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({Recurrent_Error_Test.class, Recurrent_UseCase_Test.class})
+@Suite.SuiteClasses({Recurrent_UseCase_Test.class, Recurrent_Error_Test.class})
 public class Recurrent_Suite_Test {
 
 }

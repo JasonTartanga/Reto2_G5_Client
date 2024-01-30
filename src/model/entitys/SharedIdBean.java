@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
+ * Es el id del bean de la entidad Shared.
  *
  * @author Jason.
  */

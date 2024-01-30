@@ -1,4 +1,4 @@
-package model.entitys;
+package model.enums;
 
 /**
  * Esta clase es una enumeracion de los tipos de permisos que puede tener un

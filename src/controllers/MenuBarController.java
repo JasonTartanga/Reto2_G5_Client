@@ -1,6 +1,7 @@
 package controllers;
 
 /**
+ * Esta clase es el controlador generico del MenuBar.
  *
  * @author Jason.
  */
@@ -35,13 +36,11 @@ public class MenuBarController {
     @FXML
     private MenuItem miInicio, miChangePassword, miHelp, miLogout, miClose;
 
-//    public MenuBarController() {
-//        miInicio.setOnAction(this::handleMainMenu);
-//        miChangePassword.setOnAction(this::handleChangePasswordMenu);
-//        miHelp.setOnAction(this::handleHelpMenu);
-//        miLogout.setOnAction(this::handleLogoutMenu);
-//        miClose.setOnAction(this::handleCloseMenu);
-//    }
+    /**
+     * Abre la ventana de AccountView.
+     *
+     * @param action
+     */
     @FXML
     private void handleMainMenu(ActionEvent action) {
         log.info("Menu item de inicio pulsado");
@@ -59,6 +58,11 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Abre la ventana de ChangePaswordView.
+     *
+     * @param action
+     */
     @FXML
     private void handleChangePasswordMenu(ActionEvent action) {
         log.info("Menu item de cambiar contraseña pulsado");
@@ -75,12 +79,22 @@ public class MenuBarController {
 //        }
     }
 
+    /**
+     * Abre la ventana Help.
+     *
+     * @param action
+     */
     @FXML
     private void handleHelpMenu(ActionEvent action) {
         log.info("Menu item de ayuda pulsado");
 
     }
 
+    /**
+     * Cierra sesion y abre la ventana SignIn.
+     *
+     * @param action
+     */
     @FXML
     private void handleLogoutMenu(ActionEvent action) {
         log.info("Menu item de cerrar sesion pulsado");
@@ -98,6 +112,11 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Cierra la aplicacion.
+     *
+     * @param action
+     */
     @FXML
     private void handleCloseMenu(ActionEvent action) {
         log.info("Menu item de cerrar aplicacion pulsado");
@@ -120,10 +139,20 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Consigue el usuario para luego poder pasarlo a las ventanas.
+     *
+     * @param user el usuario que se ha logeado
+     */
     public void setUser(UserBean user) {
         this.user = user;
     }
 
+    /**
+     * Consigue el Stage para luego poder pasarlo a las ventanas.
+     *
+     * @param stage la ventana que vamos a pasar.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }

@@ -118,6 +118,11 @@ public class RecurrentController {
     @FXML
     private Tab tabRecurrentes, tabGraficos;
 
+    /**
+     * Inicializa la ventana RecurrentView.
+     *
+     * @param root es el nodo padre.
+     */
     public void initStage(Parent root) {
         try {
             Scene scene = new Scene(root);
@@ -140,8 +145,6 @@ public class RecurrentController {
             lblFilter.setVisible(true);
 
             //El menuBar estará visible y habilitado y será el común utilizado para todas las ventanas, creado anteriormente en una ventana individual.
-//            menuBar.setVisible(true);
-            //          menuBar.setDisable(false);
             menuBarController.setUser(user);
             menuBarController.setStage(thisStage);
 
@@ -174,7 +177,7 @@ public class RecurrentController {
             btnSearch.setTooltip(new Tooltip("Buscar gastos recurrentes"));
 
             //El filtrado es mediante un ComboBox (cbAtribute) y podrá filtrarse por “Uuid/Nombre/ Concepto/ Importe/ Naturaleza/  Periodicidad”. Está visible y habilitado siempre .
-            cbAtribute.getItems().addAll("Uuid", "Nombre", "Concepto", "Importe", "Naturaleza", "Periodicidad");
+            cbAtribute.getItems().addAll("Uuid:", "Nombre:", "Concepto:", "Importe:", "Naturaleza:", "Periodicidad:");
             cbAtribute.setOnAction(this::handleChangeFilter);
 
             //El otro ComboBox es de condición (cbCondition) y estará deshabilitado pero visible hasta que el usuario seleccione un dato en el ComboBox anterior
@@ -309,6 +312,12 @@ public class RecurrentController {
         }
     }
 
+    /**
+     * Crea un nuevo RecurrentBean en la base de datos y lo muestra en la
+     * TableView.
+     *
+     * @param event
+     */
     @FXML
     public void handleCreateRecurrent(ActionEvent event) {
         //Creará una nueva fila en el TableView con datos nulos excepto el id que se autogeneran.
@@ -332,6 +341,12 @@ public class RecurrentController {
         }
     }
 
+    /**
+     * Elimina uno o varios RecurrentBean de la base de datos y deja de
+     * mostrarlos en la TableView.
+     *
+     * @param event
+     */
     @FXML
     public void handleDeleteRecurrent(ActionEvent event) {
         //Para eliminar, haremos click en la TableView (table) sobre uno o varios accounts que queramos eliminar y clickeamos en el botón de eliminar de la parte superior de la ventana.
@@ -354,6 +369,11 @@ public class RecurrentController {
         }
     }
 
+    /**
+     * Carga la TableView con los todos los RecurrentBean del account.
+     *
+     * @param event
+     */
     @FXML
     public void handleRefreshTable(ActionEvent event) {
         try {
@@ -373,6 +393,11 @@ public class RecurrentController {
         }
     }
 
+    /**
+     * Abre la ventana PunctualView del mismo AccountBean en el que estamos.
+     *
+     * @param event
+     */
     @FXML
     public void handleSwitch(ActionEvent event) {
         log.info("Cambiando a PunctualView");
@@ -392,6 +417,12 @@ public class RecurrentController {
         }
     }
 
+    /**
+     * Genera un repote usando JasperReports con los datos actualmente visibles
+     * de la TableView.
+     *
+     * @param event
+     */
     @FXML
     public void handleGenerateReport(ActionEvent event) {
         log.info("Generando un reporte");
@@ -409,13 +440,19 @@ public class RecurrentController {
         }
     }
 
+    /**
+     * En base a que filtros se hayan seleccionado busca unos RecurrentBenas y
+     * los muestra en la TableView.
+     *
+     * @param event
+     */
     @FXML
     public void handleSearch(ActionEvent event) {
         log.log(Level.INFO, "Buscando gasto recurrente con el siguiente filtro --> {0}", cbAtribute.getValue().toString());
 
         try {
             switch (cbAtribute.getValue().toString()) {
-                case "Uuid":
+                case "Uuid:":
                     if (validateUuid(tfSearch.getText())) {
                         recurrentes.clear();
                         recurrentes.add(rest.findRecurrent_XML(new GenericType<RecurrentBean>() {
@@ -423,21 +460,21 @@ public class RecurrentController {
                     }
                     break;
 
-                case "Nombre":
+                case "Nombre:":
                     if (!tfSearch.getText().isEmpty()) {
                         recurrentes = rest.filterRecurrentsByName_XML(new GenericType<List<RecurrentBean>>() {
                         }, tfSearch.getText(), account.getId());
                     }
                     break;
 
-                case "Concepto":
+                case "Concepto:":
                     if (!tfSearch.getText().isEmpty()) {
                         recurrentes = rest.filterRecurrentsByConcept_XML(new GenericType<List<RecurrentBean>>() {
                         }, tfSearch.getText(), account.getId());
                     }
                     break;
 
-                case "Importe":
+                case "Importe:":
                     if (validateAmount(tfSearch.getText())) {
                         if (cbCondition.getValue().toString().equalsIgnoreCase("Mayor que...")) {
                             recurrentes = rest.filterRecurrentsWithHigherAmount_XML(new GenericType<List<RecurrentBean>>() {
@@ -450,14 +487,14 @@ public class RecurrentController {
                     }
                     break;
 
-                case "Naturaleza":
+                case "Naturaleza:":
                     if (!cbCondition.getValue().toString().equalsIgnoreCase("Naturaleza...")) {
                         recurrentes = rest.filterRecurrentsByCategory_XML(new GenericType<List<RecurrentBean>>() {
                         }, Category.valueOf(cbCondition.getValue().toString()), account.getId());
                     }
                     break;
 
-                case "Periodicidad":
+                case "Periodicidad:":
                     if (!cbCondition.getValue().toString().equalsIgnoreCase("Periodicidad...")) {
                         recurrentes = rest.filterRecurrentsByPeriodicity_XML(new GenericType<List<RecurrentBean>>() {
                         }, Period.valueOf(cbCondition.getValue().toString()), account.getId());
@@ -473,21 +510,20 @@ public class RecurrentController {
         }
     }
 
+    /**
+     * Dependiendo de que filtro se seleccione habilita o deshabilita los
+     * ComboBox o el TextField de los filtros.
+     *
+     * @param event
+     */
+    @FXML
     public void handleChangeFilter(Event event) {
         try {
             log.log(Level.INFO, "Cambiado el filtro a -->{0}", cbAtribute.getValue().toString());
             //  List<RecurrentBean> recurrentes = null;
 
             switch (cbAtribute.getValue().toString()) {
-                case "Sin Filtro":
-                    cbCondition.setDisable(true);
-                    tfSearch.setDisable(true);
-                    btnSearch.setDisable(false);
-                    cbCondition.setPromptText("Condicion");
-                    tfSearch.setText("");
-                    break;
-
-                case "Uuid":
+                case "Uuid:":
                     cbCondition.setDisable(true);
                     tfSearch.setDisable(false);
                     btnSearch.setDisable(false);
@@ -495,7 +531,7 @@ public class RecurrentController {
                     tfSearch.setText("");
                     break;
 
-                case "Nombre":
+                case "Nombre:":
                     cbCondition.setDisable(true);
                     tfSearch.setDisable(false);
                     btnSearch.setDisable(false);
@@ -503,7 +539,7 @@ public class RecurrentController {
                     tfSearch.setText("");
                     break;
 
-                case "Concepto":
+                case "Concepto:":
                     cbCondition.setDisable(true);
                     tfSearch.setDisable(false);
                     btnSearch.setDisable(false);
@@ -511,7 +547,7 @@ public class RecurrentController {
                     tfSearch.setText("");
                     break;
 
-                case "Importe":
+                case "Importe:":
                     cbCondition.setDisable(false);
                     tfSearch.setDisable(false);
                     btnSearch.setDisable(false);
@@ -520,7 +556,7 @@ public class RecurrentController {
                     tfSearch.setText("");
                     break;
 
-                case "Naturaleza":
+                case "Naturaleza:":
                     cbCondition.setDisable(false);
                     tfSearch.setDisable(true);
                     btnSearch.setDisable(false);
@@ -529,7 +565,7 @@ public class RecurrentController {
                     tfSearch.setText("");
                     break;
 
-                case "Periodicidad":
+                case "Periodicidad:":
                     cbCondition.setDisable(false);
                     tfSearch.setDisable(true);
                     btnSearch.setDisable(false);
@@ -546,6 +582,12 @@ public class RecurrentController {
         }
     }
 
+    /**
+     * Carga dos graficos en el segundo TabPane con los porcentajes de
+     * Naturalezas y Periodicidades.
+     *
+     * @param event
+     */
     @FXML
     private void handleLoadGraphics(Event event) {
         try {
@@ -577,6 +619,13 @@ public class RecurrentController {
         }
     }
 
+    /**
+     * Crea un Map con las Categorias y la cantidad de gastos que las tienen.
+     *
+     * @param recurrentAccount todos los recurrentes cuyas Categorias queremos
+     * cargar en el grafico.
+     * @return el Map con los datos necesarios para el grafico.
+     */
     private Map<Category, Integer> getCategoryDataGraphic(List<RecurrentBean> recurrentAccount) {
         Map<Category, Integer> categories = new HashMap();
 
@@ -592,6 +641,13 @@ public class RecurrentController {
         return categories;
     }
 
+    /**
+     * Crea un Map con las Naturalezas y la cantidad de gastos que las tienen.
+     *
+     * @param recurrentAccount todos los recurrentes cuyas Naturalezas queremos
+     * cargar en el grafico.
+     * @return el Map con los datos necesarios para el grafico.
+     */
     private Map<Period, Integer> getPeriodDataGraphic(List<RecurrentBean> recurrentAccount) {
         Map<Period, Integer> categories = new HashMap();
 
@@ -607,13 +663,25 @@ public class RecurrentController {
         return categories;
     }
 
+    /**
+     * Muestra una ventana Alert con el mensje que queramos.
+     *
+     * @param message el mensaje que queremos mostrar.
+     * @param type el tipo de la ventana.
+     */
     protected void showAlert(String message, AlertType type) {
         Alert alert = new Alert(type);
-        alert.setTitle(message);
+        alert.setContentText(message);
         alert.setHeaderText(null);
         alert.showAndWait();
     }
 
+    /**
+     * Comprueba el Uuid es un Long.
+     *
+     * @param uuid el uuid
+     * @return si es un Long.
+     */
     protected boolean validateUuid(String uuid) {
         boolean valido = true;
         try {
@@ -624,6 +692,12 @@ public class RecurrentController {
         return valido;
     }
 
+    /**
+     * Comprueba el Amount es un Float.
+     *
+     * @param amount el Amount
+     * @return si es un Float.
+     */
     protected boolean validateAmount(String amount) {
         boolean valido = true;
         try {
@@ -660,14 +734,29 @@ public class RecurrentController {
         }
     }
 
+    /**
+     * Consigue el Stage para luego poder pasarlo a las ventanas.
+     *
+     * @param thisStage la ventana que vamos a pasar.
+     */
     public void setStage(Stage thisStage) {
         this.thisStage = thisStage;
     }
 
+    /**
+     * Consigue el UserBean con el que se ha loggeado.
+     *
+     * @param user el usuario que se ha loggeado
+     */
     public void setUser(UserBean user) {
         this.user = user;
     }
 
+    /**
+     * Consigue el AccountBean cuyos RecurrentBean vamos a gestionar.
+     *
+     * @param account el AccountBean.
+     */
     public void setAccount(AccountBean account) {
         this.account = account;
     }

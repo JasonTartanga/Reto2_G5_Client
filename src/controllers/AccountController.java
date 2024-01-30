@@ -54,7 +54,7 @@ import javafx.util.converter.FloatStringConverter;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
 import model.entitys.ExpenseBean;
-import model.entitys.Permissions;
+import model.enums.Permissions;
 import model.entitys.PunctualBean;
 import model.entitys.RecurrentBean;
 import model.entitys.SharedBean;

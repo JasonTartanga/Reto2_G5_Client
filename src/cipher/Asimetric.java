@@ -1,6 +1,7 @@
 package cipher;
 
 /**
+ * Esta clase permite cifrar Asimetricamente mediante clave publica.
  *
  * @author Jason.
  */
@@ -19,12 +20,17 @@ public class Asimetric {
 
     private static final Logger LOG = Logger.getLogger(Asimetric.class.getName());
 
+    /**
+     * Cifra un String y lo formatea para que pueda viajar mediante HTTP.
+     *
+     * @param passwd el String que se quiere cifrar.
+     * @return el String cifrado con formato para poder enviarse mediante HTTP.
+     */
     public static String cipherPassword(String passwd) {
         FileInputStream fis = null;
         String cipherPasswd = null;
 
         try {
-            // Cargamos la clave publica
             fis = new FileInputStream(System.getProperty("user.home") + File.separator + "Documents\\CashTracker\\publicKey.der");
             byte[] publicKeyBytes = new byte[fis.available()];
             fis.read(publicKeyBytes);
@@ -34,7 +40,6 @@ public class Asimetric {
             X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
-            // Encriptamos la contraseña
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             byte[] encryptedData = cipher.doFinal(passwd.getBytes());

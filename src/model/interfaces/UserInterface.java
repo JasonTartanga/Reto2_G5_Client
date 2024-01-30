@@ -5,10 +5,10 @@ import exceptions.CredentialErrorException;
 import exceptions.DeleteException;
 import exceptions.SelectException;
 import exceptions.UpdateException;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 
 /**
+ * Es la interfaz para la entidad User.
  *
  * @author Jason.
  */

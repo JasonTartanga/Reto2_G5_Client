@@ -39,44 +39,100 @@ public class SharedRESTClient implements SharedInterface {
         webTarget = client.target(BASE_URI).path("entitys.shared");
     }
 
+    /**
+     *
+     * @param requestEntity objeto generico que devuelve el REST
+     * @throws CreateException
+     */
     @Override
     public void create_XML(Object requestEntity) throws CreateException {
         System.out.println("Enviando shared al servidor --> " + requestEntity.toString());
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
+    /**
+     *
+     * @param requestEntity objeto generico que devuelve el REST
+     * @throws CreateException
+     */
     @Override
     public void create_JSON(Object requestEntity) throws CreateException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
+    /**
+     *
+     * @param requestEntity objeto generico que devuelve el REST
+     * @param id
+     * @throws UpdateException gestiona una excepcion a la hora de modificar un
+     * Shared
+     */
     @Override
     public void edit_XML(Object requestEntity, String id) throws UpdateException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
+    /**
+     *
+     * @param requestEntity objeto generico que devuelve el REST
+     * @param id
+     * @throws UpdateException gestiona una excepcion a la hora de modificar un
+     * Shared
+     */
     @Override
     public void edit_JSON(Object requestEntity, String id) throws UpdateException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
+    /**
+     *
+     * @param account_id
+     * @param user_mail
+     * @throws DeleteException
+     */
     @Override
     public void remove(String account_id, String user_mail) throws DeleteException {
         webTarget.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{account_id, user_mail})).request().delete();
     }
 
+    /**
+     *
+     * @param <T> clase generica que devuelve el REST
+     * @param responseType el tipo de objecto que queremos que nos devuelva el
+     * REST
+     * @return
+     * @throws SelectException gestiona una excepcion a la hora de
+     */
     @Override
     public <T> T findAll_XML(GenericType<T> responseType) throws SelectException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
+    /**
+     *
+     * @param <T> clase generica que devuelve el REST
+     * @param responseType el tipo de objecto que queremos que nos devuelva el
+     * REST
+     * @return
+     * @throws SelectException gestiona una excepcion a la hora de
+     */
     @Override
     public <T> T findAll_JSON(GenericType<T> responseType) throws SelectException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    /**
+     *
+     * @param <T> clase generica que devuelve el REST
+     * @param responseType el tipo de objecto que queremos que nos devuelva el
+     * REST
+     * @param account_id
+     * @param user_mail
+     * @return
+     * @throws SelectException gestiona una excepcion a la hora de
+     */
     @Override
     public <T> T findShared_XML(GenericType<T> responseType, String account_id, String user_mail) throws SelectException {
         WebTarget resource = webTarget;
@@ -84,6 +140,16 @@ public class SharedRESTClient implements SharedInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
+    /**
+     *
+     * @param <T> clase generica que devuelve el REST
+     * @param responseType el tipo de objecto que queremos que nos devuelva el
+     * REST
+     * @param account_id
+     * @param user_mail
+     * @return
+     * @throws SelectException gestiona una excepcion a la hora de
+     */
     @Override
     public <T> T findShared_JSON(GenericType<T> responseType, String account_id, String user_mail) throws SelectException {
         WebTarget resource = webTarget;
