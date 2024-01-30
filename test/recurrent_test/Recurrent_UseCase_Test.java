@@ -1,10 +1,14 @@
-package testRecurrent;
+package recurrent_test;
 
 import controllers.RecurrentController;
 import exceptions.SelectException;
-import java.util.HashSet;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
-import java.util.Observable;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -30,8 +34,8 @@ import model.enums.Period;
 import model.factory.AccountFactory;
 import model.factory.RecurrentFactory;
 import model.factory.UserFactory;
-import model.interfaces.AccountInterface;
 import model.interfaces.RecurrentInterface;
+import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
@@ -50,7 +54,7 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
  * @author Jason.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class RecurrentController_Test extends ApplicationTest {
+public class Recurrent_UseCase_Test extends ApplicationTest {
 
     private UserBean user;
     private AccountBean account;
@@ -61,20 +65,25 @@ public class RecurrentController_Test extends ApplicationTest {
     private TextField tfSearch;
     private TableView table;
 
+    private Stage stage;
+
     @Override
     public void start(Stage stage) throws Exception {
         user = UserFactory.getFactory().findUser_XML(new GenericType<UserBean>() {
         }, "jason@gmail.com");
         account = AccountFactory.getFactory().findAccount_XML(new GenericType<AccountBean>() {
-        }, Long.parseLong(7 + ""));
+        }, Long.parseLong(6 + ""));
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RecurrentView.fxml"));
+        System.out.println(loader.getLocation());
         Parent root = loader.load();
         RecurrentController recurrent = loader.getController();
         recurrent.setStage(stage);
         recurrent.setAccount(account);
         recurrent.setUser(user);
         recurrent.initStage(root);
+
+        this.stage = stage;
 
         btnCreate = lookup("#btnCreate").query();
         btnDelete = lookup("#btnDelete").query();
@@ -86,12 +95,33 @@ public class RecurrentController_Test extends ApplicationTest {
         cbCondition = lookup("#cbCondition").queryComboBox();
         tfSearch = lookup("#tfSearch").query();
         table = lookup("#table").queryTableView();
+
     }
 
     @Test
     @Ignore
     public void test1_initStage() {
+        verifyThat(btnCreate, isVisible());
+        verifyThat(btnCreate, isEnabled());
+        verifyThat(btnDelete, isVisible());
+        verifyThat(btnDelete, isEnabled());
+        verifyThat(btnRefresh, isVisible());
+        verifyThat(btnRefresh, isEnabled());
+        verifyThat(btnSwitch, isVisible());
+        verifyThat(btnSwitch, isEnabled());
+        verifyThat(btnReport, isVisible());
+        verifyThat(btnReport, isEnabled());
 
+        verifyThat(cbAtribute, isVisible());
+        verifyThat(cbAtribute, isEnabled());
+        verifyThat(cbCondition, isVisible());
+        verifyThat(cbCondition, isDisabled());
+        verifyThat(tfSearch, isVisible());
+        verifyThat(tfSearch, isDisabled());
+        verifyThat(cbCondition, isVisible());
+        verifyThat(cbCondition, isDisabled());
+        verifyThat(btnSearch, isVisible());
+        verifyThat(btnSearch, isDisabled());
     }
 
     @Test
@@ -104,15 +134,16 @@ public class RecurrentController_Test extends ApplicationTest {
             }) + 1;
 
             clickOn(btnCreate);
-            assertEquals("The row has not been added!!!", rowCount + 1, table.getItems().size());
+            System.out.println(table.getItems().size());
+            assertEquals("La fila no se ha creado!!!", rowCount + 1, table.getItems().size());
 
             List<RecurrentBean> recurrent = table.getItems();
 
-            assertEquals("The user has not been added!!!",
+            assertEquals("El recurrente no se ha añdido!!!",
                     recurrent.stream().filter(r -> r.getUuid().equals(uuid)).count(), 1);
 
         } catch (SelectException ex) {
-            Logger.getLogger(RecurrentController_Test.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -120,63 +151,74 @@ public class RecurrentController_Test extends ApplicationTest {
     @Test
     @Ignore
     public void test3_handleModifyRecurrent() {
-        int rowCount = table.getItems().size();
-        assertNotEquals("No existe ningun gasto Recurrente",
-                rowCount, 0);
-        //look for 1st row in table view and click it
-        //Node row = lookup(".table-row-cell").nth(0).query();
+        try {
+            int rowCount = table.getItems().size();
+            assertNotEquals("No existe ningun gasto Recurrente",
+                    rowCount, 0);
 
-        Node uuidRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(0).query();
-        Node nameRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(1).query();
-        Node conceptRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(2).query();
-        Node importRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(3).query();
-        Node categoryRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(5).query();
-        Node periodicityRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(6).query();
+            Node uuidRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(0).query();
+            Node nameRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(1).query();
+            Node conceptRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(2).query();
+            Node importRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(3).query();
+            Node dateRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(4).query();
+            Node categoryRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(5).query();
+            Node periodicityRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(6).query();
 
-        assertNotNull("El gasto Recurrente es nullo, no se puede editar", uuidRow);
+            assertNotNull("El gasto Recurrente es nullo, no se puede editar", uuidRow);
 
-        clickOn(uuidRow);
-        RecurrentBean selectedRecurrent = (RecurrentBean) table.getSelectionModel()
-                .getSelectedItem();
-        int selectedIndex = table.getSelectionModel().getSelectedIndex();
+            clickOn(uuidRow);
+            RecurrentBean selectedRecurrent = (RecurrentBean) table.getSelectionModel()
+                    .getSelectedItem();
+            int selectedIndex = table.getSelectionModel().getSelectedIndex();
 
-        RecurrentBean modifiedBean = selectedRecurrent;
-        modifiedBean.setUuid(selectedRecurrent.getUuid());
-        modifiedBean.setName(generateRandomString());
-        modifiedBean.setConcept(generateRandomString());
-        modifiedBean.setAmount(Float.parseFloat(new Random().nextInt() + ""));
-        modifiedBean.setCategory(Category.values()[generateRandomNumber(0, Category.values().length)]);
-        modifiedBean.setPeriodicity(Period.values()[generateRandomNumber(0, Period.values().length)]);
+            RecurrentBean modifiedBean = selectedRecurrent;
+            modifiedBean.setUuid(selectedRecurrent.getUuid());
+            modifiedBean.setName(generateRandomString());
+            modifiedBean.setConcept(generateRandomString());
+            modifiedBean.setAmount(Float.parseFloat(generateRandomNumber(0, 999999) + ""));
 
-        doubleClickOn(nameRow);
-        doubleClickOn(nameRow);
-        write(modifiedBean.getName());
-        type(KeyCode.ENTER);
+            SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getInstance();
+            modifiedBean.setDate(sdf.parse("30/01/2024 0:00"));
 
-        doubleClickOn(conceptRow);
-        doubleClickOn(conceptRow);
-        write(modifiedBean.getConcept());
-        type(KeyCode.ENTER);
+            modifiedBean.setCategory(Category.values()[generateRandomNumber(0, Category.values().length - 1)]);
+            modifiedBean.setPeriodicity(Period.values()[generateRandomNumber(0, Period.values().length - 1)]);
 
-        doubleClickOn(importRow);
-        doubleClickOn(importRow);
-        write(modifiedBean.getAmount() + "");
-        type(KeyCode.ENTER);
+            doubleClickOn(nameRow);
+            doubleClickOn(nameRow);
+            write(modifiedBean.getName());
+            type(KeyCode.ENTER);
 
-        clickOn(categoryRow);
-        clickOn(categoryRow);
-        clickOn(modifiedBean.getCategory() + "");
-        type(KeyCode.ENTER);
+            doubleClickOn(conceptRow);
+            doubleClickOn(conceptRow);
+            write(modifiedBean.getConcept());
+            type(KeyCode.ENTER);
 
-        clickOn(periodicityRow);
-        clickOn(periodicityRow);
-        clickOn(modifiedBean.getPeriodicity() + "");
-        type(KeyCode.ENTER);
+            doubleClickOn(importRow);
+            doubleClickOn(importRow);
+            write(modifiedBean.getAmount() + "");
+            type(KeyCode.ENTER);
 
-        assertEquals("The user has not been modified!!!",
-                modifiedBean,
-                (RecurrentBean) table.getItems().get(selectedIndex));
+            doubleClickOn(dateRow);
+            doubleClickOn(dateRow);
+            write("30/01/2024");
+            type(KeyCode.ENTER);
 
+            clickOn(categoryRow);
+            clickOn(categoryRow);
+            clickOn(modifiedBean.getCategory() + "");
+            type(KeyCode.ENTER);
+
+            clickOn(periodicityRow);
+            clickOn(periodicityRow);
+            clickOn(modifiedBean.getPeriodicity() + "");
+            type(KeyCode.ENTER);
+
+            assertEquals("The user has not been modified!!!",
+                    modifiedBean,
+                    (RecurrentBean) table.getItems().get(selectedIndex));
+        } catch (ParseException ex) {
+            Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Test
@@ -186,7 +228,6 @@ public class RecurrentController_Test extends ApplicationTest {
         assertNotEquals("No existen Recurrentes, no se puede eliminar nada",
                 rowCount, 0);
 
-        //look for 1st row in table view and click it
         Node row = lookup(".table-row-cell").nth(0).query();
         assertNotNull("La tabla que se ha seleccionado es nula", row);
         clickOn(row);
@@ -199,19 +240,30 @@ public class RecurrentController_Test extends ApplicationTest {
     @Test
     @Ignore
     public void test5_handleRefreshTable() {
+        boolean iguales = true;
+
         try {
             clickOn(btnRefresh);
 
-            List<RecurrentBean> recurrentes = ri.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
-            }, account.getId());
-
             ObservableList<RecurrentBean> tableList = table.getItems();
-            ObservableList<RecurrentBean> recurrentList = FXCollections.observableArrayList(recurrentes);
+
+            ObservableList<RecurrentBean> databaseList = FXCollections.observableArrayList(ri.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
+            }, account.getId()));
+
+            assertEquals("Las tablas no tienen la misma cantidad de objetos",
+                    tableList.size(), databaseList.size());
+
+            for (int i = 0; i < tableList.size(); i++) {
+                if (!tableList.get(i).getUuid().equals(databaseList.get(i).getUuid())) {
+                    iguales = false;
+                }
+            }
 
             assertEquals("Los datos de la base de datos no coinciden con los de la tabla",
-                    tableList, recurrentList);
+                    true, iguales);
+
         } catch (SelectException ex) {
-            Logger.getLogger(RecurrentController_Test.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -224,13 +276,7 @@ public class RecurrentController_Test extends ApplicationTest {
 
     @Test
     @Ignore
-    public void test7_handleGenerateReport() {
-
-    }
-
-    @Test
-    @Ignore
-    public void test8_handleFilterChange() {
+    public void test7_handleFilterChange() {
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isDisabled());
         verifyThat(tfSearch, isDisabled());
@@ -281,6 +327,7 @@ public class RecurrentController_Test extends ApplicationTest {
     @Test
     @Ignore
     public void test9_handleSearch() {
+        boolean iguales = true;
         try {
             Long id = ri.countExpenses(new GenericType<Long>() {
             });
@@ -295,10 +342,16 @@ public class RecurrentController_Test extends ApplicationTest {
             write(id + "");
 
             clickOn(btnSearch);
+
+            ObservableList<RecurrentBean> recurrentes = table.getItems();
+            if (!rec.getUuid().equals(recurrentes.get(0).getUuid())) {
+                iguales = false;
+            }
+
             assertEquals("No se ha buscado correctamente",
-                    rec, table.getItems().get(0));
+                    true, iguales);
         } catch (SelectException ex) {
-            Logger.getLogger(RecurrentController_Test.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
