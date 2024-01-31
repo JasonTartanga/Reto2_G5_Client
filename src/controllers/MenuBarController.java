@@ -4,6 +4,7 @@ package controllers;
  *
  * @author Jason.
  */
+import help.HelpController;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -27,21 +28,22 @@ public class MenuBarController {
 
     private Stage stage;
     private UserBean user;
+    
 
     @FXML
     private MenuBar menuBar;
     @FXML
     private Menu mInicio, mPerfil, mAyuda, mSalir;
     @FXML
-    private MenuItem miInicio, miChangePassword, miHelp, miLogout, miClose;
+    private MenuItem miInicio, miChangePassword, miAccount, miRecurrent, miPunctual, miChange, miForgot, miLogout, miClose;
 
-//    public MenuBarController() {
-//        miInicio.setOnAction(this::handleMainMenu);
-//        miChangePassword.setOnAction(this::handleChangePasswordMenu);
-//        miHelp.setOnAction(this::handleHelpMenu);
-//        miLogout.setOnAction(this::handleLogoutMenu);
-//        miClose.setOnAction(this::handleCloseMenu);
-//    }
+    public MenuBarController() {
+        miInicio.setOnAction(this::handleMainMenu);
+        miChangePassword.setOnAction(this::handleChangePasswordMenu);
+        mAyuda.setOnAction(this::handleHelpMenu);
+        miLogout.setOnAction(this::handleLogoutMenu);
+        miClose.setOnAction(this::handleCloseMenu);
+    }
     @FXML
     private void handleMainMenu(ActionEvent action) {
         log.info("Menu item de inicio pulsado");
@@ -63,21 +65,26 @@ public class MenuBarController {
     private void handleChangePasswordMenu(ActionEvent action) {
         log.info("Menu item de cambiar contraseña pulsado");
 
-//        try {
-//            ((Stage) this.menuBar.getScene().getWindow()).close();
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ForgotPassword.fxml"));
-//            Parent root = loader.load();
-//            ForgotPasswordController forgotPassword = loader.getController();
-//            forgotPassword.setStage(new Stage());
-//            forgotPassword.initStage(root);
-//        } catch (IOException ex) {
-//            Logger.getLogger(MenuBarController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            ((Stage) this.menuBar.getScene().getWindow()).close();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ForgotPassword.fxml"));
+            Parent root = loader.load();
+            ForgotPasswordController forgotPassword = loader.getController();
+            forgotPassword.setStage(new Stage());
+            forgotPassword.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuBarController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
     private void handleHelpMenu(ActionEvent action) {
         log.info("Menu item de ayuda pulsado");
+        miAccount.setOnAction(this::handleAyudaAccount);
+        miRecurrent.setOnAction(this::handleAyudaRecurrent);
+        miPunctual.setOnAction(this::handleAyudaPunctual);
+        miChange.setOnAction(this::handleAyudaChange);
+        miForgot.setOnAction(this::handleAyudaForgot);
 
     }
 
@@ -120,6 +127,26 @@ public class MenuBarController {
         }
     }
 
+    public void handleAyudaAccount(ActionEvent event) {
+        HelpController.getInstance().mostrarVentanaAyudaAccount();
+    }
+    
+      public void handleAyudaRecurrent(ActionEvent event) {
+        HelpController.getInstance().mostrarVentanaAyudaRecurrent();
+    }
+      
+     public void handleAyudaPunctual(ActionEvent event) {
+        HelpController.getInstance().mostrarVentanaAyudaPunctual();
+    }
+     
+     public void handleAyudaChange(ActionEvent event) {
+        HelpController.getInstance().mostrarVentanaAyudaChangePasswd();
+    }
+     
+      public void handleAyudaForgot(ActionEvent event) {
+        HelpController.getInstance().mostrarVentanaAyudaForgotPasswd();
+    }
+    
     public void setUser(UserBean user) {
         this.user = user;
     }
