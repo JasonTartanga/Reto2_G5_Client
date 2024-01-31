@@ -1,8 +1,9 @@
 package controllers;
 
 /**
+ * Controlador de MenuBar.
  *
- * @author Jason.
+ * @author Jason y Jessica.
  */
 import help.HelpController;
 import java.io.IOException;
@@ -28,7 +29,6 @@ public class MenuBarController {
 
     private Stage stage;
     private UserBean user;
-    
 
     @FXML
     private MenuBar menuBar;
@@ -44,6 +44,13 @@ public class MenuBarController {
         miLogout.setOnAction(this::handleLogoutMenu);
         miClose.setOnAction(this::handleCloseMenu);
     }
+
+    /**
+     * Metodo para item de inicio. Nos redirije a la ventana de Account que es
+     * la principal
+     *
+     * @param action
+     */
     @FXML
     private void handleMainMenu(ActionEvent action) {
         log.info("Menu item de inicio pulsado");
@@ -61,6 +68,12 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Metodo para item de cambiar la contraseña. Nos redirije a la ventana de
+     * cambio de contraseña.
+     *
+     * @param action
+     */
     @FXML
     private void handleChangePasswordMenu(ActionEvent action) {
         log.info("Menu item de cambiar contraseña pulsado");
@@ -77,6 +90,13 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Metodo para item de ayudas de la ventana. Cada item seleccionado nos abre
+     * un html explicando el uso de la ventana que hayamos seleccionado para
+     * abrir.
+     *
+     * @param action
+     */
     @FXML
     private void handleHelpMenu(ActionEvent action) {
         log.info("Menu item de ayuda pulsado");
@@ -88,6 +108,12 @@ public class MenuBarController {
 
     }
 
+    /**
+     * Metodo para item de cerrar sesion. Una vez hayamos cerrado sesion nos
+     * redirije a la ventana de inicio de sesion.
+     *
+     * @param action
+     */
     @FXML
     private void handleLogoutMenu(ActionEvent action) {
         log.info("Menu item de cerrar sesion pulsado");
@@ -105,6 +131,12 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Metodo para item de cerrar la app Cerrara la aplicacion una vez se
+     * confirme el cierre.
+     *
+     * @param action
+     */
     @FXML
     private void handleCloseMenu(ActionEvent action) {
         log.info("Menu item de cerrar aplicacion pulsado");
@@ -127,26 +159,51 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Metodo para mostrar la ventana de ayuda de account
+     *
+     * @param event
+     */
     public void handleAyudaAccount(ActionEvent event) {
         HelpController.getInstance().mostrarVentanaAyudaAccount();
     }
-    
-      public void handleAyudaRecurrent(ActionEvent event) {
+
+    /**
+     * Metodo para mostrar la ventana de ayuda de recurrent
+     *
+     * @param event
+     */
+    public void handleAyudaRecurrent(ActionEvent event) {
         HelpController.getInstance().mostrarVentanaAyudaRecurrent();
     }
-      
-     public void handleAyudaPunctual(ActionEvent event) {
+
+    /**
+     * Metodo para mostrar la ventana de ayuda de punctual
+     *
+     * @param event
+     */
+    public void handleAyudaPunctual(ActionEvent event) {
         HelpController.getInstance().mostrarVentanaAyudaPunctual();
     }
-     
-     public void handleAyudaChange(ActionEvent event) {
+
+    /**
+     * Metodo para mostrar la ventana de ayuda de cambio de contraseña
+     *
+     * @param event
+     */
+    public void handleAyudaChange(ActionEvent event) {
         HelpController.getInstance().mostrarVentanaAyudaChangePasswd();
     }
-     
-      public void handleAyudaForgot(ActionEvent event) {
+
+    /**
+     * Metodo para mostrar la ventana de ayuda de olvidar la contraseña
+     *
+     * @param event
+     */
+    public void handleAyudaForgot(ActionEvent event) {
         HelpController.getInstance().mostrarVentanaAyudaForgotPasswd();
     }
-    
+
     public void setUser(UserBean user) {
         this.user = user;
     }
