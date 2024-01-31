@@ -1,0 +1,42 @@
+   body{
+                background-color: beige;
+                align-items: center;
+                margin: 50px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+            div.cuerpo{
+                margin: 20px;
+                margin-top: 30px;
+                align-content: center;
+            }
+            img{
+
+                width: 200px;
+                height: 100px;
+            }
+            hr{
+                border-collapse: collapse;
+                border: 2px solid white;
+                border-radius: 5px;
+            }
+            p.destaca{
+                color: #3EFA18;
+            }
+            .foto{
+                width: 700px;
+                height: 100px;
+            }
+            #principal{
+                width: 500px;
+                height: 300px;
+            }
+            
+            .menuBar{
+                width: 1200px;
+                height: 60px;
+            }
+            .apartadoInferior{
+                width: 1200px;
+                height: 60px;
+            }

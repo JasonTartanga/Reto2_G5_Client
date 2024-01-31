@@ -7,121 +7,103 @@ and open the template in the editor.
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vista de Gastos Recurrentes</title>
-    <style type="text/css">
-        body {
-            background-color: beige;
-            align-items: center;
-            margin: 50px;
-            padding-top: 20px;
-            padding-bottom: 20px;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Recurrent View</title>
+        <link rel="stylesheet" href="estilosAyuda.css">
+    </head>
 
-        div.cuerpo {
-            margin: 20px;
-            margin-top: 30px;
-            align-content: center;
-        }
+    <body>
 
-        hr {
-            border-collapse: collapse;
-            border: 2px solid white;
-            border-radius: 5px;
-        }
+        <hr>
+        <h1 align="Center">RECURRENT VIEW</h1>
+        <hr>
+        <div class="cuerpo">
+            <p>Al igual que en la ventana principal, en la ventana de gastos recurrentes hay un apartado superior de botones.</p>
 
-        p {
-            text-align: center;
-        }
+            <!-- Aquí va la foto de la primera sección -->
 
-    </style>
-</head>
+            <h2 style="color: blue;">Apartado de Botones (Tabla)</h2>        
 
-<body>
+            <p>Tendrás los botones para el uso de la tabla, es decir, el primero lo usarás para crear una nueva fila (para crear un nuevo gasto), 
+                el segundo para borrar la que previamente habrás seleccionado (que será el gasto que hayas seleccionado) y el tercero es para actualizar 
+                los datos de los gastos de la tabla.</p>
 
-    <hr>
-    <h1 align="Center">Vista de Gastos Recurrentes</h1>
-    <hr>
-    <div class="cuerpo">
-        <p>Al igual que en la ventana principal, en la ventana de gastos recurrentes hay un apartado superior de botones.</p>
-        
-          <!-- Aquí va la foto de la primera sección -->
+            <h2>Uso de botones</h2>
+            <li><strong>Botón de crear:</strong> Para hacer la creación de un nuevo gasto, haz clic en el botón y se añadirá una fila nueva. Introduce los datos que quieras y le das al enter.</li>
+            <li><strong>Botón de eliminar:</strong> Para eliminar, haz clic sobre la fila que quieras borrar y pulsa el botón.</li>
+            <li><strong>Para modificar:</strong> Selecciona la celda que quieras modificar y agrega el cambio. Para que quede guardado, pulsa la tecla de enter. En caso de no ver los cambios, pulsa el botón de actualizar tabla. (Tecla enter).</li>
 
-        <p>En el primer apartado de botones (marcado en azul):</p>
-        <ul>
-            <li>Tendrás los botones para el uso de la tabla, es decir, el primero lo usarás para crear una nueva fila (para crear un nuevo gasto), el segundo para borrar la que previamente habrás seleccionado (que será el gasto que hayas seleccionado) y el tercero es para actualizar los datos de los gastos de la tabla.</li>
-        </ul>
+            <img src="PrimerApartadoAccount.png">
 
-        <p>En el segundo apartado (marcado en rojo):</p>
-        <ul>
-            <li>Tendrás un botón que será para la navegación entre ventanas, sirve para abrir la ventana de gastos puntuales.</li>
-        </ul>
+            <h2 style="color: red;">Apartado de Navegación</h2>
 
-        <p>En el tercer apartado dispones de otro botón para sacar los informes (marcado en negro):</p>
-        <ul>
-            <li>En este caso, para sacar el informe de la ventana de recurrente.</li>
-        </ul>
+            <p>Tendrás un botón que será para la navegación entre ventanas, sirve para abrir la ventana de gastos puntuales.</p>
 
-        <p>Y para acabar con la parte superior, tendrás un cuarto apartado que usarás para filtrar en la tabla (marcado en verde):</p>
-        <ul>
-            <li>El primer Combo es utilizado para elegir por el atributo que queramos filtrar.</li>
-            <li>El segundo para la condición que usaremos en caso de seleccionar (Importe, naturaleza, categoría).</li>
-            <li>El TextField lo usaremos para escribir el dato cuando la selección del atributo haya sido seleccionado.</li>
-            <li>Y por último, tendrás el botón de buscar que es el que dará la acción que previamente hayamos seleccionado.</li>
-        </ul>
+            <img src="NavegacionRecurrente.png">
 
-        <p>En la parte inferior hay dos pestañas. En la primera aparece una tabla con los gastos de las cuentas, y en la segunda pestaña, aparecen los gráficos correspondientes.</p>
+            <h2 style="color: black;">Apartado de Informes</h2>
 
-          <!-- Aquí va la foto de la primera sección -->
-        <h2>USO DE BOTONES</h2>
-        <p><strong>Botón de crear:</strong> Para hacer la creación de un nuevo gasto, haz clic en el botón y se añadirá una fila nueva. Introduce los datos que quieras y le das al enter.</p>
-        <p><strong>Botón de eliminar:</strong> Para eliminar, haz clic sobre la fila que quieras borrar y pulsa el botón.</p>
-        <p><strong>Para modificar:</strong> Selecciona la celda que quieras modificar y agrega el cambio. Para que quede guardado, pulsa la tecla de enter. En caso de no ver los cambios, pulsa el botón de actualizar tabla. (Tecla enter).</p>
+            <p>En este caso, para sacar el informe de la ventana de recurrente.</p>
 
-          <!-- Aquí va la foto de la primera sección -->
-          
-          
-        <h2>Para el uso del filtrado:</h2>
-        <p>Para empezar tienes un ComboBox que se llama "atributo". Haz clic y se desplegarán las diferentes opciones. Pulsa en la opción que desees:</p>
-        <ul>
-            <li>Si seleccionas los atributos de Uuid, Nombre o Concepto:</li>
+            <img src="TercerApartadoAccount.png">
+
+            <h2 style="color: green;">Apartado de Filtrado en la Tabla</h2>
             <ul>
-                <li>Se habilitará el TextField para poder escribir el dato que quieras y el combo de condición quedará inhabilitado.</li>
+                <li>El primer Combo es utilizado para elegir por el atributo que queramos filtrar.</li>
+                <li>El segundo para la condición que usaremos en caso de seleccionar (Importe, naturaleza, categoría).</li>
+                <li>El TextField lo usaremos para escribir el dato cuando la selección del atributo haya sido seleccionado.</li>
+                <li>Y por último, tendrás el botón de buscar que es el que dará la acción que previamente hayamos seleccionado.</li>
             </ul>
-            <li>En caso de seleccionar importe, naturaleza o categoria:</li>
+
+            <img class="foto" src="CuartoApartadoAccount.png">
+
+            <p>En la parte inferior hay dos pestañas. En la primera aparece una tabla con los gastos de las cuentas, y en la segunda pestaña, aparecen los gráficos correspondientes.</p>
+
+            <img class="apartadoInferior" src="ParteInferiorRecurrent.png">
+
+
+            <h2>Para el uso del filtrado:</h2>
+            <p>Para empezar tienes un ComboBox que se llama "atributo". Haz clic y se desplegarán las diferentes opciones. Pulsa en la opción que desees:</p>
             <ul>
-                <li>Se habilitará el siguiente ComboBox que hemos llamado "condición".</li>
-                <li>Se desplegarán las diferentes opciones en base a la selección.</li>
-                <li>Una vez seleccionado, se habilita el TextField para escribir.</li>
+                <li>Si seleccionas los atributos de Uuid, Nombre o Concepto:</li>
+                <ul>
+                    <li>Se habilitará el TextField para poder escribir el dato que quieras y el combo de condición quedará inhabilitado.</li>
+                </ul>
+                <li>En caso de seleccionar importe, naturaleza o categoria:</li>
+                <ul>
+                    <li>Se habilitará el siguiente ComboBox que hemos llamado "condición".</li>
+                    <li>Se desplegarán las diferentes opciones en base a la selección.</li>
+                    <li>Una vez seleccionado, se habilita el TextField para escribir.</li>
+                </ul>
             </ul>
-        </ul>
-        <p>En ambos casos, para hacer el filtrado, haz clic en el botón de "buscar", y ello hará que se muestren en la tabla los gastos con esas características.</p>
+            <p>En ambos casos, para hacer el filtrado, haz clic en el botón de "buscar", y ello hará que se muestren en la tabla los gastos con esas características.</p>
 
-        
-        <h2>La tabla:</h2>
-        <p>Es una tabla editable con diferentes celdas. El Uuid es auto generado, el nombre y el concepto son TextField. La fecha es un DatePicker, y las celdas de naturaleza, categoria e importe son Combobox con las opciones para seleccionarlas. La celda del id no es editable.</p>
 
-          <!-- Aquí va la foto de la primera sección -->
-          
-          
-        <h2>Los gráficos:</h2>
-        <p>Los gráficos se actualizan solos.</p>
+            <h2>La tabla:</h2>
+            <p>Es una tabla editable con diferentes celdas. El Uuid es auto generado, el nombre y el concepto son TextField. La fecha es un DatePicker, y las celdas de naturaleza, categoria e importe son Combobox con las opciones para seleccionarlas. La celda del id no es editable.</p>
 
-        <p>Por otra parte, tenemos un menúBar en la parte superior de la ventana.</p>
-        <ul>
-            <li>El botón de inicio se utiliza para ir a la ventana principal, en este caso, al hacer clic se abrirá la ventana de account.</li>
-            <li>El botón de perfil te redirige a cambiar la contraseña por una nueva.</li>
-            <li>El de ayuda para obtener el contenido de ayuda de dicha ventana.</li>
-            <li>Y el botón de salir se utiliza para cerrar sesión o cerrar la aplicación.</li>
-        </ul>
-        
-          <!-- Aquí va la foto de la primera sección -->
+            <!-- Aquí va la foto de la primera sección -->
 
-    </div>
 
-</body>
+            <h2>Los gráficos:</h2>
+            <p>Los gráficos se actualizan solos.</p>
+
+            <h2>MenuBar</h2>
+            <p>En la parte superior de la ventana, tienes un Menubar con diferentes opciones:</p>
+            <ul>
+                <li><strong>Inicio:</strong> Para ir a la ventana principal.</li>
+                <li><strong>Perfil:</strong> Te redirige a cambiar la contraseña.</li>
+                <li><strong>Ayuda:</strong> Para obtener el contenido de ayuda de la ventana.</li>
+                <li><strong>Salir:</strong> Para cerrar sesión o cerrar la aplicación.</li>
+            </ul>
+
+            <img class="menuBar" src="MenuBar.png">
+
+        </div>
+
+    </body>
 
 </html>
 

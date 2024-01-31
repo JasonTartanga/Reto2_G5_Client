@@ -6,92 +6,56 @@ and open the template in the editor.
 -->
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account View</title>
-    <style type="text/css">
-       body{
-                background-color: beige;
-                align-items: center;
-                margin: 50px;
-                padding-top: 20px;
-                padding-bottom: 20px;
-            }
-            div.cuerpo{
-                margin: 20px;
-                margin-top: 30px;
-                align-content: center;
-            }
-            img{
-                
-                width: 700px;
-                height: 500px;
-            }
-            hr{
-                border-collapse: collapse;
-                border: 2px solid white;
-                border-radius: 5px;
-            }
-            p.destaca{
-                color: #3EFA18;
-            }
-            p{
-                text-align: center;
-            }
-            
-       
-    </style>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Account View</title>
+        <link rel="stylesheet" href="estilosAyuda.css">
+    </head>
+    <body>
 
-    <h1>ACCOUNT VIEW</h1>
+        <h1>ACCOUNT VIEW</h1>
 
-    <p>La ventana Account es la principal al ejecutar la aplicación. Al iniciar, en la parte superior aparecerán diferentes apartados de botones.</p>
+        <p>La ventana Account es la principal al ejecutar la aplicación. Al iniciar, en la parte superior aparecerán diferentes apartados de botones.</p>
 
-    <!-- Aquí va la foto de la primera sección -->
+        <img id="principal" src="AccountView.png">
 
-    <h2 style="color: blue;">Apartado de Botones (Tabla)</h2>
-    <p>Tendrás los botones para el uso de la tabla. El primero para crear una nueva fila (nuevo grupo de gastos), el segundo para borrar la fila seleccionada 
-        (grupo de gastos), y el tercero para actualizar los datos de los grupos de la tabla.</p>
+        <h2 style="color: blue;">Apartado de Botones (Tabla)</h2>
+        <p>Tendrás los botones para el uso de la tabla. El primero para crear una nueva fila (nuevo grupo de gastos), el segundo para borrar la fila seleccionada 
+            (grupo de gastos), y el tercero para actualizar los datos de los grupos de la tabla.</p>
 
-    <!-- Aquí va la foto de la segunda sección -->
+        <h2>Uso de Botones</h2>
+        <ul>
+            <li><strong>Botón de Crear:</strong> Para hacer la creación de un nuevo grupo, haz clic en el botón y se añadirá una fila nueva. 
+                Introduce los datos y presiona Enter.</li>
+            <li><strong>Botón de Eliminar:</strong> Haz clic sobre la fila que quieras borrar y pulsa el botón. </li>         
+            <li><strong>Botón de Modificar</strong> Para modificar, selecciona 
+                la celda que quieras cambiar y agrega el cambio. Para guardar, pulsa Enter. En caso de no ver los cambios, pulsa el botón de 
+                actualizar tabla.</li>
+        </ul>
 
-    <h2 style="color: red;">Apartado de Navegación</h2>
-    <p>Dos botones para la navegación entre ventanas. El primero para ir a la ventana de gastos recurrentes y el segundo para la de gastos puntuales.</p>
-    <p>En caso de querer dirigirte a cualquiera de las dos ventanas, deberar primero seleccionar un grupo haciendo clic sobre la fila y luego haciendo clic sobre
-    el boton de la ventana a la que queires </p>
+        <img src="PrimerApartadoAccount.png">
 
-    <!-- Aquí va la foto de la tercera sección -->
+        <h2 style="color: red;">Apartado de Navegación</h2>
+        <p>Dos botones para la navegación entre ventanas. El primero para ir a la ventana de gastos recurrentes y el segundo para la de gastos puntuales.</p>
+        <p>En caso de querer dirigirte a cualquiera de las dos ventanas, deberar primero seleccionar un grupo haciendo clic sobre la fila y luego haciendo clic sobre
+            el boton de la ventana a la que queires </p>
 
-    <h2 style="color: black;">Apartado de Informes</h2>
-    <p>Botón para sacar el informe de la ventana de Account.</p>
+        <img src="SegundoApartadoAccount.png">
 
-    <!-- Aquí va la foto de la cuarta sección -->
+        <h2 style="color: black;">Apartado de Informes</h2>
+        <p>Botón para sacar el informe de la ventana de Account.</p>
 
-    <h2 style="color: green;">Apartado de Filtrado en la Tabla</h2>
-    <p>Utiliza el primer Combo para elegir por el atributo que quieres filtrar. El segundo para la condición y el TextField para escribir el dato. 
-        Finalmente, el botón de buscar ejecutará la acción seleccionada.</p>
+        <img src="TercerApartadoAccount.png">
 
-    <!-- Aquí va la foto de la quinta sección -->
+        <h2 style="color: green;">Apartado de Filtrado en la Tabla</h2>
+        <p>Utiliza el primer Combo para elegir por el atributo que quieres filtrar. El segundo para la condición y el TextField para escribir el dato. 
+            Finalmente, el botón de buscar ejecutará la acción seleccionada.</p>
 
-    <h2>Parte Inferior</h2>
-    <p>En la primera pestaña aparece una tabla con los grupos de las cuentas, y en la segunda pestaña, aparecen los gráficos correspondientes.</p>
+        <img class="foto" src="CuartoApartadoAccount.png">
 
-    <h2>Uso de Botones</h2>
-    <ul>
-        <li><strong>Botón de Crear:</strong> Para hacer la creación de un nuevo grupo, haz clic en el botón y se añadirá una fila nueva. 
-            Introduce los datos y presiona Enter.</li>
-        <li><strong>Botón de Eliminar:</strong> Haz clic sobre la fila que quieras borrar y pulsa el botón. </li>         
-        <li><strong>Botón de Modificar</strong> Para modificar, selecciona 
-            la celda que quieras cambiar y agrega el cambio. Para guardar, pulsa Enter. En caso de no ver los cambios, pulsa el botón de 
-            actualizar tabla.</li>
-    </ul>
-
-    <!-- Aquí va la foto de la sexta sección -->
-
-    <h2>Uso del Filtrado</h2>
-     <ol>
+        <h2>Uso del Filtrado</h2>
+        <ol>
             <li>Tienes un ComboBox llamado "atributo". Haz clic y se desplegarán las diferentes opciones. Pulsa en la opción que desees.</li>
             <li>Si seleccionas los atributos de Id, Nombre o Descripción:</li>
             <ul>
@@ -107,26 +71,30 @@ and open the template in the editor.
             <li>En ambos casos, para hacer el filtrado, haz clic en el botón de "buscar". Esto mostrará en la tabla los grupos con esas características.</li>
         </ol>
 
-    
+        <h2>Parte Inferior</h2>
+        <p>En la primera pestaña aparece una tabla con los grupos de las cuentas, y en la segunda pestaña, aparecen los gráficos correspondientes.</p>
 
-    <!-- Aquí va la foto de la séptima sección -->
+        <img class="apartadoInferior" src="ParteInferiorAccount.png">
 
-    <h2>La Tabla</h2>
-    <p>Es una tabla editable con diferentes celdas. El ID es auto generado y su celda no es editable, el nombre y la descripción son TextField. 
-        La fecha es un DatePicker, y las celdas de plan y divisa son ComboBox. La celda de Balance no es editable.</p>
 
-    <h2>Los Gráficos</h2>
-    <p>Los gráficos se actualizan automáticamente.</p>
+        <h2>La Tabla</h2>
+        <p>Es una tabla editable con diferentes celdas. El ID es auto generado y su celda no es editable, el nombre y la descripción son TextField. 
+            La fecha es un DatePicker, y las celdas de plan y divisa son ComboBox. La celda de Balance no es editable.</p>
 
-    <h2>MenuBar</h2>
-    <p>En la parte superior de la ventana, tienes un Menubar con diferentes opciones:</p>
-    <ul>
-        <li><strong>Inicio:</strong> Para ir a la ventana principal.</li>
-        <li><strong>Perfil:</strong> Te redirige a cambiar la contraseña.</li>
-        <li><strong>Ayuda:</strong> Para obtener el contenido de ayuda de la ventana.</li>
-        <li><strong>Salir:</strong> Para cerrar sesión o cerrar la aplicación.</li>
-    </ul>
+        <h2>Los Gráficos</h2>
+        <p>Los gráficos se actualizan automáticamente.</p>
 
-</body>
+        <h2>MenuBar</h2>
+        <p>En la parte superior de la ventana, tienes un Menubar con diferentes opciones:</p>
+        <ul>
+            <li><strong>Inicio:</strong> Para ir a la ventana principal.</li>
+            <li><strong>Perfil:</strong> Te redirige a cambiar la contraseña.</li>
+            <li><strong>Ayuda:</strong> Para obtener el contenido de ayuda de la ventana.</li>
+            <li><strong>Salir:</strong> Para cerrar sesión o cerrar la aplicación.</li>
+        </ul>
+
+        <img class="menuBar" src="MenuBar.png">
+
+    </body>
 </html>
 
