@@ -193,8 +193,11 @@ public class AccountController {
 //        HBox hBoxMenu = (HBox) root.getChildrenUnmodifiable().get(0);
 //        //Get the menu bar from the children of the layout got before
 //        MenuBar menuBar = (MenuBar) hBoxMenu.getChildren().get(0);
+
+        //El MenuBar (menu) está habilitado y visible siempre y será el común utilizado para todas las ventanas, creado anteriormente en una ventana individual.
         menuBarController.setStage(stage);
         menuBarController.setUser(user);
+        
 
         //El botón crear (btnCreate), eliminar (btnDelete), cargar (btnRefresh), el de gastos recurrentes (bntRecurrent),
         //el de gastos puntuales (btnPunctual) y el de informe (btnReport) están habilitados y visibles.
@@ -383,9 +386,10 @@ public class AccountController {
         btnSearch.setVisible(true);
         btnSearch.setOnAction(this::handleSearch);
 
-        //El MenuBar (menu) está habilitado y visible siempre y será el común utilizado para todas las ventanas, creado anteriormente en una ventana individual.
 //        menuBar.setDisable(false);
 //        menuBar.setVisible(true);
+
+
         //CONTEXTMENU
         //Cuando se pulse click derecho sobre la tableView se verá un menú de contexto con un menu (menú) que tendrá
         //dos menu items (miCreate) que llamara al mismo método que el botón btnCreate  y (miDelete) que llamara
