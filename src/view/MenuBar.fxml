@@ -21,7 +21,11 @@
             </Menu>
           <Menu id="menuAyuda" fx:id="mAyuda" mnemonicParsing="false" text="Ayuda">
             <items>
-              <MenuItem id="menuItemAyuda" fx:id="miHelp" mnemonicParsing="false" onAction="#handleHelpMenu" text="Contenidos de ayuda" />
+              <MenuItem id="menuItemAyuda" fx:id="miAccount" mnemonicParsing="false" onAction="#handleHelpMenu" text="Account" />
+                  <MenuItem id="menuItemAyuda" fx:id="miRecurrent" mnemonicParsing="false" onAction="#handleHelpMenu" text="Recurrent" />
+                  <MenuItem id="menuItemAyuda" fx:id="miPunctual" mnemonicParsing="false" onAction="#handleHelpMenu" text="Punctual" />
+                  <MenuItem id="menuItemAyuda" fx:id="miChange" mnemonicParsing="false" onAction="#handleHelpMenu" text="Change Password" />
+                  <MenuItem id="menuItemAyuda" fx:id="miForgot" mnemonicParsing="false" onAction="#handleHelpMenu" text="Forgot Password" />
             </items>
           </Menu>
           <Menu id="menuSalir" fx:id="mSalir" mnemonicParsing="false" text="Salir">

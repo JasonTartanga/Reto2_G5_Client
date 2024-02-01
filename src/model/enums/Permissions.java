@@ -8,6 +8,5 @@ package model.enums;
  */
 public enum Permissions {
     Creador,
-    Autorizado,
-    Espectador
+    Autorizado
 }

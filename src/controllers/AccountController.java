@@ -3,6 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+ /*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package controllers;
 
 import exceptions.DeleteException;
@@ -70,6 +75,7 @@ import model.factory.UserFactory;
 import model.interfaces.AccountInterface;
 import model.interfaces.PunctualInterface;
 import model.interfaces.RecurrentInterface;
+import model.interfaces.SharedInterface;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -265,16 +271,16 @@ public class AccountController {
 
         //La columna de “Balance” tendrá un formato numérico para el cómputo global de los gastos de la cuenta.
         tcBalance.setCellValueFactory(new PropertyValueFactory<>("balance"));
-        tcBalance.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
-        tcBalance.setOnEditCommit(event -> {
-            try {
-                AccountBean accountBean = event.getRowValue();
-                accountBean.setBalance(event.getNewValue());
-                aInterface.updateAccount_XML(accountBean, accountBean.getId());
-            } catch (Exception e) {
-                this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
-            }
-        });
+//        tcBalance.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
+//        tcBalance.setOnEditCommit(event -> {
+//            try {
+//                AccountBean accountBean = event.getRowValue();
+//                accountBean.setBalance(event.getNewValue());
+//                aInterface.updateAccount_XML(accountBean, accountBean.getId());
+//            } catch (Exception e) {
+//                this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
+//            }
+//        });
 
         //La columna de “Fecha” está formada por una DatePicker y es editable.
         //La columna de “fecha” será con un DatePicker.
@@ -462,9 +468,14 @@ public class AccountController {
         LOGGER.info("Eliminando uno o varios Account.");
         try {
             List<AccountBean> selectedAccount = table.getSelectionModel().getSelectedItems();
+            SharedInterface si = SharedFactory.getFactory();
 
             for (AccountBean a : selectedAccount) {
                 System.out.println(a.toString());
+
+                SharedBean s = si.findShared_XML(new GenericType<SharedBean>() {
+                }, a.getId().toString(), user.getMail());
+
                 aInterface.deleteAccount(a.getId());
                 table.getItems().remove(a);
             }
@@ -473,6 +484,8 @@ public class AccountController {
 
         } catch (DeleteException e) {
             this.showAlert(e.getMessage(), AlertType.ERROR);
+        } catch (SelectException ex) {
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

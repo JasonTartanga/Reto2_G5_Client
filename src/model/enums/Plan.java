@@ -7,10 +7,12 @@ package model.enums;
  * @author Jessica
  */
 public enum Plan {
-    Viaje,
+    Ahorros,
+    Banco,
     Casa_Compartida,
-    Pareja,
     Celebracion,
+    Pareja,
     Proyecto,
-    Otro
+    Viaje,
+    Otro,
 }
