@@ -148,22 +148,21 @@ public class AccountController {
     @FXML
     private TableColumn<AccountBean, Plan> tcPlan;
 
-    //TODO: falta columna de asociados
     @FXML
-    private TableColumn<AccountBean, String> tcAsociated;
+    private TableColumn<AccountBean, List<SharedBean>> tcAsociated;
 
     @FXML
     private AnchorPane fondoAccount;
 
     @FXML
     private MenuItem miCreate, miDelete, miRefresh, miReport;
-
+    @FXML
     private MenuBarController menuBarController = new MenuBarController();
     @FXML
     ObservableList<AccountBean> listAccount;
 
     @FXML
-    protected static final Logger LOGGER = Logger.getLogger("/controller/TrainingController");
+    protected static final Logger LOGGER = Logger.getLogger("/controller/AccountController");
 
     /**
      * Method to initialize the window
@@ -194,8 +193,8 @@ public class AccountController {
 //        HBox hBoxMenu = (HBox) root.getChildrenUnmodifiable().get(0);
 //        //Get the menu bar from the children of the layout got before
 //        MenuBar menuBar = (MenuBar) hBoxMenu.getChildren().get(0);
-        menuBarController.setStage(stage);
         menuBarController.setUser(user);
+        menuBarController.setStage(stage);
 
         //El botón crear (btnCreate), eliminar (btnDelete), cargar (btnRefresh), el de gastos recurrentes (bntRecurrent),
         //el de gastos puntuales (btnPunctual) y el de informe (btnReport) están habilitados y visibles.
@@ -327,34 +326,52 @@ public class AccountController {
         tcAsociated.setCellValueFactory(new PropertyValueFactory<>("asociated"));
         tcAsociated.setOnEditStart(event -> {
             try {
-                String asociated = this.abrirNM(null);
+                SharedInterface si = SharedFactory.getFactory();
+
+                AccountBean selectedAccount = table.getSelectionModel().getSelectedItem();
+                List<SharedBean> sharedList = selectedAccount.getShared();
+
+                if (sharedList == null) {
+                    sharedList = new ArrayList<>();
+                }
+
+                String sharedMails = this.abrirNM(null);
 
                 TablePosition<AccountBean, ?> editingCellPosition = table.getEditingCell();
-                if (editingCellPosition != null) {
-                    int row = editingCellPosition.getRow();
-                    TableColumn< AccountBean, ?> column = editingCellPosition.getTableColumn();
+                int row = editingCellPosition.getRow();
+                TableColumn< AccountBean, ?> column = editingCellPosition.getTableColumn();
 
-                    // Actualizar el valor de la celda
-                    table.getItems().get(row).setAsociated(asociated);
-                    table.refresh();
+                String[] emailArray = sharedMails.split(",\\s*");
+                List<String> emailList = Arrays.asList(emailArray);
 
-                    String[] emailArray = asociated.split(",\\s*");
+                for (String string : emailList) {
+                    try {
+                        SharedBean s = si.findShared_XML(new GenericType<SharedBean>() {
+                        }, selectedAccount.getId().toString(), string);
 
-                    // Convertir el array a una List<String>
-                    List<String> emailList = Arrays.asList(emailArray);
+                        this.showAlert("El usuario " + string + " ya esta asociado", AlertType.WARNING);
 
-                    for (String string : emailList) {
-//                        System.out.println("Parametros --> String: " + string + " account: " + event.getRowValue().getId() + " permission: " + Permissions.Autorizado);
-//                        SharedBean shared = new SharedBean(string, event.getRowValue().getId(), Permissions.Autorizado);
-//                        SharedFactory.getFactory().create_XML(shared);
+                    } catch (Exception e) {
+                        SharedIdBean sib = new SharedIdBean(selectedAccount.getId(), string);
+                        UserBean u = UserFactory.getFactory().findUser_XML(new GenericType<UserBean>() {
+                        }, string);
+
+                        SharedBean newS = new SharedBean(sib, selectedAccount, u, Permissions.Autorizado);
+                        si.create_XML(newS);
+                        sharedList.add(newS);
                     }
-
                 }
+                selectedAccount.setShared(sharedList);
+                aInterface.updateAccount_XML(selectedAccount, selectedAccount.getId());
+
+                this.handleRefreshTable(null);
+
             } catch (Exception e) {
                 this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
                 e.printStackTrace();
             }
-        });
+        }
+        );
 
         //La columna de ID no será editable ya que se genera automáticamente.
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -409,25 +426,24 @@ public class AccountController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SelectAsociatedView.fxml"));
             Parent root = loader.load();
-
             SelectAsociatedController selectController = loader.getController();
             Stage selectStage = new Stage();
-
-            // Set the stage for the SelectAsociatedController
             selectController.setStage(selectStage);
 
-            // Load the list of users
             List<UserBean> userList = UserFactory.getFactory().findAllUsers_XML(new GenericType<List<UserBean>>() {
             });
             selectController.handleLoadList(userList);
 
-            // Show the SelectAsociatedView and wait for user interaction
             selectController.initStage(root);
             asociated = selectController.getAsociated();
+
         } catch (IOException ex) {
-            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AccountController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (SelectException ex) {
-            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AccountController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return asociated;
     }
@@ -915,7 +931,7 @@ public class AccountController {
 
     protected void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
-        alert.setTitle(message);
+        alert.setContentText(message);
         alert.setHeaderText(null);
         alert.showAndWait();
     }

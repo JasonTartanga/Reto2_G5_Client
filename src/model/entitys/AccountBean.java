@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import model.enums.Divisa;
 import model.enums.Plan;
 
@@ -30,12 +31,10 @@ public class AccountBean {
     private final SimpleFloatProperty balance;
     private final SimpleObjectProperty<Plan> plan;
 
-    private final SimpleStringProperty asociated;
-
     private final SimpleObjectProperty<List<SharedBean>> shared;
     private final SimpleObjectProperty<List<ExpenseBean>> expenses;
 
-    public AccountBean(Long id, String name, String description, Divisa divisa, Date date, Float balance, Plan plan, List<SharedBean> shared, List<ExpenseBean> expenses, String asociated) {
+    public AccountBean(Long id, String name, String description, Divisa divisa, Date date, Float balance, Plan plan, List<SharedBean> shared, List<ExpenseBean> expenses) {
         this.id = new SimpleLongProperty(id);
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(name);
@@ -45,7 +44,6 @@ public class AccountBean {
         this.plan = new SimpleObjectProperty<>(plan);
         this.shared = new SimpleObjectProperty<>(shared);
         this.expenses = new SimpleObjectProperty<>(expenses);
-        this.asociated = new SimpleStringProperty(asociated);
     }
 
     public AccountBean() {
@@ -58,7 +56,6 @@ public class AccountBean {
         this.plan = new SimpleObjectProperty<>();
         this.shared = new SimpleObjectProperty<>();
         this.expenses = new SimpleObjectProperty<>();
-        this.asociated = new SimpleStringProperty();
     }
 
     //******************** GETTERS && SETTERS *********************/
@@ -119,6 +116,7 @@ public class AccountBean {
 
     }
 
+    @XmlTransient
     public List<SharedBean> getShared() {
         return shared.get();
     }
@@ -135,14 +133,6 @@ public class AccountBean {
         this.expenses.set(expenses);
     }
 
-    public String getAsociated() {
-        return asociated.get();
-    }
-
-    public void setAsociated(String asociated) {
-        this.asociated.set(asociated);
-    }
-
     @Override
     public int hashCode() {
         int hash = 5;
@@ -153,7 +143,6 @@ public class AccountBean {
         hash = 97 * hash + Objects.hashCode(this.date);
         hash = 97 * hash + Objects.hashCode(this.balance);
         hash = 97 * hash + Objects.hashCode(this.plan);
-        hash = 97 * hash + Objects.hashCode(this.asociated);
         hash = 97 * hash + Objects.hashCode(this.shared);
         hash = 97 * hash + Objects.hashCode(this.expenses);
         return hash;
@@ -193,9 +182,6 @@ public class AccountBean {
         if (!Objects.equals(this.plan, other.plan)) {
             return false;
         }
-        if (!Objects.equals(this.asociated, other.asociated)) {
-            return false;
-        }
         if (!Objects.equals(this.shared, other.shared)) {
             return false;
         }
@@ -207,6 +193,6 @@ public class AccountBean {
 
     @Override
     public String toString() {
-        return "AccountBean{" + "id=" + id + ", name=" + name + ", description=" + description + ", divisa=" + divisa + ", date=" + date + ", balance=" + balance + ", plan=" + plan + ", asociated=" + asociated + ", shared=" + shared + ", expenses=" + expenses + '}';
+        return "AccountBean{" + "id=" + id + ", name=" + name + ", description=" + description + ", divisa=" + divisa + ", date=" + date + ", balance=" + balance + ", plan=" + plan + '}';
     }
 }

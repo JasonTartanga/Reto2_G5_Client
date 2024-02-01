@@ -206,7 +206,14 @@ public class UserRESTCliente implements UserInterface {
     public <T> T forgotPassword(GenericType<T> responseType, String mail) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("forgotPassword/{0}", new Object[]{mail}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+        return resource.request().get(responseType);
+    }
+
+    @Override
+    public <T> T changePassword(GenericType<T> responseType, String mail, String passwd) throws SelectException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("changePassword/{0}/{1}", new Object[]{mail, passwd}));
+        return resource.request().get(responseType);
     }
 
     public void close() {

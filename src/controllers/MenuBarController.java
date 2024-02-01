@@ -68,16 +68,18 @@ public class MenuBarController {
     private void handleChangePasswordMenu(ActionEvent action) {
         log.info("Menu item de cambiar contraseña pulsado");
 
-//        try {
-//            ((Stage) this.menuBar.getScene().getWindow()).close();
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ForgotPassword.fxml"));
-//            Parent root = loader.load();
-//            ForgotPasswordController forgotPassword = loader.getController();
-//            forgotPassword.setStage(new Stage());
-//            forgotPassword.initStage(root);
-//        } catch (IOException ex) {
-//            Logger.getLogger(MenuBarController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            ((Stage) this.menuBar.getScene().getWindow()).close();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ChangePassword.fxml"));
+            Parent root = loader.load();
+            ChangePaswordController forgotPassword = loader.getController();
+            forgotPassword.setStage(new Stage());
+            System.out.println("user --> " + user.toString());
+            forgotPassword.setUser(user);
+            forgotPassword.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuBarController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -195,6 +197,7 @@ public class MenuBarController {
      * @param user el usuario que se ha logeado
      */
     public void setUser(UserBean user) {
+        System.out.println("user --> " + user.toString());
         this.user = user;
     }
 

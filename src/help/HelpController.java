@@ -12,8 +12,8 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 /**
- * La clase HelpController gestiona y muestra ventanas de ayuda relacionadas
- * con diferentes secciones de la aplicación.
+ * La clase HelpController gestiona y muestra ventanas de ayuda relacionadas con
+ * diferentes secciones de la aplicación.
  *
  * Cada método en esta clase se encarga de abrir una ventana de ayuda específica
  * cargando un archivo HTML correspondiente en un WebView.
@@ -24,6 +24,7 @@ import javafx.stage.Stage;
  * @author Jessica
  */
 public class HelpController {
+
     private static final HelpController INSTANCE = new HelpController();
 
     private HelpController() {
@@ -34,7 +35,8 @@ public class HelpController {
     }
 
     /**
-     * Muestra una ventana de ayuda relacionada con la ventana Account, explicando la funcionalidad.
+     * Muestra una ventana de ayuda relacionada con la ventana Account,
+     * explicando la funcionalidad.
      */
     public void mostrarVentanaAyudaAccount() {
         WebView webView = new WebView();
@@ -50,7 +52,8 @@ public class HelpController {
     }
 
     /**
-     * Muestra una ventana de ayuda relacionada con la ventana Punctual, explicando la funcionalidad.
+     * Muestra una ventana de ayuda relacionada con la ventana Punctual,
+     * explicando la funcionalidad.
      */
     public void mostrarVentanaAyudaPunctual() {
         WebView webView = new WebView();
@@ -66,7 +69,8 @@ public class HelpController {
     }
 
     /**
-     * Muestra una ventana de ayuda relacionada con la ventana Recurrent, explicando la funcionalidad.
+     * Muestra una ventana de ayuda relacionada con la ventana Recurrent,
+     * explicando la funcionalidad.
      */
     public void mostrarVentanaAyudaRecurrent() {
         WebView webView = new WebView();
@@ -82,7 +86,8 @@ public class HelpController {
     }
 
     /**
-     * Muestra una ventana de ayuda relacionada con la ventana Cambiar Contraseña, explicando la funcionalidad.
+     * Muestra una ventana de ayuda relacionada con la ventana Cambiar
+     * Contraseña, explicando la funcionalidad.
      */
     public void mostrarVentanaAyudaChangePasswd() {
         WebView webView = new WebView();
@@ -98,11 +103,12 @@ public class HelpController {
     }
 
     /**
-     * Muestra una ventana de ayuda relacionada con la ventana Olvidar Contraseña, explicando la funcionalidad.
+     * Muestra una ventana de ayuda relacionada con la ventana Olvidar
+     * Contraseña, explicando la funcionalidad.
      */
     public void mostrarVentanaAyudaForgotPasswd() {
         WebView webView = new WebView();
-        webView.getEngine().load(getClass().getResource("/help/ForgotPasswd.html").toExternalForm());
+        webView.getEngine().load(getClass().getResource("/help/ForgotPassword.html").toExternalForm());
 
         ScrollPane scrollPane = new ScrollPane(webView);
         Scene scene = new Scene(new StackPane(scrollPane), 800, 600);
@@ -114,5 +120,3 @@ public class HelpController {
     }
 
 }
-
-
