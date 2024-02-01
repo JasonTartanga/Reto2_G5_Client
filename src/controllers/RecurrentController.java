@@ -325,13 +325,13 @@ public class RecurrentController {
 
         log.info("Creando un gasto recurrente");
         try {
-            Long uuid = rest.countExpenses(new GenericType<Long>() {
-            });
 
             RecurrentBean rec = new RecurrentBean();
             rec.setAccount(account);
             rest.createRecurrent_XML(rec);
-            rec.setUuid(uuid + 1);
+
+            rec.setUuid(rest.countExpenses(new GenericType<Long>() {
+            }));
 
             table.getItems().add(rec);
             table.refresh();

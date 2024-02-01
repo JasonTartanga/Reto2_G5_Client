@@ -128,6 +128,8 @@ public class SignInController {
             }
         });
 
+        txtEmail.setText("jason@gmail.com");
+        txtPasswd.setText("abcd*1234");
         thisStage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
 
         thisStage.show();

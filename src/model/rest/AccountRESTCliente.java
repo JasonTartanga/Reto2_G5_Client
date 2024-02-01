@@ -53,14 +53,15 @@ public class AccountRESTCliente implements AccountInterface {
     }
 
     @Override
-    public <T> T filterAccountsWithLowerBalance_XML(GenericType<T> responseType, Float balance, String mail) throws ClientErrorException {
+    public <T> T filterAccountsWithLowerBalance_XML(GenericType<T> responseType, String balance, String mail) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterAccountsWithLowerBalance/{0}/{1}", new Object[]{balance, mail}));
+        System.out.println("Menor que " + resource.getUri());
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T filterAccountsWithLowerBalance_JSON(GenericType<T> responseType, Float balance, String mail) throws ClientErrorException {
+    public <T> T filterAccountsWithLowerBalance_JSON(GenericType<T> responseType, String balance, String mail) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterAccountsWithLowerBalance/{0}/{1}", new Object[]{balance, mail}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -96,6 +97,7 @@ public class AccountRESTCliente implements AccountInterface {
     public <T> T filterAccountsByDivisa_XML(GenericType<T> responseType, Divisa divisa, String mail) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterAccountsByDivisa/{0}/{1}", new Object[]{divisa, mail}));
+
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
@@ -149,14 +151,15 @@ public class AccountRESTCliente implements AccountInterface {
     }
 
     @Override
-    public <T> T filterAccountsWithHigherBalance_XML(GenericType<T> responseType, Float balance, String mail) throws ClientErrorException {
+    public <T> T filterAccountsWithHigherBalance_XML(GenericType<T> responseType, String balance, String mail) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterAccountsWithHigherBalance/{0}/{1}", new Object[]{balance, mail}));
+        System.out.println("Mayor que " + resource.getUri());
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T filterAccountsWithHigherBalance_JSON(GenericType<T> responseType, Float balance, String mail) throws ClientErrorException {
+    public <T> T filterAccountsWithHigherBalance_JSON(GenericType<T> responseType, String balance, String mail) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterAccountsWithHigherBalance/{0}/{1}", new Object[]{balance, mail}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -164,7 +167,6 @@ public class AccountRESTCliente implements AccountInterface {
 
     @Override
     public void createAccount_XML(Object requestEntity) throws ClientErrorException {
-        System.out.println("Prueba");
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
         System.out.println(webTarget.getUri());
     }
@@ -200,5 +202,4 @@ public class AccountRESTCliente implements AccountInterface {
         client.close();
     }
 
-     
 }

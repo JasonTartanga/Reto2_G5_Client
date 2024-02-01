@@ -3,6 +3,13 @@
 	<property name="ireport.zoom" value="1.4641000000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+        <field name="id" class="java.lang.Long"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>	
+	<field name="date" class="java.util.Date"/>
+        <field name="balance" class="java.lang.Float"/>
+	<field name="divisa" class="model.enums.Divisa"/>
+	<field name="plan" class="model.enums.Plan"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

@@ -298,13 +298,12 @@ public class PunctualController {
 
         log.info("Creando un gasto puntual");
         try {
-            Long uuid = puncInt.countExpenses(new GenericType<Long>() {
-            });
 
             PunctualBean punc = new PunctualBean();
             punc.setAccount(account);
             puncInt.createPunctual_XML(punc);
-            punc.setUuid(uuid + 1);
+            punc.setUuid(puncInt.countExpenses(new GenericType<Long>() {
+            }));
 
             table.getItems().add(punc);
             table.refresh();

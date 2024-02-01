@@ -5,6 +5,7 @@ package controllers;
  *
  * @author Jason.
  */
+import help.HelpController;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -85,9 +86,58 @@ public class MenuBarController {
      * @param action
      */
     @FXML
-    private void handleHelpMenu(ActionEvent action) {
-        log.info("Menu item de ayuda pulsado");
+    private void handleAccountHelp(ActionEvent action) {
+        log.info("Menu item de ayuda account");
+        HelpController help = HelpController.getInstance();
+        help.mostrarVentanaAyudaAccount();
+    }
 
+    /**
+     * Abre la ventana Help.
+     *
+     * @param action
+     */
+    @FXML
+    private void handleRecurrentHelp(ActionEvent action) {
+        log.info("Menu item de ayuda recurrent");
+        HelpController help = HelpController.getInstance();
+        help.mostrarVentanaAyudaRecurrent();
+    }
+
+    /**
+     * Abre la ventana Help.
+     *
+     * @param action
+     */
+    @FXML
+    private void handlePunctualHelp(ActionEvent action) {
+        log.info("Menu item de ayuda punctual");
+        HelpController help = HelpController.getInstance();
+        help.mostrarVentanaAyudaPunctual();
+    }
+
+    /**
+     * Abre la ventana Help.
+     *
+     * @param action
+     */
+    @FXML
+    private void handleChangeHelp(ActionEvent action) {
+        log.info("Menu item de ayuda change password");
+        HelpController help = HelpController.getInstance();
+        help.mostrarVentanaAyudaChangePasswd();
+    }
+
+    /**
+     * Abre la ventana Help.
+     *
+     * @param action
+     */
+    @FXML
+    private void helpForgotHelp(ActionEvent action) {
+        log.info("Menu item de ayuda forgot password");
+        HelpController help = HelpController.getInstance();
+        help.mostrarVentanaAyudaForgotPasswd();
     }
 
     /**

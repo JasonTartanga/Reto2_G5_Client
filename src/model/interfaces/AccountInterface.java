@@ -27,9 +27,9 @@ public interface AccountInterface {
 
     public void updateAccount_JSON(Object requestEntity, Long id) throws ClientErrorException;
 
-    public <T> T filterAccountsWithLowerBalance_XML(GenericType<T> responseType, Float balance, String mail) throws ClientErrorException;
+    public <T> T filterAccountsWithLowerBalance_XML(GenericType<T> responseType, String balance, String mail) throws ClientErrorException;
 
-    public <T> T filterAccountsWithLowerBalance_JSON(GenericType<T> responseType, Float balance, String mail) throws ClientErrorException;
+    public <T> T filterAccountsWithLowerBalance_JSON(GenericType<T> responseType, String balance, String mail) throws ClientErrorException;
 
     public <T> T findAccount_XML(GenericType<T> responseType, Long id) throws ClientErrorException;
 
@@ -59,9 +59,9 @@ public interface AccountInterface {
 
     public <T> T filterAccountsByDescription_JSON(GenericType<T> responseType, String description, String mail) throws ClientErrorException;
 
-    public <T> T filterAccountsWithHigherBalance_XML(GenericType<T> responseType, Float balance, String mail) throws ClientErrorException;
+    public <T> T filterAccountsWithHigherBalance_XML(GenericType<T> responseType, String balance, String mail) throws ClientErrorException;
 
-    public <T> T filterAccountsWithHigherBalance_JSON(GenericType<T> responseType, Float balance, String mail) throws ClientErrorException;
+    public <T> T filterAccountsWithHigherBalance_JSON(GenericType<T> responseType, String balance, String mail) throws ClientErrorException;
 
     public void deleteAccount(Long id) throws DeleteException;
 

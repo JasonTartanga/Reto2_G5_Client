@@ -440,12 +440,11 @@ public class AccountController {
     private void handleButtonCrearAction(ActionEvent event) {
         LOGGER.info("Creando un Account");
         try {
-            Long id = aInterface.countAccount(new GenericType<Long>() {
-            });
 
             AccountBean account = new AccountBean();
             aInterface.createAccount_XML(account);
-            account.setId(id + 1);
+            account.setId(aInterface.countAccount(new GenericType<Long>() {
+            }));
 
             SharedBean shared = new SharedBean(new SharedIdBean(account.getId(), user.getMail()), account, user, Permissions.Creador);
             SharedFactory.getFactory().create_XML(shared);
@@ -473,8 +472,7 @@ public class AccountController {
             for (AccountBean a : selectedAccount) {
                 System.out.println(a.toString());
 
-                SharedBean s = si.findShared_XML(new GenericType<SharedBean>() {
-                }, a.getId().toString(), user.getMail());
+                si.remove(a.getId().toString(), user.getMail());
 
                 aInterface.deleteAccount(a.getId());
                 table.getItems().remove(a);
@@ -484,8 +482,6 @@ public class AccountController {
 
         } catch (DeleteException e) {
             this.showAlert(e.getMessage(), AlertType.ERROR);
-        } catch (SelectException ex) {
-            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -656,12 +652,11 @@ public class AccountController {
         // List<AccountBean> listAccount;
         try {
             switch (cbAtribute.getValue().toString()) {
-                case "ID":
+                case "Id":
                     if (validateId(tfSearch.getText())) {
                         listAccounts.clear();
                         listAccounts.add(aInterface.findAccount_XML(new GenericType<AccountBean>() {
                         }, Long.parseLong(tfSearch.getText())));
-
                     }
                     break;
 
@@ -683,11 +678,11 @@ public class AccountController {
                     if (validateBalance(tfSearch.getText())) {
                         if (cbCondition.getValue().toString().equalsIgnoreCase("Mayor que...")) {
                             listAccounts = aInterface.filterAccountsWithHigherBalance_XML(new GenericType<List<AccountBean>>() {
-                            }, Float.parseFloat(tfSearch.getText()), user.getMail());
+                            }, tfSearch.getText(), user.getMail());
 
                         } else if (cbCondition.getValue().toString().equalsIgnoreCase("Menor que...")) {
                             listAccounts = aInterface.filterAccountsWithLowerBalance_XML(new GenericType<List<AccountBean>>() {
-                            }, Float.parseFloat(tfSearch.getText()), user.getMail());
+                            }, tfSearch.getText(), user.getMail());
                         }
                     }
                     break;
@@ -698,6 +693,7 @@ public class AccountController {
                         }, Plan.valueOf(cbCondition.getValue().toString()), user.getMail());
                     }
                     break;
+
                 case "Divisa":
                     if (!cbCondition.getValue().toString().equalsIgnoreCase("Divisa...")) {
                         listAccounts = aInterface.filterAccountsByDivisa_XML(new GenericType<List<AccountBean>>() {
