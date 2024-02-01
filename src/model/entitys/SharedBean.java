@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * Es el bean se asociados
  * @author Jason.
  */
 @XmlRootElement(name = "shared")

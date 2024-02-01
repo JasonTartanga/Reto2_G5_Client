@@ -7,7 +7,7 @@ import exceptions.UpdateException;
 import javax.ws.rs.core.GenericType;
 
 /**
- *
+ * Interface de asociados
  * @author Jason.
  */
 public interface SharedInterface {

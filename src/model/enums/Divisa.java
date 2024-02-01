@@ -1,7 +1,7 @@
 package model.enums;
 
 /**
- *
+ * Enumeracion de las divisas para el account
  * @author Jason.
  */
 public enum Divisa {

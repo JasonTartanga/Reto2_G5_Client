@@ -9,7 +9,7 @@ import model.enums.Category;
 import model.enums.Period;
 
 /**
- *
+ * Interface de recurrentes
  * @author Jason.
  */
 public interface RecurrentInterface {

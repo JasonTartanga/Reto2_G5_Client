@@ -10,7 +10,7 @@ import model.entitys.RecurrentBean;
 
 /**
  *
- * @author Jason.
+ * @author Jessica.
  */
 public class DatePickerCellAccount extends TableCell<AccountBean, Date> {
 

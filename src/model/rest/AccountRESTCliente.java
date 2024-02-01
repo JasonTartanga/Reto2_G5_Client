@@ -25,7 +25,7 @@ import model.interfaces.AccountInterface;
  *        client.close();
  * </pre>
  *
- * @author Jason.
+ * @author Jessica.
  */
 public class AccountRESTCliente implements AccountInterface {
 

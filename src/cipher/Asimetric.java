@@ -1,9 +1,6 @@
 package cipher;
 
-/**
- *
- * @author Jason.
- */
+
 import java.io.*;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
@@ -15,10 +12,20 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.xml.bind.DatatypeConverter;
 
+
+/**
+ * Clase para asimetricp
+ * @author Jason.
+ */
 public class Asimetric {
 
     private static final Logger LOG = Logger.getLogger(Asimetric.class.getName());
 
+    /**
+     * Metodo para cifrar la contraseña asimetricamente
+     * @param passwd es la contraseña que recoge
+     * @return cipherPasswd es la contraseña que se ha cifrado
+     */
     public static String cipherPassword(String passwd) {
         FileInputStream fis = null;
         String cipherPasswd = null;

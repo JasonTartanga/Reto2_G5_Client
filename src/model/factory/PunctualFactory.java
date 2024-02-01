@@ -4,7 +4,7 @@ import model.interfaces.PunctualInterface;
 import model.rest.PunctualRESTClient;
 
 /**
- *
+ * Factoria de punctual
  * @author Jason.
  */
 public class PunctualFactory {

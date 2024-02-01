@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
- *
+ * Es el bean de asociados con el id
  * @author Jason.
  */
 public class SharedIdBean {

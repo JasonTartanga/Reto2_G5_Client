@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import model.enums.Importance;
 
 /**
- *
+ * Es el bean de la entidad de punctual
  * @author Ian.
  */
 @XmlRootElement(name = "punctual")

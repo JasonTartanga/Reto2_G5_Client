@@ -4,7 +4,7 @@ import model.interfaces.SharedInterface;
 import model.rest.SharedRESTClient;
 
 /**
- *
+ * Factoria de asociados
  * @author Jason.
  */
 public class SharedFactory {

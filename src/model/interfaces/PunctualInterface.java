@@ -15,7 +15,7 @@ import javax.ws.rs.core.GenericType;
 import model.enums.Importance;
 
 /**
- *
+ * Interface de puntuales
  * @author Ian.
  */
 public interface PunctualInterface {

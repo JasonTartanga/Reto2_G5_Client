@@ -1,7 +1,8 @@
 package exceptions;
 
 /**
- *
+ * Esta excepcion gestiona errores a la hora de crear entidades en el lado
+ * cliente.
  * @author Jason.
  */
 public class DeleteException extends Exception {
