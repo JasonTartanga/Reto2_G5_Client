@@ -166,7 +166,7 @@ public class PunctualController {
             btnRefresh.setTooltip(new Tooltip("Actualiza la tabla"));
             btnSwitch.setTooltip(new Tooltip("Ver gastos recurrentes"));
             btnReport.setTooltip(new Tooltip("Genera un reporte"));
-            btnSearch.setTooltip(new Tooltip("Buscar gastos recurrentes"));
+            btnSearch.setTooltip(new Tooltip("Buscar gastos puntuales"));
 
             //El filtrado es mediante un ComboBox (cbAtribute) y podrá filtrarse por “Uuid/Nombre/ Concepto/ Importe/ Importancia”. Está visible y habilitado siempre .
             cbAtribute.getItems().addAll("Uuid", "Nombre", "Concepto", "Importe", "Importancia");
@@ -431,7 +431,7 @@ public class PunctualController {
                     }
                     break;
 
-                case "Naturaleza":
+                case "Importancia":
                     if (!cbCondition.getValue().toString().equalsIgnoreCase("Importancia...")) {
                         punctuals = puncInt.filterPunctualsByImportance_XML(new GenericType<List<PunctualBean>>() {
                         }, Importance.valueOf(cbCondition.getValue().toString()), account.getId());
@@ -451,7 +451,6 @@ public class PunctualController {
     public void handleChangeFilter(Event event) {
         try {
             log.log(Level.INFO, "Cambiado el filtro a -->{0}", cbAtribute.getValue().toString());
-            //  List<RecurrentBean> recurrentes = null;
 
             switch (cbAtribute.getValue().toString()) {
                 case "Sin Filtro":

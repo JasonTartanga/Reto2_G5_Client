@@ -37,7 +37,7 @@ public class ForgotPasswordController {
     @FXML
     private TextField txtEmail;
     @FXML
-    private Label lblInfo, lblInfo2;
+    private Label lblTitulo, lblIntroduce;
     @FXML
     private Button btnCancelar, btnEnviar;
 
@@ -49,19 +49,19 @@ public class ForgotPasswordController {
             thisStage.setScene(scene);
             thisStage.initModality(Modality.APPLICATION_MODAL);
 
-            //El título de la ventana es “Recurrent View”
+            //El título de la ventana es “ForgotPassword View”
             thisStage.setTitle("ForgotPassword View");
 
             //La ventana no es redimensionable.
             thisStage.setResizable(false);
 
-            //En la ventana tenemos un panel principal (fondoRecurrente).
-            //El foco inicialmente estará en el botón de crear (btnCreate).
+            //En la ventana tenemos un panel principal (fondoForgotPassword).
+            //El foco inicialmente estará en el botón de crear (btnEnviar).
             txtEmail.requestFocus();
 
             //El label de filtrar (lblFilter) estará visible.
-            lblInfo.setVisible(true);
-            lblInfo2.setVisible(true);
+            lblTitulo.setVisible(true);
+            lblIntroduce.setVisible(true);
 
             //El botón cancelar (btnCancelar), enviar (btnEnviar) están habilitados y visibles.
             btnCancelar.setVisible(true);
@@ -73,6 +73,7 @@ public class ForgotPasswordController {
             thisStage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
 
             thisStage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,7 +102,7 @@ public class ForgotPasswordController {
             }
 
         } catch (Exception e) {
-            this.showAlert(e.getMessage(), AlertType.ERROR);
+            this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
@@ -109,7 +110,9 @@ public class ForgotPasswordController {
     public void handleEnviar(ActionEvent event) {
 
         try {
-
+            if (txtEmail.getText().isEmpty()) {
+                throw new Exception("Por favor, rellene el campo del mail");
+            }
             event.consume();
             //Con esto vamos a crear una ventana de confirmación al pulsar el botón de email
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Seguro que deseas enviar un email?");
@@ -121,6 +124,12 @@ public class ForgotPasswordController {
             if (action.get() == ButtonType.OK) {
                 userInter.forgotPassword(new GenericType<String>() {
                 }, txtEmail.getText());
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignIn.fxml"));
+                Parent root = loader.load();
+                SignInController signIn = loader.getController();
+                signIn.setStage(thisStage);
+                signIn.initStage(root);
+                thisStage.close();
             }
 
         } catch (Exception e) {

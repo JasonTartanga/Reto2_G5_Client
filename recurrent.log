@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2024-02-01T22:18:09</date>
+  <millis>1706822289337</millis>
+  <sequence>8</sequence>
+  <logger>controllers.RecurrentController</logger>
+  <level>INFO</level>
+  <class>controllers.RecurrentController</class>
+  <method>handleRefreshTable</method>
+  <thread>22</thread>
+  <message>Recargando la tabla</message>
+</record>
+<record>
+  <date>2024-02-01T22:18:09</date>
+  <millis>1706822289367</millis>
+  <sequence>9</sequence>
+  <logger>controllers.RecurrentController</logger>
+  <level>INFO</level>
+  <class>controllers.RecurrentController</class>
+  <method>handleLoadGraphics</method>
+  <thread>22</thread>
+  <message>Cargando graficos.</message>
+</record>
+<record>
+  <date>2024-02-01T22:18:10</date>
+  <millis>1706822290406</millis>
+  <sequence>10</sequence>
+  <logger>controllers.RecurrentController</logger>
+  <level>INFO</level>
+  <class>controllers.RecurrentController</class>
+  <method>handleSwitch</method>
+  <thread>22</thread>
+  <message>Cambiando a PunctualView</message>
+</record>
+</log>

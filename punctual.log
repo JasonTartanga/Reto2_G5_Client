@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2024-02-01T22:18:10</date>
+  <millis>1706822290448</millis>
+  <sequence>14</sequence>
+  <logger>controllers.PunctualController</logger>
+  <level>INFO</level>
+  <class>controllers.PunctualController</class>
+  <method>handleRefreshTable</method>
+  <thread>22</thread>
+  <message>Recargando la tabla</message>
+</record>
+<record>
+  <date>2024-02-01T22:18:10</date>
+  <millis>1706822290476</millis>
+  <sequence>15</sequence>
+  <logger>controllers.PunctualController</logger>
+  <level>INFO</level>
+  <class>controllers.PunctualController</class>
+  <method>handleLoadGraphics</method>
+  <thread>22</thread>
+  <message>Cargando graficos.</message>
+</record>
+<record>
+  <date>2024-02-01T22:18:21</date>
+  <millis>1706822301594</millis>
+  <sequence>16</sequence>
+  <logger>controllers.PunctualController</logger>
+  <level>INFO</level>
+  <class>controllers.PunctualController</class>
+  <method>handleLoadGraphics</method>
+  <thread>22</thread>
+  <message>Cargando graficos.</message>
+</record>
+<record>
+  <date>2024-02-01T22:18:25</date>
+  <millis>1706822305386</millis>
+  <sequence>17</sequence>
+  <logger>controllers.PunctualController</logger>
+  <level>INFO</level>
+  <class>controllers.PunctualController</class>
+  <method>handleLoadGraphics</method>
+  <thread>22</thread>
+  <message>Cargando graficos.</message>
+</record>
+<record>
+  <date>2024-02-01T22:18:27</date>
+  <millis>1706822307944</millis>
+  <sequence>18</sequence>
+  <logger>controllers.PunctualController</logger>
+  <level>INFO</level>
+  <class>controllers.PunctualController</class>
+  <method>handleChangeFilter</method>
+  <thread>22</thread>
+  <message>Cambiado el filtro a --&gt;Nombre</message>
+</record>
+</log>

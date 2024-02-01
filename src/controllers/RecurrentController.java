@@ -523,6 +523,14 @@ public class RecurrentController {
             //  List<RecurrentBean> recurrentes = null;
 
             switch (cbAtribute.getValue().toString()) {
+                case "Sin Filtro":
+                    cbCondition.setDisable(true);
+                    tfSearch.setDisable(true);
+                    btnSearch.setDisable(false);
+                    cbCondition.setPromptText("Condicion");
+                    tfSearch.setText("");
+                    break;
+
                 case "Uuid:":
                     cbCondition.setDisable(true);
                     tfSearch.setDisable(false);

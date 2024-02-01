@@ -209,6 +209,20 @@ public class UserRESTCliente implements UserInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
+    @Override
+    public <T> T changePassword_XML(GenericType<T> responseType, String mail, String passwd) throws SelectException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("changePassword/{0}/{1}", new Object[]{mail, passwd}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    @Override
+    public <T> T changePassword_JSON(GenericType<T> responseType, String mail, String passwd) throws SelectException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("changePassword/{0}/{1}", new Object[]{mail, passwd}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+
     public void close() {
         client.close();
     }
