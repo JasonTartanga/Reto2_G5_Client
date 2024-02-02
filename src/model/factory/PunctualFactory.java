@@ -5,7 +5,7 @@ import model.rest.PunctualRESTClient;
 
 /**
  *
- * @author Jason.
+ * @author Ian.
  */
 public class PunctualFactory {
 

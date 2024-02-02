@@ -10,7 +10,7 @@ import javax.ws.rs.core.GenericType;
 /**
  * Es la interfaz para la entidad User.
  *
- * @author Jason.
+ * @author Jason, Ian.
  */
 public interface UserInterface {
 

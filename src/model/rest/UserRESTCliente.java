@@ -28,7 +28,7 @@ import model.interfaces.UserInterface;
  *        client.close();
  * </pre>
  *
- * @author Jason.
+ * @author Jason, Ian.
  */
 public class UserRESTCliente implements UserInterface {
 
@@ -209,6 +209,16 @@ public class UserRESTCliente implements UserInterface {
         return resource.request().get(responseType);
     }
 
+    /**
+     *
+     * @param <T> clase generica que devuelve el REST
+     * @param responseType el tipo de objecto que queremos que nos devuelva el
+     * REST
+     * @param mail
+     * @param passwd
+     * @return
+     * @throws SelectException gestiona una excepcion a la hora de
+     */
     @Override
     public <T> T changePassword(GenericType<T> responseType, String mail, String passwd) throws SelectException {
         WebTarget resource = webTarget;

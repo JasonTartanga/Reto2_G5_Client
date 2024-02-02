@@ -115,6 +115,11 @@ public class PunctualController {
     @FXML
     private Tab tabPunctuals, tabGrafico;
 
+    /**
+     * Metodo para inciializar la ventana
+     *
+     * @param root el root de la ventana
+     */
     public void initStage(Parent root) {
         try {
             Scene scene = new Scene(root);
@@ -166,7 +171,7 @@ public class PunctualController {
             btnRefresh.setTooltip(new Tooltip("Actualiza la tabla"));
             btnSwitch.setTooltip(new Tooltip("Ver gastos recurrentes"));
             btnReport.setTooltip(new Tooltip("Genera un reporte"));
-            btnSearch.setTooltip(new Tooltip("Buscar gastos recurrentes"));
+            btnSearch.setTooltip(new Tooltip("Buscar gastos puntuales"));
 
             //El filtrado es mediante un ComboBox (cbAtribute) y podrá filtrarse por “Uuid/Nombre/ Concepto/ Importe/ Importancia”. Está visible y habilitado siempre .
             cbAtribute.getItems().addAll("Uuid", "Nombre", "Concepto", "Importe", "Importancia");
@@ -291,6 +296,11 @@ public class PunctualController {
         }
     }
 
+    /**
+     * Metodo para crear un nuevo gasto puntual
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleCreatePunctual(ActionEvent event) {
         //Creará una nueva fila en el TableView con datos nulos excepto el id que se autogeneran.
@@ -313,6 +323,11 @@ public class PunctualController {
         }
     }
 
+    /**
+     * Metodo para eliminar un gasto puntual
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleDeletePunctual(ActionEvent event) {
         //Para eliminar, haremos click en la TableView (table) sobre uno o varios accounts que queramos eliminar y clickeamos en el botón de eliminar de la parte superior de la ventana.
@@ -335,6 +350,11 @@ public class PunctualController {
         }
     }
 
+    /**
+     * Metodo para actualizar la tabla
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleRefreshTable(ActionEvent event) {
         try {
@@ -354,6 +374,11 @@ public class PunctualController {
         }
     }
 
+    /**
+     * Metodo para cambiar a la ventana de gastos recurrentes
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleSwitch(ActionEvent event) {
         log.info("Cambiando a RecurrentView");
@@ -373,6 +398,11 @@ public class PunctualController {
         }
     }
 
+    /**
+     * Metodo para realizar el informe de el gasto seleccionado
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleGenerateReport(ActionEvent event) {
         log.info("Generando un reporte");
@@ -390,6 +420,11 @@ public class PunctualController {
         }
     }
 
+    /**
+     * Metodo para el filtrado y el resultado aparezca en la tabla
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleSearch(ActionEvent event) {
         log.log(Level.INFO, "Buscando gasto puntual con el siguiente filtro --> {0}", cbAtribute.getValue().toString());
@@ -431,7 +466,7 @@ public class PunctualController {
                     }
                     break;
 
-                case "Naturaleza":
+                case "Importancia":
                     if (!cbCondition.getValue().toString().equalsIgnoreCase("Importancia...")) {
                         punctuals = puncInt.filterPunctualsByImportance_XML(new GenericType<List<PunctualBean>>() {
                         }, Importance.valueOf(cbCondition.getValue().toString()), account.getId());
@@ -448,10 +483,14 @@ public class PunctualController {
         }
     }
 
+    /**
+     * Metodo para cambiar el tipo de filtrado
+     *
+     * @param event del controlador
+     */
     public void handleChangeFilter(Event event) {
         try {
             log.log(Level.INFO, "Cambiado el filtro a -->{0}", cbAtribute.getValue().toString());
-            //  List<RecurrentBean> recurrentes = null;
 
             switch (cbAtribute.getValue().toString()) {
                 case "Sin Filtro":
@@ -512,6 +551,11 @@ public class PunctualController {
         }
     }
 
+    /**
+     * Metodo cargar un grafico sobre la importancia de los gastos puntuales
+     *
+     * @param event del controlador
+     */
     @FXML
     private void handleLoadGraphics(Event event) {
         try {
@@ -536,6 +580,13 @@ public class PunctualController {
         }
     }
 
+    /**
+     * Metodo para necesario para el grafico para recoger las importancias de
+     * los gastos puntuales
+     *
+     * @param punctualAccount recogemos id del grupo
+     * @return si es valido o no
+     */
     private Map<Importance, Integer> getImportanceDataGraphic(List<PunctualBean> punctualAccount) {
         Map<Importance, Integer> importances = new HashMap();
 
@@ -558,6 +609,12 @@ public class PunctualController {
         alert.showAndWait();
     }
 
+    /**
+     * Metodo para validar el id del grupo
+     *
+     * @param uuid recogemos id del grupo
+     * @return si es valido o no
+     */
     protected boolean validateUuid(String uuid) {
         boolean valido = true;
         try {
@@ -568,6 +625,12 @@ public class PunctualController {
         return valido;
     }
 
+    /**
+     * Metodo para validar el amount
+     *
+     * @param amount recogemos el balance
+     * @return si es valido o no
+     */
     protected boolean validateAmount(String amount) {
         boolean valido = true;
         try {

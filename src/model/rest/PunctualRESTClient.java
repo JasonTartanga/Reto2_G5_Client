@@ -98,28 +98,28 @@ public class PunctualRESTClient implements PunctualInterface {
     }
 
     @Override
-    public <T> T filterPunctualsWithHigherAmount_XML(GenericType<T> responseType, float amount, Long account_id) throws SelectException {
+    public <T> T filterPunctualsWithHigherAmount_XML(GenericType<T> responseType, Float amount, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsWithHigherAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T filterPunctualsWithHigherAmount_JSON(GenericType<T> responseType, float amount, Long account_id) throws SelectException {
+    public <T> T filterPunctualsWithHigherAmount_JSON(GenericType<T> responseType, Float amount, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsWithHigherAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     @Override
-    public <T> T filterPunctualsWithLowerAmount_XML(GenericType<T> responseType, float amount, Long account_id) throws SelectException {
+    public <T> T filterPunctualsWithLowerAmount_XML(GenericType<T> responseType, Float amount, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsWithLowerAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T filterPunctualsWithLowerAmount_JSON(GenericType<T> responseType, float amount, Long account_id) throws SelectException {
+    public <T> T filterPunctualsWithLowerAmount_JSON(GenericType<T> responseType, Float amount, Long account_id) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterPunctualsWithLowerAmount/{0}/{1}", new Object[]{amount, account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);

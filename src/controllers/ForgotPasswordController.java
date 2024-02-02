@@ -86,7 +86,7 @@ public class ForgotPasswordController {
     }
 
     /**
-     * Metodo para salir de la ventana
+     * Metodo para cancelar la opcion de generar una nueva contraseña
      *
      * @param event del controlador
      */
@@ -117,7 +117,8 @@ public class ForgotPasswordController {
     }
 
     /**
-     * Metodo para enviar el email
+     * Metodo para enviar un email con una contraseña nueva generada
+     * aleatoriamente
      *
      * @param event del controlador
      */
@@ -125,6 +126,9 @@ public class ForgotPasswordController {
     public void handleEnviar(ActionEvent event) {
 
         try {
+            if (txtEmail.getText().isEmpty()) {
+                throw new Exception("Por favor, rellene el campo del mail");
+            }
 
             event.consume();
             //Con esto vamos a crear una ventana de confirmación al pulsar el botón de email

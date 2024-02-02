@@ -30,7 +30,7 @@ import model.interfaces.UserInterface;
 
 /**
  *
- * @author ianlo
+ * @author Ian
  */
 public class ChangePaswordController {
 
@@ -110,6 +110,12 @@ public class ChangePaswordController {
         thisStage.show();
     }
 
+    /**
+     * Metodo para cancelar la opcion de cambiar contraseña y volver a la
+     * ventana de Sign In
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleCancelar(ActionEvent event) {
 
@@ -136,6 +142,11 @@ public class ChangePaswordController {
         }
     }
 
+    /**
+     * Metodo para cambiar la contraseña del usuario
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleCambiar(ActionEvent event) {
 
@@ -190,6 +201,12 @@ public class ChangePaswordController {
         }
     }
 
+    /**
+     * Metodo para alternar la foto de poder ver la contraseña y para mostrar la
+     * contraseña que esta introduciendo en el passwordField
+     *
+     * @param event del controlador
+     */
     @FXML
     protected void handleMostrarContraseniaToggleButtonAction1(ActionEvent event) {
         if (tbtnPasswd1.isSelected()) {
@@ -213,6 +230,12 @@ public class ChangePaswordController {
         }
     }
 
+    /**
+     * Metodo para alternar la foto de poder ver la contraseña y para mostrar la
+     * contraseña que esta introduciendo en el passwordField
+     *
+     * @param event del controlador
+     */
     @FXML
     protected void handleMostrarContraseniaToggleButtonAction2(ActionEvent event) {
         if (tbtnPasswd2.isSelected()) {
@@ -236,6 +259,12 @@ public class ChangePaswordController {
         }
     }
 
+    /**
+     * Metodo para alternar la foto de poder ver la contraseña y para mostrar la
+     * contraseña que esta introduciendo en el passwordField
+     *
+     * @param event del controlador
+     */
     @FXML
     protected void handleMostrarContraseniaToggleButtonAction3(ActionEvent event) {
         if (tbtnPasswd3.isSelected()) {

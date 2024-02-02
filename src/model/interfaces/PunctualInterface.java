@@ -34,13 +34,13 @@ public interface PunctualInterface {
 
     public <T> T filterPunctualsByName_JSON(GenericType<T> responseType, String name, Long account_id) throws SelectException;
 
-    public <T> T filterPunctualsWithHigherAmount_XML(GenericType<T> responseType, float amount, Long account_id) throws SelectException;
+    public <T> T filterPunctualsWithHigherAmount_XML(GenericType<T> responseType, Float amount, Long account_id) throws SelectException;
 
-    public <T> T filterPunctualsWithHigherAmount_JSON(GenericType<T> responseType, float amount, Long account_id) throws SelectException;
+    public <T> T filterPunctualsWithHigherAmount_JSON(GenericType<T> responseType, Float amount, Long account_id) throws SelectException;
 
-    public <T> T filterPunctualsWithLowerAmount_XML(GenericType<T> responseType, float amount, Long account_id) throws SelectException;
+    public <T> T filterPunctualsWithLowerAmount_XML(GenericType<T> responseType, Float amount, Long account_id) throws SelectException;
 
-    public <T> T filterPunctualsWithLowerAmount_JSON(GenericType<T> responseType, float amount, Long account_id) throws SelectException;
+    public <T> T filterPunctualsWithLowerAmount_JSON(GenericType<T> responseType, Float amount, Long account_id) throws SelectException;
 
     public void createPunctual_XML(Object requestEntity) throws CreateException;
 
