@@ -7,6 +7,7 @@ package controllers;
 
 import cipher.Asimetric;
 import java.util.Optional;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,11 +31,12 @@ import model.interfaces.UserInterface;
 
 /**
  *
- * @author ianlo
+ * @author Ian
  */
 public class ChangePasswordController {
 
     private UserInterface userInter = UserFactory.getFactory();
+    private static final Logger log = Logger.getLogger(ChangePasswordController.class.getName());
 
     private UserBean user;
 
@@ -45,6 +47,8 @@ public class ChangePasswordController {
     private Label lblTitulo, lblActual, lblNueva, lblNuevaOtraVez;
     @FXML
     private Button btnCancelar, btnCambiar;
+
+    private MenuBarController menuBarController = new MenuBarController();
     @FXML
     private PasswordField txtPasswd1, txtPasswd2, txtPasswd3;
     @FXML
@@ -65,6 +69,9 @@ public class ChangePasswordController {
         thisStage.setResizable(false);
         //El título de la ventana es “Sign In”.
         thisStage.setTitle("Cambiar Contrasena");
+
+        menuBarController.setStage(thisStage);
+        menuBarController.setUser(user);
 
         //Los label de título (lblTitulo),introducir la contraseña actual (lblActual), la nueva contraseña (lblNueva) y repetir la contraseña (lblNuevaOtraVez)
         // estarán visibles
@@ -111,6 +118,12 @@ public class ChangePasswordController {
         thisStage.show();
     }
 
+    /**
+     * Metodo para cancelar la opcion de cambiar contraseña y volver a la
+     * ventana de Sign In
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleCancelar(ActionEvent event) {
 
@@ -137,6 +150,11 @@ public class ChangePasswordController {
         }
     }
 
+    /**
+     * Metodo para cambiar la contraseña del usuario
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleCambiar(ActionEvent event) {
 
@@ -186,6 +204,12 @@ public class ChangePasswordController {
         }
     }
 
+    /**
+     * Metodo para alternar la foto de poder ver la contraseña y para mostrar la
+     * contraseña que esta introduciendo en el passwordField
+     *
+     * @param event del controlador
+     */
     @FXML
     protected void handleMostrarContraseniaToggleButtonAction1(ActionEvent event) {
         if (tbtnPasswd1.isSelected()) {
@@ -209,6 +233,12 @@ public class ChangePasswordController {
         }
     }
 
+    /**
+     * Metodo para alternar la foto de poder ver la contraseña y para mostrar la
+     * contraseña que esta introduciendo en el passwordField
+     *
+     * @param event del controlador
+     */
     @FXML
     protected void handleMostrarContraseniaToggleButtonAction2(ActionEvent event) {
         if (tbtnPasswd2.isSelected()) {
@@ -232,6 +262,12 @@ public class ChangePasswordController {
         }
     }
 
+    /**
+     * Metodo para alternar la foto de poder ver la contraseña y para mostrar la
+     * contraseña que esta introduciendo en el passwordField
+     *
+     * @param event del controlador
+     */
     @FXML
     protected void handleMostrarContraseniaToggleButtonAction3(ActionEvent event) {
         if (tbtnPasswd3.isSelected()) {

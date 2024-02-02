@@ -10,7 +10,7 @@ import javax.ws.rs.core.GenericType;
 /**
  * Es la interfaz para la entidad User.
  *
- * @author Jason.
+ * @author Jason, Ian.
  */
 public interface UserInterface {
 
@@ -41,4 +41,5 @@ public interface UserInterface {
     public <T> T changePassword_XML(GenericType<T> responseType, String mail, String passwd) throws SelectException;
 
     public <T> T changePassword_JSON(GenericType<T> responseType, String mail, String passwd) throws SelectException;
+
 }

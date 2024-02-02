@@ -80,6 +80,11 @@ public class ForgotPasswordController {
 
     }
 
+    /**
+     * Metodo para cancelar la opcion de generar una nueva contraseña
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleCancelar(ActionEvent event) {
 
@@ -106,6 +111,12 @@ public class ForgotPasswordController {
         }
     }
 
+    /**
+     * Metodo para enviar un email con una contraseña nueva generada
+     * aleatoriamente
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleEnviar(ActionEvent event) {
 
