@@ -55,10 +55,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.converter.FloatStringConverter;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
-import model.entitys.ExpenseBean;
 import model.enums.Permissions;
 import model.entitys.PunctualBean;
 import model.entitys.RecurrentBean;
@@ -98,7 +96,7 @@ public class AccountController {
     private AccountBean account;
     private UserBean user;
     private static final Logger log = Logger.getLogger(RecurrentController.class.getName());
-    List<AccountBean> listAccounts;
+    private List<AccountBean> listAccounts = new ArrayList<>();
     //Declaramos los camois que utilizaremos en la ventana Account
     @FXML
     private Button btnCreate, btnDelete, btnRefresh, btnRecurrent, btnPunctual, btnReport, btnSearch;
@@ -383,7 +381,7 @@ public class AccountController {
         //El filtrado es mediante un ComboBox (cbAtribute) y podrá filtrarse por “Id/ Nombre/ Plan/ Balance/ Divisa/ Descripción”. Está visible y habilitado siempre .
         cbAtribute.setDisable(false);
         cbAtribute.setVisible(true);
-        cbAtribute.getItems().addAll("Id", "Nombre", "Descripción", "Balance", "Divisa", "Plan");
+        cbAtribute.getItems().addAll("Id:", "Nombre:", "Descripcion:", "Balance:", "Divisa:", "Plan:");
         cbAtribute.setOnAction(this::handleActionAtributoSearch);
 
         //El otro ComboBox es de condición (cbCondition) y estará deshabilitado pero visible hasta que el usuario seleccione
@@ -423,7 +421,7 @@ public class AccountController {
     /**
      * Metodo para abrir la nm de asociados
      *
-     * @param event
+     * @param event evento del controlador
      * @return un asociado de un grupo de cuentas
      */
     public String abrirNM(ActionEvent event) {
@@ -667,53 +665,48 @@ public class AccountController {
 
         //Object newValue = new Object();
         switch (cbAtribute.getValue().toString()) {
-            case "Id":
-                cbCondition.setDisable(true);
-                tfSearch.setDisable(false);
-                btnSearch.setDisable(false);
-                cbCondition.setPromptText("Condicion");
-                //tfSearch.setText("");
-                //cargarId();
-                break;
-            case ("Nombre"):
-                cbCondition.setDisable(true);
-                tfSearch.setDisable(false);
-                btnSearch.setDisable(false);
-                //cargarNombre();
-                break;
-            case ("Descripción"):
+            case "Id:":
                 cbCondition.setDisable(true);
                 tfSearch.setDisable(false);
                 btnSearch.setDisable(false);
                 cbCondition.setPromptText("Condicion");
                 tfSearch.setText("");
-                //cargarDescripcion();
                 break;
-            case ("Balance"):
+            case ("Nombre:"):
+                cbCondition.setDisable(true);
+                tfSearch.setDisable(false);
+                btnSearch.setDisable(false);
+                tfSearch.setText("");
+                break;
+            case ("Descripcion:"):
+                cbCondition.setDisable(true);
+                tfSearch.setDisable(false);
+                btnSearch.setDisable(false);
+                cbCondition.setPromptText("Condicion");
+                tfSearch.setText("");
+                break;
+            case ("Balance:"):
                 cbCondition.setDisable(false);
                 tfSearch.setDisable(false);
                 cbCondition.getItems().setAll("Mayor que...", "Menor que...");
                 cbCondition.setPromptText("Rango...");
                 tfSearch.setText("");
                 btnSearch.setDisable(false);
-                //cargarIntensidad();
                 break;
-            case ("Divisa"):
+            case ("Divisa:"):
                 cbCondition.setDisable(false);
-                tfSearch.setDisable(false);
+                tfSearch.setDisable(true);
                 btnSearch.setDisable(false);
                 cbCondition.getItems().setAll(FXCollections.observableArrayList(Divisa.values()));
-                //cargarIntensidad();
+                tfSearch.setText("");
                 break;
-            case ("Plan"):
+            case ("Plan:"):
                 cbCondition.setDisable(false);
-                tfSearch.setDisable(false);
+                tfSearch.setDisable(true);
                 btnSearch.setDisable(false);
                 cbCondition.getItems().setAll(FXCollections.observableArrayList(Plan.values()));
                 cbCondition.setPromptText("Periodicidad...");
                 tfSearch.setText("");
-            //cargarFiltroObjetivo();
-
         }
     }
 
@@ -727,7 +720,7 @@ public class AccountController {
         // List<AccountBean> listAccount;
         try {
             switch (cbAtribute.getValue().toString()) {
-                case "Id":
+                case "Id:":
                     if (validateId(tfSearch.getText())) {
                         listAccounts.clear();
                         listAccounts.add(aInterface.findAccount_XML(new GenericType<AccountBean>() {
@@ -735,21 +728,21 @@ public class AccountController {
                     }
                     break;
 
-                case "Nombre":
+                case "Nombre:":
                     if (!tfSearch.getText().isEmpty()) {
                         listAccounts = aInterface.filterAccountsByName_XML(new GenericType<List<AccountBean>>() {
                         }, tfSearch.getText(), user.getMail());
                     }
                     break;
 
-                case "Descripción":
+                case "Descripcion:":
                     if (!tfSearch.getText().isEmpty()) {
                         listAccounts = aInterface.filterAccountsByDescription_XML(new GenericType<List<AccountBean>>() {
                         }, tfSearch.getText(), user.getMail());
                     }
                     break;
 
-                case "Balance":
+                case "Balance:":
                     if (validateBalance(tfSearch.getText())) {
                         if (cbCondition.getValue().toString().equalsIgnoreCase("Mayor que...")) {
                             listAccounts = aInterface.filterAccountsWithHigherBalance_XML(new GenericType<List<AccountBean>>() {
@@ -762,14 +755,14 @@ public class AccountController {
                     }
                     break;
 
-                case "Plan":
+                case "Plan:":
                     if (!cbCondition.getValue().toString().equalsIgnoreCase("Plan...")) {
                         listAccounts = aInterface.filterAccountsByPlan_XML(new GenericType<List<AccountBean>>() {
                         }, Plan.valueOf(cbCondition.getValue().toString()), user.getMail());
                     }
                     break;
 
-                case "Divisa":
+                case "Divisa:":
                     if (!cbCondition.getValue().toString().equalsIgnoreCase("Divisa...")) {
                         listAccounts = aInterface.filterAccountsByDivisa_XML(new GenericType<List<AccountBean>>() {
                         }, Divisa.valueOf(cbCondition.getValue().toString()), user.getMail());
@@ -782,6 +775,7 @@ public class AccountController {
             table.refresh();
 
         } catch (Exception e) {
+            e.printStackTrace();
             this.showAlert(e.getMessage(), AlertType.ERROR);
         }
     }

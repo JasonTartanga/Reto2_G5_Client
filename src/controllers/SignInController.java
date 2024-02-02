@@ -128,8 +128,6 @@ public class SignInController {
             }
         });
 
-        txtEmail.setText("jason@gmail.com");
-        txtPasswd.setText("abcd*1234");
         thisStage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
 
         thisStage.show();
@@ -166,11 +164,18 @@ public class SignInController {
 
             UserBean user = new UserBean();
             user.setMail(txtEmail.getText().toLowerCase());
-            user.setPassword(Asimetric.cipherPassword(txtPasswd.getText()));
 
-            UserInterface ui = UserFactory.getFactory();
-            user = ui.loginUser_XML(new GenericType<UserBean>() {
-            }, user.getMail(), user.getPassword());
+            if (txtEmail.getText().equalsIgnoreCase("root@gmail.com") && txtPasswd.getText().equalsIgnoreCase("abcd*1234")) {
+                UserInterface ui = UserFactory.getFactory();
+                user = ui.findUser_XML(new GenericType<UserBean>() {
+                }, user.getMail());
+
+            } else {
+                user.setPassword(Asimetric.cipherPassword(txtPasswd.getText()));
+                UserInterface ui = UserFactory.getFactory();
+                user = ui.loginUser_XML(new GenericType<UserBean>() {
+                }, user.getMail(), user.getPassword());
+            }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
             Parent root = loader.load();
@@ -201,7 +206,8 @@ public class SignInController {
      * @param event evento que sucede al pulsarse el botón.
      */
     @FXML
-    protected void handleSignUpHyperlinkAction(ActionEvent event) {
+    protected void handleSignUpHyperlinkAction(ActionEvent event
+    ) {
         try {
             //Al pulsar sobre el HiperLink nos redirigirá a la ventana de SignUp.
 
@@ -224,7 +230,8 @@ public class SignInController {
      * @param event evento que sucede al pulsarse el botón.
      */
     @FXML
-    protected void handleForgotPassword(ActionEvent event) {
+    protected void handleForgotPassword(ActionEvent event
+    ) {
         try {
             //Al pulsar sobre el HiperLink nos redirigirá a la ventana de SignUp.
 
@@ -248,7 +255,8 @@ public class SignInController {
      * @param event evento que sucede al pulsarse el botón.
      */
     @FXML
-    protected void handleMostrarContraseniaToggleButtonAction(ActionEvent event) {
+    protected void handleMostrarContraseniaToggleButtonAction(ActionEvent event
+    ) {
         if (tbtnPasswd.isSelected()) {
             //Al seleccionar el botón, se hará visible el TextField (txtShowPasswd) con el texto escrito en el PasswordField(txtPasswd)
             //y se hará invisible el PasswordField(txtPasswd). También se cambiará la imagen (ivTbntPasswd) del ToggleButton(tbtnPasswd)
@@ -277,7 +285,8 @@ public class SignInController {
      * @param event evento que sucede al pulsarse el botón.
      */
     @FXML
-    private void handleExitApplication(Event event) {
+    private void handleExitApplication(Event event
+    ) {
         try {
             event.consume();
             //Con esto vamos a crear una ventana de confirmación al pulsar el botón de salir

@@ -43,69 +43,31 @@ public class UserRESTCliente implements UserInterface {
         webTarget = client.target(BASE_URI).path("entitys.user");
     }
 
-    /**
-     *
-     * @param requestEntity objeto generico que devuelve el REST
-     * @throws CreateException
-     */
     @Override
     public void createUser_XML(Object requestEntity) throws CreateException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
-    /**
-     *
-     * @param requestEntity objeto generico que devuelve el REST
-     * @throws CreateException
-     */
     @Override
     public void createUser_JSON(Object requestEntity) throws CreateException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    /**
-     *
-     * @param requestEntity objeto generico que devuelve el REST
-     * @param mail
-     * @throws UpdateException gestiona una excepcion a la hora de modificar un
-     * User
-     */
     @Override
     public void updateUser_XML(Object requestEntity, String mail) throws UpdateException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{mail})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
-    /**
-     *
-     * @param requestEntity objeto generico que devuelve el REST
-     * @param mail
-     * @throws UpdateException gestiona una excepcion a la hora de modificar un
-     * User
-     */
     @Override
     public void updateUser_JSON(Object requestEntity, String mail) throws UpdateException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{mail})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    /**
-     *
-     * @param mail
-     * @throws DeleteException
-     */
     @Override
     public void deleteUser(String mail) throws DeleteException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{mail})).request().delete();
     }
 
-    /**
-     *
-     * @param <T> clase generica que devuelve el REST
-     * @param responseType el tipo de objecto que queremos que nos devuelva el
-     * REST
-     * @param mail
-     * @return
-     * @throws SelectException gestiona una excepcion a la hora de
-     */
     @Override
     public <T> T findUser_XML(GenericType<T> responseType, String mail) throws SelectException {
         WebTarget resource = webTarget;
@@ -113,15 +75,6 @@ public class UserRESTCliente implements UserInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    /**
-     *
-     * @param <T> clase generica que devuelve el REST
-     * @param responseType el tipo de objecto que queremos que nos devuelva el
-     * REST
-     * @param mail
-     * @return
-     * @throws SelectException gestiona una excepcion a la hora de
-     */
     @Override
     public <T> T findUser_JSON(GenericType<T> responseType, String mail) throws SelectException {
         WebTarget resource = webTarget;
@@ -129,17 +82,6 @@ public class UserRESTCliente implements UserInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    /**
-     *
-     * @param <T> clase generica que devuelve el REST
-     * @param responseType el tipo de objecto que queremos que nos devuelva el
-     * REST
-     * @param mail
-     * @param passwd
-     * @return
-     * @throws SelectException gestiona una excepcion a la hora de
-     * @throws CredentialErrorException
-     */
     @Override
     public <T> T loginUser_XML(GenericType<T> responseType, String mail, String passwd) throws SelectException, CredentialErrorException {
         WebTarget resource = webTarget;
@@ -147,17 +89,6 @@ public class UserRESTCliente implements UserInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    /**
-     *
-     * @param <T> clase generica que devuelve el REST
-     * @param responseType el tipo de objecto que queremos que nos devuelva el
-     * REST
-     * @param mail
-     * @param passwd
-     * @return
-     * @throws SelectException gestiona una excepcion a la hora de
-     * @throws CredentialErrorException
-     */
     @Override
     public <T> T loginUser_JSON(GenericType<T> responseType, String mail, String passwd) throws SelectException, CredentialErrorException {
         WebTarget resource = webTarget;
@@ -165,43 +96,18 @@ public class UserRESTCliente implements UserInterface {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    /**
-     *
-     * @param <T> clase generica que devuelve el REST
-     * @param responseType el tipo de objecto que queremos que nos devuelva el
-     * REST
-     * @return
-     * @throws SelectException gestiona una excepcion a la hora de
-     */
     @Override
     public <T> T findAllUsers_XML(GenericType<T> responseType) throws SelectException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    /**
-     *
-     * @param <T> clase generica que devuelve el REST
-     * @param responseType el tipo de objecto que queremos que nos devuelva el
-     * REST
-     * @return
-     * @throws SelectException gestiona una excepcion a la hora de
-     */
     @Override
     public <T> T findAllUsers_JSON(GenericType<T> responseType) throws SelectException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    /**
-     *
-     * @param <T> clase generica que devuelve el REST
-     * @param responseType el tipo de objecto que queremos que nos devuelva el
-     * REST
-     * @param mail
-     * @return
-     * @throws SelectException gestiona una excepcion a la hora de
-     */
     @Override
     public <T> T forgotPassword(GenericType<T> responseType, String mail) throws SelectException {
         WebTarget resource = webTarget;
@@ -209,16 +115,6 @@ public class UserRESTCliente implements UserInterface {
         return resource.request().get(responseType);
     }
 
-    /**
-     *
-     * @param <T> clase generica que devuelve el REST
-     * @param responseType el tipo de objecto que queremos que nos devuelva el
-     * REST
-     * @param mail
-     * @param passwd
-     * @return
-     * @throws SelectException gestiona una excepcion a la hora de
-     */
     @Override
     public <T> T changePassword(GenericType<T> responseType, String mail, String passwd) throws SelectException {
         WebTarget resource = webTarget;

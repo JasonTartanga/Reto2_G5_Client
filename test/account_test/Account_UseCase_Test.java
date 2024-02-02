@@ -1,13 +1,9 @@
-package recurrent_test;
+package account_test;
 
-import controllers.RecurrentController;
+import controllers.AccountController;
 import exceptions.SelectException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -27,18 +23,16 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
-import model.entitys.RecurrentBean;
 import model.entitys.UserBean;
-import model.enums.Category;
-import model.enums.Period;
+import model.enums.Divisa;
+import model.enums.Plan;
 import model.factory.AccountFactory;
-import model.factory.RecurrentFactory;
 import model.factory.UserFactory;
-import model.interfaces.RecurrentInterface;
-import org.junit.After;
+import model.interfaces.AccountInterface;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -50,17 +44,19 @@ import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
 /**
+ * Test de casos de uso de la parte de Account.
  *
- * @author Jason.
+ * @author Jessica
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class Recurrent_UseCase_Test extends ApplicationTest {
+public class Account_UseCase_Test extends ApplicationTest {
 
+    private AccountController controller;
     private UserBean user;
     private AccountBean account;
-    private RecurrentInterface ri = RecurrentFactory.getFactory();
+    private AccountInterface ai = AccountFactory.getFactory();
 
-    private Button btnCreate, btnDelete, btnRefresh, btnSwitch, btnReport, btnSearch;
+    private Button btnCreate, btnDelete, btnRefresh, btnRecurrent, btnPunctual, btnReport, btnSearch;
     private ComboBox cbAtribute, cbCondition;
     private TextField tfSearch;
     private TableView table;
@@ -74,21 +70,22 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
         account = AccountFactory.getFactory().findAccount_XML(new GenericType<AccountBean>() {
         }, Long.parseLong(6 + ""));
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RecurrentView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
         System.out.println(loader.getLocation());
         Parent root = loader.load();
-        RecurrentController recurrent = loader.getController();
-        recurrent.setStage(stage);
-        recurrent.setAccount(account);
-        recurrent.setUser(user);
-        recurrent.initStage(root);
+        AccountController account = loader.getController();
+        account.setStage(stage);
+
+        account.setUser(user);
+        account.initStage(root);
 
         this.stage = stage;
 
         btnCreate = lookup("#btnCreate").query();
         btnDelete = lookup("#btnDelete").query();
         btnRefresh = lookup("#btnRefresh").query();
-        btnSwitch = lookup("#btnSwitch").query();
+        btnRecurrent = lookup("#btnRecurrent").query();
+        btnPunctual = lookup("#btnPunctual").query();
         btnReport = lookup("#btnReport").query();
         btnSearch = lookup("#btnSearch").query();
         cbAtribute = lookup("#cbAtribute").queryComboBox();
@@ -107,8 +104,10 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
         verifyThat(btnDelete, isEnabled());
         verifyThat(btnRefresh, isVisible());
         verifyThat(btnRefresh, isEnabled());
-        verifyThat(btnSwitch, isVisible());
-        verifyThat(btnSwitch, isEnabled());
+        verifyThat(btnRecurrent, isVisible());
+        verifyThat(btnRecurrent, isEnabled());
+        verifyThat(btnPunctual, isVisible());
+        verifyThat(btnPunctual, isEnabled());
         verifyThat(btnReport, isVisible());
         verifyThat(btnReport, isEnabled());
 
@@ -121,81 +120,75 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
         verifyThat(cbCondition, isVisible());
         verifyThat(cbCondition, isDisabled());
         verifyThat(btnSearch, isVisible());
-        verifyThat(btnSearch, isDisabled());
+        verifyThat(btnSearch, isEnabled());
     }
 
     @Test
-    //@Ignore
-    public void test2_handleCreateRecurrent() {
+    @Ignore
+    public void test2_handleCreateAccount() {
         try {
             int rowCount = table.getItems().size();
 
-            Long uuid = ri.countExpenses(new GenericType<Long>() {
+            Long id = ai.countAccount(new GenericType<Long>() {
             }) + 1;
 
             clickOn(btnCreate);
             System.out.println(table.getItems().size());
             assertEquals("La fila no se ha creado!!!", rowCount + 1, table.getItems().size());
 
-            List<RecurrentBean> recurrent = table.getItems();
+            List<AccountBean> account = table.getItems();
 
-            assertEquals("El recurrente no se ha añdido!!!",
-                    recurrent.stream().filter(r -> r.getUuid().equals(uuid)).count(), 1);
+            assertEquals("El grupo no se ha aÃ±dido!!!",
+                    account.stream().filter(r -> r.getId().equals(id)).count(), 1);
 
         } catch (SelectException ex) {
-            Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Account_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
     @Test
     @Ignore
-    public void test3_handleModifyRecurrent() {
+    public void test3_handleModifyAccount() {
         try {
             int rowCount = table.getItems().size();
-            assertNotEquals("No existe ningun gasto Recurrente",
+            assertNotEquals("No existe ningun grupo de gastos",
                     rowCount, 0);
 
-            Node uuidRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(0).query();
+            Node idRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(0).query();
             Node nameRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(1).query();
-            Node conceptRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(2).query();
-            Node importRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(3).query();
-            Node dateRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(4).query();
-            Node categoryRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(5).query();
-            Node periodicityRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(6).query();
+            Node descriptionRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(2).query();
+            Node dateRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(3).query();
+            Node balanceRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(4).query();
+            Node divisaRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(5).query();
+            Node planRow = lookup(".table-row-cell").nth(0).lookup(".table-cell").nth(6).query();
 
-            assertNotNull("El gasto Recurrente es nullo, no se puede editar", uuidRow);
+            assertNotNull("El grupo de gastos es nullo, no se puede editar", idRow);
 
-            clickOn(uuidRow);
-            RecurrentBean selectedRecurrent = (RecurrentBean) table.getSelectionModel()
+            clickOn(idRow);
+            AccountBean selectedAccount = (AccountBean) table.getSelectionModel()
                     .getSelectedItem();
             int selectedIndex = table.getSelectionModel().getSelectedIndex();
 
-            RecurrentBean modifiedBean = selectedRecurrent;
-            modifiedBean.setUuid(selectedRecurrent.getUuid());
+            AccountBean modifiedBean = selectedAccount;
+            modifiedBean.setId(selectedAccount.getId());
             modifiedBean.setName(generateRandomString());
-            modifiedBean.setConcept(generateRandomString());
-            modifiedBean.setAmount(Float.parseFloat(generateRandomNumber(0, 999999) + ""));
-
+            modifiedBean.setDescription(generateRandomString());
             SimpleDateFormat sdf = (SimpleDateFormat) SimpleDateFormat.getInstance();
             modifiedBean.setDate(sdf.parse("30/01/2024 0:00"));
 
-            modifiedBean.setCategory(Category.values()[generateRandomNumber(0, Category.values().length - 1)]);
-            modifiedBean.setPeriodicity(Period.values()[generateRandomNumber(0, Period.values().length - 1)]);
+            modifiedBean.setBalance(Float.parseFloat(generateRandomNumber(0, 999999) + ""));
+            modifiedBean.setDivisa(Divisa.values()[generateRandomNumber(0, Divisa.values().length - 1)]);
+            modifiedBean.setPlan(Plan.values()[generateRandomNumber(0, Plan.values().length - 1)]);
 
             doubleClickOn(nameRow);
             doubleClickOn(nameRow);
             write(modifiedBean.getName());
             type(KeyCode.ENTER);
 
-            doubleClickOn(conceptRow);
-            doubleClickOn(conceptRow);
-            write(modifiedBean.getConcept());
-            type(KeyCode.ENTER);
-
-            doubleClickOn(importRow);
-            doubleClickOn(importRow);
-            write(modifiedBean.getAmount() + "");
+            doubleClickOn(descriptionRow);
+            doubleClickOn(descriptionRow);
+            write(modifiedBean.getDescription());
             type(KeyCode.ENTER);
 
             doubleClickOn(dateRow);
@@ -203,29 +196,34 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
             write("30/01/2024");
             type(KeyCode.ENTER);
 
-            clickOn(categoryRow);
-            clickOn(categoryRow);
-            clickOn(modifiedBean.getCategory() + "");
+            doubleClickOn(balanceRow);
+            doubleClickOn(balanceRow);
+            write(modifiedBean.getBalance() + "");
             type(KeyCode.ENTER);
 
-            clickOn(periodicityRow);
-            clickOn(periodicityRow);
-            clickOn(modifiedBean.getPeriodicity() + "");
+            clickOn(divisaRow);
+            clickOn(divisaRow);
+            clickOn(modifiedBean.getDivisa() + "");
+            type(KeyCode.ENTER);
+
+            clickOn(planRow);
+            clickOn(planRow);
+            clickOn(modifiedBean.getPlan() + "");
             type(KeyCode.ENTER);
 
             assertEquals("The user has not been modified!!!",
                     modifiedBean,
-                    (RecurrentBean) table.getItems().get(selectedIndex));
+                    (AccountBean) table.getItems().get(selectedIndex));
         } catch (ParseException ex) {
-            Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Account_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Test
     @Ignore
-    public void test4_handleDeleteRecurrent() {
+    public void test4_handleDeleteAccount() {
         int rowCount = table.getItems().size();
-        assertNotEquals("No existen Recurrentes, no se puede eliminar nada",
+        assertNotEquals("No existen grupos, no se puede eliminar nada",
                 rowCount, 0);
 
         Node row = lookup(".table-row-cell").nth(0).query();
@@ -233,7 +231,7 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
         clickOn(row);
         clickOn(btnDelete);
 
-        assertEquals("El Recurrente no se ha eliminado!!!",
+        assertEquals("El Grupo no se ha eliminado!!!",
                 rowCount - 1, table.getItems().size());
     }
 
@@ -245,16 +243,16 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
         try {
             clickOn(btnRefresh);
 
-            ObservableList<RecurrentBean> tableList = table.getItems();
+            ObservableList<AccountBean> tableList = table.getItems();
 
-            ObservableList<RecurrentBean> databaseList = FXCollections.observableArrayList(ri.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
-            }, account.getId()));
+            ObservableList<AccountBean> databaseList = FXCollections.observableArrayList(ai.findAllAccountsByUser_XML(new GenericType<List<AccountBean>>() {
+            }, user.getMail()));
 
             assertEquals("Las tablas no tienen la misma cantidad de objetos",
                     tableList.size(), databaseList.size());
 
             for (int i = 0; i < tableList.size(); i++) {
-                if (!tableList.get(i).getUuid().equals(databaseList.get(i).getUuid())) {
+                if (!tableList.get(i).getId().equals(databaseList.get(i).getId())) {
                     iguales = false;
                 }
             }
@@ -263,26 +261,39 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
                     true, iguales);
 
         } catch (SelectException ex) {
-            Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Account_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Test
     @Ignore
-    public void test6_handleSwitch() {
-        clickOn(btnSwitch);
-        verifyThat("#fondoPuncutal", isVisible());
+    public void test6_handleSwitchRecurrent() {
+        Node row = lookup(".table-row-cell").nth(0).query();
+        assertNotNull("La tabla que se ha seleccionado es nula", row);
+        clickOn(row);
+        clickOn(btnRecurrent);
+        verifyThat("#fondoRecurrent", isVisible());
     }
 
     @Test
     @Ignore
-    public void test7_handleFilterChange() {
+    public void test7_handleSwitchPunctual() {
+        Node row = lookup(".table-row-cell").nth(0).query();
+        assertNotNull("La tabla que se ha seleccionado es nula", row);
+        clickOn(row);
+        clickOn(btnPunctual);
+        verifyThat("#fondoPunctual", isVisible());
+    }
+
+    @Test
+    @Ignore
+    public void test8_handleFilterChange() {
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isDisabled());
         verifyThat(tfSearch, isDisabled());
 
         clickOn(cbAtribute);
-        clickOn("Uuid:");
+        clickOn("Id:");
 
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isDisabled());
@@ -296,32 +307,33 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
         verifyThat(tfSearch, isEnabled());
 
         clickOn(cbAtribute);
-        clickOn("Concepto:");
+        clickOn("Descripcion:");
 
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isDisabled());
         verifyThat(tfSearch, isEnabled());
 
         clickOn(cbAtribute);
-        clickOn("Importe:");
+        clickOn("Balance:");
 
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isEnabled());
         verifyThat(tfSearch, isEnabled());
 
         clickOn(cbAtribute);
-        clickOn("Naturaleza:");
+        clickOn("Divisa:");
 
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isEnabled());
         verifyThat(tfSearch, isDisabled());
 
         clickOn(cbAtribute);
-        clickOn("Periodicidad:");
+        clickOn("Plan:");
 
         verifyThat(cbAtribute, isEnabled());
         verifyThat(cbCondition, isEnabled());
         verifyThat(tfSearch, isDisabled());
+
     }
 
     @Test
@@ -329,49 +341,49 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
     public void test9_handleSearch() {
         boolean iguales = true;
 
-        int randomRecurrent;
+        int randomAccount;
 
-        List<RecurrentBean> allRecurrents;
-        List<RecurrentBean> databaseList;
-        ObservableList<RecurrentBean> tableList;
+        List<AccountBean> allAccounts;
+        List<AccountBean> databaseList;
+        ObservableList<AccountBean> tableList;
 
         try {
-            allRecurrents = ri.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
-            }, account.getId());
+            allAccounts = ai.findAllAccountsByUser_XML(new GenericType<List<AccountBean>>() {
+            }, user.getMail());
 
-            //Buscar por UUID.
-            randomRecurrent = generateRandomNumber(0, allRecurrents.size() - 1);
+            //Buscar por ID.
+            randomAccount = generateRandomNumber(0, allAccounts.size() - 1);
             clickOn(cbAtribute);
-            clickOn("Uuid:");
+            clickOn("Id:");
             clickOn(tfSearch);
-            write(allRecurrents.get(randomRecurrent).getUuid() + "");
+            write(allAccounts.get(randomAccount).getId() + "");
             clickOn(btnSearch);
 
-            RecurrentBean databaseRecurrent = ri.findRecurrent_XML(new GenericType<RecurrentBean>() {
-            }, allRecurrents.get(randomRecurrent).getUuid());
+            AccountBean databaseAccount = ai.findAccount_XML(new GenericType<AccountBean>() {
+            }, allAccounts.get(randomAccount).getId());
 
             tableList = table.getItems();
 
-            if (!tableList.get(0).getUuid().equals(databaseRecurrent.getUuid())) {
+            if (!tableList.get(0).getId().equals(databaseAccount.getId())) {
                 iguales = false;
             }
 
-            assertEquals("Busqueda por uuid a fallado",
+            assertEquals("Busqueda por id a fallado",
                     true, iguales);
 
             //Buscar por NOMBRE:
-            randomRecurrent = generateRandomNumber(0, allRecurrents.size() - 1);
+            randomAccount = generateRandomNumber(0, allAccounts.size() - 1);
             clickOn(cbAtribute);
             clickOn("Nombre:");
             clickOn(tfSearch);
-            write(allRecurrents.get(randomRecurrent).getName() + "");
+            write(allAccounts.get(randomAccount).getName() + "");
             clickOn(btnSearch);
 
-            databaseList = ri.filterRecurrentsByName_XML(new GenericType<List<RecurrentBean>>() {
-            }, allRecurrents.get(randomRecurrent).getName(), account.getId());
+            databaseList = ai.filterAccountsByName_XML(new GenericType<List<AccountBean>>() {
+            }, allAccounts.get(randomAccount).getName(), user.getMail());
 
             tableList = table.getItems();
-            assertEquals("No hay la misma cantidad de recurrentes",
+            assertEquals("No hay la misma cantidad de grupos",
                     databaseList.size(), tableList.size());
 
             for (int i = 0; i < tableList.size(); i++) {
@@ -380,132 +392,132 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
                 }
             }
 
-            assertEquals("Busqueda por uuid a fallado",
+            assertEquals("Busqueda por id a fallado",
                     true, iguales);
 
-            //Buscar por CONCEPTO:
-            randomRecurrent = generateRandomNumber(0, allRecurrents.size() - 1);
+            //Buscar por DESCRIPCION:
+            randomAccount = generateRandomNumber(0, allAccounts.size() - 1);
             clickOn(cbAtribute);
-            clickOn("Concepto:");
+            clickOn("Descripcion:");
             clickOn(tfSearch);
-            write(allRecurrents.get(randomRecurrent).getConcept() + "");
+            write(allAccounts.get(randomAccount).getDescription() + "");
             clickOn(btnSearch);
 
-            databaseList = ri.filterRecurrentsByConcept_XML(new GenericType<List<RecurrentBean>>() {
-            }, allRecurrents.get(randomRecurrent).getConcept(), account.getId());
+            databaseList = ai.filterAccountsByDescription_XML(new GenericType<List<AccountBean>>() {
+            }, allAccounts.get(randomAccount).getDescription(), user.getMail());
 
             tableList = table.getItems();
-            assertEquals("No hay la misma cantidad de recurrentes",
+            assertEquals("No hay la misma cantidad de grupos",
                     databaseList.size(), tableList.size());
 
             for (int i = 0; i < tableList.size(); i++) {
-                if (!tableList.get(i).getConcept().equals(databaseList.get(i).getConcept())) {
+                if (!tableList.get(i).getDescription().equals(databaseList.get(i).getDescription())) {
                     iguales = false;
                 }
             }
 
-            assertEquals("Busqueda por uuid a fallado",
+            assertEquals("Busqueda por id a fallado",
                     true, iguales);
 
-            //Buscar por IMPORTE MAYOR:
-            randomRecurrent = generateRandomNumber(0, allRecurrents.size() - 1);
+            //Buscar por BALANCE MAYOR:
+            randomAccount = generateRandomNumber(0, allAccounts.size() - 1);
             clickOn(cbAtribute);
-            clickOn("Importe:");
+            clickOn("Balance:");
             clickOn(cbCondition);
             clickOn("Mayor que...");
             clickOn(tfSearch);
-            write(allRecurrents.get(randomRecurrent).getAmount() - 1 + "");
+            write(allAccounts.get(randomAccount).getBalance() - 1 + "");
             clickOn(btnSearch);
 
-            databaseList = ri.filterRecurrentsWithHigherAmount_XML(new GenericType<List<RecurrentBean>>() {
-            }, allRecurrents.get(randomRecurrent).getAmount() - 1, account.getId());
+            databaseList = ai.filterAccountsWithHigherBalance_XML(new GenericType<List<AccountBean>>() {
+            }, allAccounts.get(randomAccount).getBalance() - 1 + "", user.getMail());
 
             tableList = table.getItems();
-            assertEquals("No hay la misma cantidad de recurrentes",
+            assertEquals("No hay la misma cantidad de grupos",
                     databaseList.size(), tableList.size());
 
             for (int i = 0; i < tableList.size(); i++) {
-                if (!tableList.get(i).getAmount().equals(databaseList.get(i).getAmount())) {
+                if (!tableList.get(i).getBalance().equals(databaseList.get(i).getBalance())) {
                     iguales = false;
                 }
             }
 
-            assertEquals("Busqueda por uuid a fallado",
+            assertEquals("Busqueda por id a fallado",
                     true, iguales);
 
-            //Buscar por IMPORTE MENOR:
-            randomRecurrent = generateRandomNumber(0, allRecurrents.size() - 1);
+            //Buscar por BALANCE MENOR:
+            randomAccount = generateRandomNumber(0, allAccounts.size() - 1);
             clickOn(cbCondition);
             clickOn("Menor que...");
             clickOn(tfSearch);
             doubleClickOn(tfSearch);
-            write(allRecurrents.get(randomRecurrent).getAmount() + 1 + "");
+            write(allAccounts.get(randomAccount).getBalance() + 1 + "");
             clickOn(btnSearch);
 
-            databaseList = ri.filterRecurrentsWithLowerAmount_XML(new GenericType<List<RecurrentBean>>() {
-            }, allRecurrents.get(randomRecurrent).getAmount() + 1, account.getId());
+            databaseList = ai.filterAccountsWithLowerBalance_XML(new GenericType<List<AccountBean>>() {
+            }, allAccounts.get(randomAccount).getBalance() + 1 + "", user.getMail());
 
             tableList = table.getItems();
-            assertEquals("No hay la misma cantidad de recurrentes",
+            assertEquals("No hay la misma cantidad de grupos",
                     databaseList.size(), tableList.size());
 
             for (int i = 0; i < tableList.size(); i++) {
-                if (!tableList.get(i).getAmount().equals(databaseList.get(i).getAmount())) {
+                if (!tableList.get(i).getBalance().equals(databaseList.get(i).getBalance())) {
                     iguales = false;
                 }
             }
 
-            assertEquals("Busqueda por uuid a fallado",
+            assertEquals("Busqueda por id a fallado",
                     true, iguales);
 
-            //Buscar por NATURALEZA:
+            //Buscar por Divisa:
             clickOn(cbAtribute);
-            clickOn("Naturaleza:");
+            clickOn("Divisa:");
             clickOn(cbCondition);
             System.out.println();
-            clickOn(allRecurrents.get(0).getCategory() + "");
+            clickOn("AED");
             clickOn(btnSearch);
 
-            databaseList = ri.filterRecurrentsByCategory_XML(new GenericType<List<RecurrentBean>>() {
-            }, allRecurrents.get(0).getCategory(), account.getId());
+            databaseList = ai.filterAccountsByDivisa_XML(new GenericType<List<AccountBean>>() {
+            }, Divisa.valueOf("AED"), user.getMail());
 
             tableList = table.getItems();
-            assertEquals("No hay la misma cantidad de recurrentes",
+            assertEquals("No hay la misma cantidad de grupos",
                     databaseList.size(), tableList.size());
 
             for (int i = 0; i < tableList.size(); i++) {
-                if (!tableList.get(i).getCategory().equals(databaseList.get(i).getCategory())) {
+                if (!tableList.get(i).getDivisa().equals(databaseList.get(i).getDivisa())) {
                     iguales = false;
                 }
             }
 
-            assertEquals("Busqueda por uuid a fallado",
+            assertEquals("Busqueda por id a fallado",
                     true, iguales);
 
-            //Buscar por PERIODICIDAD:
+            //Buscar por PLAN:
             clickOn(cbAtribute);
-            clickOn("Periodicidad:");
+            clickOn("Plan:");
             clickOn(cbCondition);
-            clickOn(allRecurrents.get(0).getPeriodicity() + "");
+            clickOn(allAccounts.get(0).getPlan() + "");
             clickOn(btnSearch);
 
-            databaseList = ri.filterRecurrentsByPeriodicity_XML(new GenericType<List<RecurrentBean>>() {
-            }, allRecurrents.get(0).getPeriodicity(), account.getId());
+            databaseList = ai.filterAccountsByPlan_XML(new GenericType<List<AccountBean>>() {
+            }, allAccounts.get(0).getPlan(), user.getMail());
 
             tableList = table.getItems();
-            assertEquals("No hay la misma cantidad de recurrentes",
+            assertEquals("No hay la misma cantidad de grupos",
                     databaseList.size(), tableList.size());
 
             for (int i = 0; i < tableList.size(); i++) {
-                if (!tableList.get(i).getPeriodicity().equals(databaseList.get(i).getPeriodicity())) {
+                if (!tableList.get(i).getPlan().equals(databaseList.get(i).getPlan())) {
                     iguales = false;
                 }
             }
 
-            assertEquals("Busqueda por uuid a fallado",
+            assertEquals("Busqueda por id a fallado",
                     true, iguales);
         } catch (SelectException ex) {
-            Logger.getLogger(Recurrent_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Account_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -513,11 +525,11 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
     @Ignore
     public void test10_handleChargeGraphics() {
         clickOn("#tabGraficos");
-        PieChart pieCategory = lookup("#pieCategory").query();
-        PieChart piePeriodicity = lookup("#piePeriodicity").query();
+        PieChart piePlan = lookup("#gPlan").query();
+        PieChart pieExpenses = lookup("#gExpenses").query();
 
-        assertNotNull(pieCategory);
-        assertNotNull(piePeriodicity);
+        assertNotNull(piePlan);
+        assertNotNull(pieExpenses);
     }
 
     protected int generateRandomNumber(int min, int max) {
@@ -539,4 +551,5 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
 
         return sb.toString();
     }
+
 }

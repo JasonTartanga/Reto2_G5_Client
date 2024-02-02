@@ -1,10 +1,5 @@
 package controllers;
 
-/**
- * Esta clase es el controlador generico del MenuBar.
- *
- * @author Jason.
- */
 import help.HelpController;
 import java.io.IOException;
 import java.util.Optional;
@@ -23,6 +18,11 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import model.entitys.UserBean;
 
+/**
+ * Esta clase es el controlador generico del MenuBar.
+ *
+ * @author Jason.
+ */
 public class MenuBarController {
 
     private static final Logger log = Logger.getLogger(MenuBarController.class.getName());

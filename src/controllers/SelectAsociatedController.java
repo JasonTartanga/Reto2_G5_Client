@@ -58,7 +58,7 @@ public class SelectAsociatedController {
      * Formatea todos los mails de los UserBean para que este en un mismo String
      * pero separado por comas.
      *
-     * @param event
+     * @param event del controlador
      */
     public void handleSelectNames(ActionEvent event) {
         asociated = null;
@@ -79,7 +79,7 @@ public class SelectAsociatedController {
     /**
      * Carga los mails de los UserBean posibles en el ListView.
      *
-     * @param usuarios
+     * @param usuarios los usuarios que recoge.
      */
     public void handleLoadList(List<UserBean> usuarios) {
         List<String> names = new ArrayList<>();

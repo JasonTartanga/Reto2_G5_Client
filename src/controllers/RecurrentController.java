@@ -317,7 +317,7 @@ public class RecurrentController {
      * Crea un nuevo RecurrentBean en la base de datos y lo muestra en la
      * TableView.
      *
-     * @param event
+     * @param event del controlador
      */
     @FXML
     public void handleCreateRecurrent(ActionEvent event) {
@@ -346,7 +346,7 @@ public class RecurrentController {
      * Elimina uno o varios RecurrentBean de la base de datos y deja de
      * mostrarlos en la TableView.
      *
-     * @param event
+     * @param event del controlador
      */
     @FXML
     public void handleDeleteRecurrent(ActionEvent event) {
@@ -373,7 +373,7 @@ public class RecurrentController {
     /**
      * Carga la TableView con los todos los RecurrentBean del account.
      *
-     * @param event
+     * @param event del controlador
      */
     @FXML
     public void handleRefreshTable(ActionEvent event) {
@@ -397,7 +397,7 @@ public class RecurrentController {
     /**
      * Abre la ventana PunctualView del mismo AccountBean en el que estamos.
      *
-     * @param event
+     * @param event del controlador
      */
     @FXML
     public void handleSwitch(ActionEvent event) {
@@ -422,7 +422,7 @@ public class RecurrentController {
      * Genera un repote usando JasperReports con los datos actualmente visibles
      * de la TableView.
      *
-     * @param event
+     * @param event del controlador
      */
     @FXML
     public void handleGenerateReport(ActionEvent event) {
@@ -445,7 +445,7 @@ public class RecurrentController {
      * En base a que filtros se hayan seleccionado busca unos RecurrentBenas y
      * los muestra en la TableView.
      *
-     * @param event
+     * @param event del controlador
      */
     @FXML
     public void handleSearch(ActionEvent event) {
@@ -515,13 +515,12 @@ public class RecurrentController {
      * Dependiendo de que filtro se seleccione habilita o deshabilita los
      * ComboBox o el TextField de los filtros.
      *
-     * @param event
+     * @param event del controlador
      */
     @FXML
     public void handleChangeFilter(Event event) {
         try {
             log.log(Level.INFO, "Cambiado el filtro a -->{0}", cbAtribute.getValue().toString());
-            //  List<RecurrentBean> recurrentes = null;
 
             switch (cbAtribute.getValue().toString()) {
                 case "Uuid:":

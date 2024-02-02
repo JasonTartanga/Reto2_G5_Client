@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="fondoPuncutal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PunctualController">
+<AnchorPane fx:id="fondoPunctual" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PunctualController">
     <children>
         <fx:include fx:id="menuBar" source="MenuBar.fxml" />
         <Button fx:id="btnCreate" layoutX="52.0" layoutY="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">

@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package punctualTest;
+package punctual_test;
 
 import controllers.PunctualController;
 import exceptions.SelectException;
@@ -29,6 +24,7 @@ import javafx.stage.Stage;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
 import model.entitys.PunctualBean;
+import model.entitys.RecurrentBean;
 import model.entitys.UserBean;
 import model.enums.Importance;
 import model.factory.AccountFactory;
@@ -47,6 +43,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
+import recurrent_test.Recurrent_UseCase_Test;
 
 /**
  * Test del gasto puntual.
@@ -54,7 +51,7 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
  * @author Ian
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class PunctualTest extends ApplicationTest {
+public class Punctual_UseCase_Test extends ApplicationTest {
 
     private UserBean user;
     private AccountBean account;
@@ -70,7 +67,7 @@ public class PunctualTest extends ApplicationTest {
         user = UserFactory.getFactory().findUser_XML(new GenericType<UserBean>() {
         }, "jason@gmail.com");
         account = AccountFactory.getFactory().findAccount_XML(new GenericType<AccountBean>() {
-        }, Long.parseLong(7 + ""));
+        }, Long.parseLong(6 + ""));
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PunctualView.fxml"));
         Parent root = loader.load();
@@ -96,7 +93,7 @@ public class PunctualTest extends ApplicationTest {
      * Test para inicializar
      */
     @Test
-
+    @Ignore
     public void test1_initStage() {
 
         verifyThat(btnCreate, isVisible());
@@ -125,10 +122,12 @@ public class PunctualTest extends ApplicationTest {
      * Test de comprobación de la creacion de filas.
      */
     @Test
-    @Ignore
+    //@Ignore
     public void test2_handleCreatePunctual() {
+
         try {
             int rowCount = table.getItems().size();
+
             Long uuid = puncInt.countExpenses(new GenericType<Long>() {
             }) + 1;
 
@@ -138,11 +137,10 @@ public class PunctualTest extends ApplicationTest {
 
             List<PunctualBean> punctual = table.getItems();
 
-            assertEquals("El puntual no se ha añadido",
-                    punctual.stream().filter(r -> r.getUuid().equals(uuid)).count(), 1);
-
+            assertEquals("El recurrente no se ha añdido!!!",
+                    punctual.stream().filter(p -> p.getUuid().equals(uuid)).count(), 1);
         } catch (SelectException ex) {
-            Logger.getLogger(PunctualTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Punctual_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -212,7 +210,7 @@ public class PunctualTest extends ApplicationTest {
                     modifiedBean,
                     (PunctualBean) table.getItems().get(selectedIndex));
         } catch (ParseException ex) {
-            Logger.getLogger(PunctualTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Punctual_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -265,7 +263,7 @@ public class PunctualTest extends ApplicationTest {
                     true, igual);
 
         } catch (SelectException ex) {
-            Logger.getLogger(PunctualTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Punctual_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -489,7 +487,7 @@ public class PunctualTest extends ApplicationTest {
                     true, iguales);
 
         } catch (SelectException ex) {
-            Logger.getLogger(PunctualTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Punctual_UseCase_Test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
