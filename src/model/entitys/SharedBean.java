@@ -1,10 +1,12 @@
 package model.entitys;
 
+import model.enums.Permissions;
 import javafx.beans.property.SimpleObjectProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Es el bean se asociados
+ * Es el bean de la entidad Shared.
+ *
  * @author Jason.
  */
 @XmlRootElement(name = "shared")
