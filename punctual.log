@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2024-02-02T09:46:54</date>
+  <millis>1706863614612</millis>
+  <sequence>7</sequence>
+  <logger>controllers.PunctualController</logger>
+  <level>INFO</level>
+  <class>controllers.PunctualController</class>
+  <method>handleRefreshTable</method>
+  <thread>14</thread>
+  <message>Recargando la tabla</message>
+</record>
+<record>
+  <date>2024-02-02T09:46:54</date>
+  <millis>1706863614660</millis>
+  <sequence>8</sequence>
+  <logger>controllers.PunctualController</logger>
+  <level>INFO</level>
+  <class>controllers.PunctualController</class>
+  <method>handleLoadGraphics</method>
+  <thread>14</thread>
+  <message>Cargando graficos.</message>
+</record>
+<record>
+  <date>2024-02-02T09:46:56</date>
+  <millis>1706863616002</millis>
+  <sequence>9</sequence>
+  <logger>controllers.PunctualController</logger>
+  <level>INFO</level>
+  <class>controllers.PunctualController</class>
+  <method>handleGenerateReport</method>
+  <thread>14</thread>
+  <message>Generando un reporte</message>
+</record>
+</log>
