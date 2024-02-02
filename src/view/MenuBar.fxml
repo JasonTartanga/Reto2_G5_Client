@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox id="hBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuBarController">
+   <children>
+      <MenuBar id="menuBar" fx:id="menuBar" prefHeight="26.0" prefWidth="1280.0">
+        <menus>
+          <Menu id="menuInicio" fx:id="mInicio" mnemonicParsing="false" text="Inicio">
+            <items>
+              <MenuItem id="menuItemInicio" fx:id="miInicio" mnemonicParsing="false" onAction="#handleMainMenu" text="Inicio" />
+            </items>
+          </Menu>
+            <Menu id="menuInicio" fx:id="mPerfil" mnemonicParsing="false" text="Perfil">
+               <items>
+                  <MenuItem id="menuItemCambiarContraseña" fx:id="miChangePassword" mnemonicParsing="false" onAction="#handleChangePasswordMenu" text="Cambiar contraseña" />
+               </items>
+            </Menu>
+          <Menu id="menuAyuda" fx:id="mAyuda" mnemonicParsing="false" text="Ayuda">
+            <items>
+              <MenuItem id="menuItemAyuda" fx:id="miAccount" mnemonicParsing="false" onAction="#handleAccountHelp" text="Account" />
+                  <MenuItem id="menuItemAyuda" fx:id="miRecurrent" mnemonicParsing="false" onAction="#handleRecurrentHelp" text="Recurrent" />
+                  <MenuItem id="menuItemAyuda" fx:id="miPunctual" mnemonicParsing="false" onAction="#handlePunctualHelp" text="Punctual" />
+                  <MenuItem id="menuItemAyuda" fx:id="miChange" mnemonicParsing="false" onAction="#handleChangeHelp" text="Change Password" />
+                  <MenuItem id="menuItemAyuda" fx:id="miForgot" mnemonicParsing="false" onAction="#helpForgotHelp" text="Forgot Password" />
+            </items>
+          </Menu>
+          <Menu id="menuSalir" fx:id="mSalir" mnemonicParsing="false" text="Salir">
+            <items>
+              <MenuItem id="menuItemCerrarSesion" fx:id="miLogout" mnemonicParsing="false" onAction="#handleLogoutMenu" text="Cerrar Sesion" />
+                  <MenuItem id="menuItemSalir" fx:id="miClose" mnemonicParsing="false" onAction="#handleCloseMenu" text="Salir" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </children>
+</HBox>

@@ -2,15 +2,15 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="fondoSignIn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" styleClass="fondo" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignInController">
+<AnchorPane fx:id="fondoSignIn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" styleClass="fondo" stylesheets="@../resources/style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignInController">
    <children>
       <ImageView fx:id="ivPanel" fitHeight="620.0" fitWidth="500.0" pickOnBounds="true">
          <image>
@@ -22,16 +22,15 @@
             <Image url="@../resources/img/correo-electronico.png" />
          </image>
       </ImageView>
-      <TextField fx:id="txtEmail" layoutX="638.0" layoutY="219.0" prefHeight="25.0" prefWidth="285.0" promptText="Introduce el correo" styleClass="textField" />
+      <TextField fx:id="txtEmail" layoutX="638.0" layoutY="213.0" prefHeight="35.0" prefWidth="285.0" promptText="Introduce el correo" styleClass="textField" />
       <ImageView fx:id="ivPasswd" fitHeight="40.0" fitWidth="40.0" layoutX="582.0" layoutY="290.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/img/contrasena.png" />
          </image>
       </ImageView>
-      <PasswordField fx:id="txtPasswd" layoutX="638.0" layoutY="297.0" prefHeight="25.0" prefWidth="285.0" promptText="Introduce la contraseña" styleClass="textField" />
-      <Label fx:id="lblCuenta" layoutX="602.0" layoutY="373.0" prefHeight="18.0" prefWidth="341.0" text="Si no tienes una cuenta                    para registrarte" wrapText="true" />
-      <Hyperlink fx:id="hlSignUp" layoutX="727.0" layoutY="371.0" onAction="#handleSignUpHyperlinkAction" text="pulsa aqui" />
-      <ToggleButton fx:id="tbtnPasswd" layoutX="931.0" layoutY="298.0" mnemonicParsing="false" onAction="#handleMostrarContraseniaToggleButtonAction" prefHeight="16.0" prefWidth="16.0">
+      <PasswordField fx:id="txtPasswd" layoutX="638.0" layoutY="292.0" prefHeight="35.0" prefWidth="285.0" promptText="Introduce la contraseña" styleClass="textField" />
+      <TextField fx:id="txtShowPasswd" layoutX="638.0" layoutY="297.0" prefHeight="25.0" prefWidth="285.0" promptText="Introduce la contraseña" styleClass="textField" visible="false" />
+      <ToggleButton fx:id="tbtnPasswd" layoutX="936.0" layoutY="298.0" mnemonicParsing="false" onAction="#handleMostrarContraseniaToggleButtonAction" prefHeight="16.0" prefWidth="16.0">
          <graphic>
             <ImageView fx:id="ivTbntPasswd" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -40,7 +39,18 @@
             </ImageView>
          </graphic>
       </ToggleButton>
-      <Button fx:id="btnIniciarSesion" layoutX="679.0" layoutY="436.0" mnemonicParsing="false" onAction="#handleIniciarSesionButtonAction" prefHeight="37.0" prefWidth="187.0" text="Iniciar sesion" />
-      <TextField fx:id="txtShowPasswd" layoutX="638.0" layoutY="297.0" prefHeight="25.0" prefWidth="285.0" promptText="Introduce la contraseña" styleClass="textField" visible="false" />
+      <Hyperlink fx:id="hlForgotPasswd" layoutX="638.0" layoutY="333.0" onAction="#handleSignUpHyperlinkAction" prefHeight="27.0" prefWidth="176.0" text="Has olvidado la contraseña?">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Hyperlink>
+      <Button fx:id="btnIniciarSesion" layoutX="687.0" layoutY="404.0" mnemonicParsing="false" onAction="#handleIniciarSesionButtonAction" prefHeight="47.0" prefWidth="187.0" text="Iniciar sesion">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+      <Hyperlink fx:id="hlSignUp" layoutX="656.0" layoutY="470.0" onAction="#handleSignUpHyperlinkAction" text="Si no tienes una cuenta pulsa aqui">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></Hyperlink>
    </children>
 </AnchorPane>
