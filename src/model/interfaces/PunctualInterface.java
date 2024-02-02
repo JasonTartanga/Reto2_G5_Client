@@ -9,8 +9,6 @@ import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.SelectException;
 import exceptions.UpdateException;
-import javax.ws.rs.ClientErrorException;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import model.enums.Importance;
 

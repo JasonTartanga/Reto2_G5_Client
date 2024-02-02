@@ -26,6 +26,7 @@ import model.factory.UserFactory;
 import model.interfaces.UserInterface;
 
 /**
+ * Este es el controlador de la ventana de olvidar contraseña.
  *
  * @author Ian.
  */
@@ -41,6 +42,11 @@ public class ForgotPasswordController {
     @FXML
     private Button btnCancelar, btnEnviar;
 
+    /**
+     * Metodo para incializar la ventana
+     *
+     * @param root del controlador
+     */
     public void initStage(Parent root) {
         try {
             Scene scene = new Scene(root);
@@ -79,6 +85,11 @@ public class ForgotPasswordController {
 
     }
 
+    /**
+     * Metodo para salir de la ventana
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleCancelar(ActionEvent event) {
 
@@ -105,6 +116,11 @@ public class ForgotPasswordController {
         }
     }
 
+    /**
+     * Metodo para enviar el email
+     *
+     * @param event del controlador
+     */
     @FXML
     public void handleEnviar(ActionEvent event) {
 

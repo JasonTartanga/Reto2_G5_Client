@@ -165,9 +165,9 @@ public class AccountController {
     protected static final Logger LOGGER = Logger.getLogger("/controller/AccountController");
 
     /**
-     * Method to initialize the window
+     * Metodo para inciializar la ventana
      *
-     * @param root the root of the window
+     * @param root el root de la ventana
      */
     public void initStage(Parent root) {
         LOGGER.info("Initializing Account stage");
@@ -237,6 +237,14 @@ public class AccountController {
         tabGraficos.setDisable(false);
 
         //La TableView (table) está siempre habilitada y será editable.
+        //TABLEVIEW
+        //Se podrá poner el foco en una de las celdas y modificarla escribiendo o borrando algo.
+        //Pulsando la tecla enter se confirmaron los cambios.
+        //En caso de que se pulse la tecla esc, el foco saldrá de la celda y se cancelan los cambios,
+        //Si el foco cambia sin haberle dado a ninguno de los anteriores botones los cambios se cancelaran.
+        //Los filtrados en la tabla se realizarán mediante los métodos que previamente se hayan realizado y comprobando que los
+        //datos que aparecen son correctos al filtrado.
+        //En caso de error saldrá una ventana informativa con una excepción (SelectException).
         table.setDisable(false);
         table.setVisible(true);
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -270,16 +278,7 @@ public class AccountController {
 
         //La columna de “Balance” tendrá un formato numérico para el cómputo global de los gastos de la cuenta.
         tcBalance.setCellValueFactory(new PropertyValueFactory<>("balance"));
-//        tcBalance.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
-//        tcBalance.setOnEditCommit(event -> {
-//            try {
-//                AccountBean accountBean = event.getRowValue();
-//                accountBean.setBalance(event.getNewValue());
-//                aInterface.updateAccount_XML(accountBean, accountBean.getId());
-//            } catch (Exception e) {
-//                this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
-//            }
-//        });
+//
 
         //La columna de “Fecha” está formada por una DatePicker y es editable.
         //La columna de “fecha” será con un DatePicker.
@@ -421,6 +420,12 @@ public class AccountController {
         stage.show();
     }
 
+    /**
+     * Metodo para abrir la nm de asociados
+     *
+     * @param event
+     * @return un asociado de un grupo de cuentas
+     */
     public String abrirNM(ActionEvent event) {
         String asociated = null;
         try {
@@ -448,12 +453,18 @@ public class AccountController {
         return asociated;
     }
 
-    //BTN CREAR: Creará una nueva fila en el TableView con datos nulos excepto el id que se autogeneran.
-    //Creará un nuevo grupo en la base de datos.
-    //En caso de error, saldrá una ventana informativa.
-    //Seguido, saldrá del método del botón.
+    /**
+     * Metodo para crear un nuevo grupo de gastos
+     *
+     * @param event del controlador
+     */
     @FXML
     private void handleButtonCrearAction(ActionEvent event) {
+        //BTN CREAR: Creará una nueva fila en el TableView con datos nulos excepto el id que se autogeneran.
+        //Creará un nuevo grupo en la base de datos.
+        //En caso de error, saldrá una ventana informativa.
+        //Seguido, saldrá del método del botón.
+
         LOGGER.info("Creando un Account");
         try {
 
@@ -474,12 +485,18 @@ public class AccountController {
         }
     }
 
-    //BTN ELIMINAR: Para eliminar, haremos click en la TableView (table) sobre uno o varios gastos recurrentes que queramos eliminar y
-    //clickeamos en el botón de eliminar de la parte superior de la ventana.
-    //Se eliminarán los gastos y si sucede algún error, saldrá un mensaje de error. Para ello usaremos la excepción (DeleteException).
-    //Seguido, saldrá del método del botón.
+    /**
+     * Metodo para eliminar un grupo de gastos
+     *
+     * @param event del controlador
+     */
     @FXML
     private void handleEliminarButtonAction(ActionEvent event) {
+
+        //BTN ELIMINAR: Para eliminar, haremos click en la TableView (table) sobre uno o varios gastos recurrentes que queramos eliminar y
+        //clickeamos en el botón de eliminar de la parte superior de la ventana.
+        //Se eliminarán los gastos y si sucede algún error, saldrá un mensaje de error. Para ello usaremos la excepción (DeleteException).
+        //Seguido, saldrá del método del botón.
         LOGGER.info("Eliminando uno o varios Account.");
         try {
             List<AccountBean> selectedAccount = table.getSelectionModel().getSelectedItems();
@@ -501,13 +518,24 @@ public class AccountController {
         }
 
     }
-    //BTN ACTUALIZAR: Al pulsar el botón volverá a cargar la tabla con los datos actualizados.
-    //En caso de error, saldrá una ventana informativa.
-    //Seguido, saldrá del método del botón.
 
+    /**
+     * Metodo para refrescar la tabla
+     *
+     * @param event del controlador
+     */
     public void handleRefreshTable(ActionEvent event) {
-        List<AccountBean> accounts = aInterface.findAllAccountsByUser_XML(new GenericType< List<AccountBean>>() {
-        }, user.getMail());
+        //BTN ACTUALIZAR: Al pulsar el botón volverá a cargar la tabla con los datos actualizados.
+        //En caso de error, saldrá una ventana informativa.
+        //Seguido, saldrá del método del botón.
+
+        List<AccountBean> accounts = null;
+        try {
+            accounts = aInterface.findAllAccountsByUser_XML(new GenericType< List<AccountBean>>() {
+            }, user.getMail());
+        } catch (SelectException ex) {
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         ObservableList accountsList = FXCollections.observableArrayList(accounts);
         table.getItems().setAll(accountsList);
@@ -515,13 +543,19 @@ public class AccountController {
 
     }
 
-    //BTN INFORME: Para obtener el informe, haremos click en el botón de informe (btnReport) del panel principal (fondoAccount).
-    //Validar que las cuentas estén informadas.
-    //En caso de que todos los datos sean correctos se procederá a visualizar el informe.
-    //Si no es correcto, saldrá un mensaje de error. Para ello usaremos una excepción.
-    //Seguido, saldrá del método del botón .
+    /**
+     * Metodo para realizar el informe de la cuenta seleccionada
+     *
+     * @param event del controlador
+     */
     @FXML
     private void handleButtonInformeAction(ActionEvent event) {
+        //BTN INFORME: Para obtener el informe, haremos click en el botón de informe (btnReport) del panel principal (fondoAccount).
+        //Validar que las cuentas estén informadas.
+        //En caso de que todos los datos sean correctos se procederá a visualizar el informe.
+        //Si no es correcto, saldrá un mensaje de error. Para ello usaremos una excepción.
+        //Seguido, saldrá del método del botón .
+
         try {
             LOGGER.info("Beginning printing action...");
             JasperReport report = JasperCompileManager.compileReport(getClass().getResourceAsStream("/reports/AccountReport.jrxml"));
@@ -541,13 +575,18 @@ public class AccountController {
 
     }
 
-    //BTN GASTOS RECURRENTES Y GASTOS PUNTUALES:
-    //El uso de estos botones es abrir las ventanas correspondientes para poder visualizar los gastos del grupo.
-    //Si hacemos clic en el botón de gastos recurrentes (btnRecurrent) se abrirá la ventana con los gastos recurrentes del grupo.
-    //Si hacemos clic en el botón de gastos puntuales (btnPunctual) se abrirá la ventana con los gastos puntuales del grupo.
-    //Seguido, saldrá del método del botón.
+    /**
+     * Metodo para la navegacion hacia la ventana de gastos recurrentes
+     *
+     * @param event del controlador
+     */
     @FXML
     private void handleButtonRecurrentAction(ActionEvent event) {
+        //BTN GASTOS RECURRENTES Y GASTOS PUNTUALES:
+        //El uso de estos botones es abrir las ventanas correspondientes para poder visualizar los gastos del grupo.
+        //Si hacemos clic en el botón de gastos recurrentes (btnRecurrent) se abrirá la ventana con los gastos recurrentes del grupo.
+        //Si hacemos clic en el botón de gastos puntuales (btnPunctual) se abrirá la ventana con los gastos puntuales del grupo.
+        //Seguido, saldrá del método del botón.
         try {
             AccountBean acc = table.getSelectionModel().getSelectedItem();
             if (acc != null) {
@@ -567,8 +606,18 @@ public class AccountController {
         }
     }
 
+    /**
+     * Metodo para la navegacion a la ventana de gastos puntuales
+     *
+     * @param event del controlador
+     */
     @FXML
     private void handleButtonPunctualAction(ActionEvent event) {
+        //BTN GASTOS RECURRENTES Y GASTOS PUNTUALES:
+        //El uso de estos botones es abrir las ventanas correspondientes para poder visualizar los gastos del grupo.
+        //Si hacemos clic en el botón de gastos recurrentes (btnRecurrent) se abrirá la ventana con los gastos recurrentes del grupo.
+        //Si hacemos clic en el botón de gastos puntuales (btnPunctual) se abrirá la ventana con los gastos puntuales del grupo.
+        //Seguido, saldrá del método del botón.
         try {
             AccountBean acc = table.getSelectionModel().getSelectedItem();
             if (acc != null) {
@@ -608,6 +657,11 @@ public class AccountController {
     //Cuando se pulsa el botón dependiendo el tipo de filtraje, realizará la consulta correspondiente a la base de datos y nos mostrará en la tabla.
     //En caso de error saldrá un alerta informativa usando una excepción (SelectException).
     //Seguido, saldrá del método del botón.
+    /**
+     * Metodo para el apartado de filtrado, para los cambios del comboBox
+     *
+     * @param event del controlador
+     */
     @FXML
     private void handleActionAtributoSearch(Event event) {
 
@@ -663,6 +717,11 @@ public class AccountController {
         }
     }
 
+    /**
+     * Metodo para el filtrado y que el resultado aparezca en la tabla
+     *
+     * @param event del controlador
+     */
     public void handleSearch(ActionEvent event) {
         // log.info("Buscando gasto recurrente con el siguiente filtro --> " + cbAtribute.getValue().toString());
         // List<AccountBean> listAccount;
@@ -727,6 +786,12 @@ public class AccountController {
         }
     }
 
+    /**
+     * Metodo para validar el id del grupo
+     *
+     * @param id recogemos id del grupo
+     * @return si es valido o no
+     */
     protected boolean validateId(String id) {
         boolean valido = true;
         try {
@@ -737,6 +802,12 @@ public class AccountController {
         return valido;
     }
 
+    /**
+     * Metodo para validar el balance
+     *
+     * @param balance recogemos el balance
+     * @return si es valido o no
+     */
     protected boolean validateBalance(String balance) {
         boolean valido = true;
         try {
@@ -747,69 +818,17 @@ public class AccountController {
         return valido;
     }
 
-    private ObservableList<AccountBean> cargarId() {
-        ObservableList<AccountBean> listAccount;
-        List<AccountBean> todosAccount;
-        todosAccount = aInterface.findAccount_XML(new GenericType<List<AccountBean>>() {
-        }, Long.parseLong(tfSearch.getText()));
-        listAccount = FXCollections.observableArrayList(todosAccount);
-        table.setItems(listAccount);
-        table.refresh();
-        return listAccount;
-    }
-
-    private ObservableList<AccountBean> cargarNombre() {
-        ObservableList<AccountBean> listAccount;
-        List<AccountBean> listNombres;
-        listNombres = aInterface.filterAccountsByName_XML(new GenericType<List<AccountBean>>() {
-        }, tfSearch.getText(), user.getMail());
-        listAccount = FXCollections.observableArrayList(listNombres);
-        table.setItems(listAccount);
-        table.refresh();
-        return listAccount;
-    }
-
-    private ObservableList<AccountBean> cargarDescripcion() {
-        ObservableList<AccountBean> listAccount;
-        List<AccountBean> listDescrip;
-        listDescrip = aInterface.filterAccountsByDescription_XML(new GenericType<List<AccountBean>>() {
-        }, tfSearch.getText(), user.getMail());
-        listAccount = FXCollections.observableArrayList(listDescrip);
-        table.setItems(listAccount);
-        table.refresh();
-        return listAccount;
-    }
-
-    private ObservableList<AccountBean> cargarDivisa() {
-        ObservableList<AccountBean> listAccount;
-        List<AccountBean> listDescrip;
-        listDescrip = aInterface.filterAccountsByDivisa_XML(new GenericType<List<AccountBean>>() {
-        }, Divisa.valueOf(cbCondition.getValue().toString()), user.getMail());
-        listAccount = FXCollections.observableArrayList(listDescrip);
-        table.setItems(listAccount);
-        table.refresh();
-        return listAccount;
-
-    }
-
-    private ObservableList<AccountBean> cargarPlan() {
-        return null;
-
-    }
-
-    //TABLEVIEW
-    //Se podrá poner el foco en una de las celdas y modificarla escribiendo o borrando algo.
-    //Pulsando la tecla enter se confirmaron los cambios.
-    //En caso de que se pulse la tecla esc, el foco saldrá de la celda y se cancelan los cambios,
-    //Si el foco cambia sin haberle dado a ninguno de los anteriores botones los cambios se cancelaran.
-    //Los filtrados en la tabla se realizarán mediante los métodos que previamente se hayan realizado y comprobando que los
-    //datos que aparecen son correctos al filtrado.
-    //En caso de error saldrá una ventana informativa con una excepción (SelectException).
-    //TAB GRAFICOS
-    //Al hacer clic sobre el tab de gráficos, se nos abrirá el segundo apartado con los gráficos de los gastos de los grupos que tiene el usuario.
-    //En caso de error nos saldrá una ventana informativa.
+    /**
+     * Metodo para cargar los graficos con los datos de los grupos
+     *
+     * @param event del controlador
+     */
     @FXML
     private void handleLoadGraphicsTab(Event event) {
+        //TAB GRAFICOS
+        //Al hacer clic sobre el tab de gráficos, se nos abrirá el segundo apartado con los gráficos de los gastos de los grupos que tiene el usuario.
+        //En caso de error nos saldrá una ventana informativa.
+
         try {
             LOGGER.info("Cargando gráficos.");
 
@@ -841,6 +860,12 @@ public class AccountController {
         }
     }
 
+    /**
+     * Metodo para el total de los gastos
+     *
+     * @param accounts es el dato que recoge
+     * @return el tipo de gasto
+     */
     private Map<String, Integer> getTotalExpenses(List<AccountBean> accounts) {
         RecurrentInterface ri = RecurrentFactory.getFactory();
         PunctualInterface pi = PunctualFactory.getFactory();
@@ -882,6 +907,12 @@ public class AccountController {
         return expenseType;
     }
 
+    /**
+     * Metodo para el tipo de plan
+     *
+     * @param account es el dato que recoge
+     * @return los planes del grupo
+     */
     private Map<Plan, Integer> getPlanDataGraphic(List<AccountBean> account) {
         Map<Plan, Integer> plans = new HashMap<>();
 
@@ -897,12 +928,18 @@ public class AccountController {
         return plans;
     }
 
-    //CERRAR VENTANA
-    //Pedir confirmación al usuario para salir:
-    //Si el usuario confirma, saldrá de la aplicación.
-    //Si no confirma, mantenerse en la ventana.
+    /**
+     * Metodo para salir de la ventana de account
+     *
+     * @param event del controlador
+     */
     @FXML
     private void handleExitApplication(Event event) {
+
+        //CERRAR VENTANA
+        //Pedir confirmación al usuario para salir:
+        //Si el usuario confirma, saldrá de la aplicación.
+        //Si no confirma, mantenerse en la ventana.
         try {
             event.consume();
             //Con esto vamos a crear una ventana de confirmación al pulsar el botón de salir

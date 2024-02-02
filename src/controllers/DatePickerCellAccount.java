@@ -9,8 +9,10 @@ import model.entitys.AccountBean;
 import model.entitys.RecurrentBean;
 
 /**
+ * Esta clase permite que aparezca un DatePicker en la celda editable de la
+ * ventana AccountView.
  *
- * @author Jason.
+ * @author Jessica.
  */
 public class DatePickerCellAccount extends TableCell<AccountBean, Date> {
 

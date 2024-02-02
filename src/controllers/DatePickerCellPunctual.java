@@ -8,6 +8,8 @@ import javafx.scene.control.TableCell;
 import model.entitys.PunctualBean;
 
 /**
+ * Esta clase permite que aparezca un DatePicker en la celda editable de la
+ * ventana PunctualView.
  *
  * @author Ian.
  */

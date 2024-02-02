@@ -65,6 +65,7 @@ import net.sf.jasperreports.view.JasperViewer;
 import org.apache.velocity.exception.ParseErrorException;
 
 /**
+ * Este es el controlador de la ventana Recurrent
  *
  * @author Jason.
  */
