@@ -13,6 +13,8 @@ package controllers;
 import exceptions.DeleteException;
 import exceptions.SelectException;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -341,21 +343,27 @@ public class AccountController {
                 String[] emailArray = sharedMails.split(",\\s*");
                 List<String> emailList = Arrays.asList(emailArray);
 
-                for (String string : emailList) {
+                StringBuilder concatenatedEmails = new StringBuilder();
+                for (String email : emailList) {
                     try {
                         SharedBean s = si.findShared_XML(new GenericType<SharedBean>() {
-                        }, selectedAccount.getId().toString(), string);
+                        }, selectedAccount.getId().toString(), email);
 
-                        this.showAlert("El usuario " + string + " ya esta asociado", AlertType.WARNING);
+                        this.showAlert("El usuario " + email + " ya esta asociado", AlertType.WARNING);
 
                     } catch (Exception e) {
-                        SharedIdBean sib = new SharedIdBean(selectedAccount.getId(), string);
+                        SharedIdBean sib = new SharedIdBean(selectedAccount.getId(), email);
                         UserBean u = UserFactory.getFactory().findUser_XML(new GenericType<UserBean>() {
-                        }, string);
+                        }, email);
 
                         SharedBean newS = new SharedBean(sib, selectedAccount, u, Permissions.Autorizado);
                         si.create_XML(newS);
                         sharedList.add(newS);
+
+                        if (concatenatedEmails.length() > 0) {
+                            concatenatedEmails.append(", ");
+                        }
+                        concatenatedEmails.append(email);
                     }
                 }
                 selectedAccount.setShared(sharedList);
@@ -381,7 +389,7 @@ public class AccountController {
         //El filtrado es mediante un ComboBox (cbAtribute) y podrá filtrarse por “Id/ Nombre/ Plan/ Balance/ Divisa/ Descripción”. Está visible y habilitado siempre .
         cbAtribute.setDisable(false);
         cbAtribute.setVisible(true);
-        cbAtribute.getItems().addAll("Id:", "Nombre:", "Descripcion:", "Balance:", "Divisa:", "Plan:");
+        cbAtribute.getItems().addAll("Id:", "Nombre:", "Descripcion:", "Balance:", "Date:", "Divisa:", "Plan:");
         cbAtribute.setOnAction(this::handleActionAtributoSearch);
 
         //El otro ComboBox es de condición (cbCondition) y estará deshabilitado pero visible hasta que el usuario seleccione
@@ -693,6 +701,14 @@ public class AccountController {
                 tfSearch.setText("");
                 btnSearch.setDisable(false);
                 break;
+            case ("Date:"):
+                cbCondition.setDisable(false);
+                tfSearch.setDisable(false);
+                cbCondition.getItems().setAll("Despues de...", "En...", "Antes de...");
+                cbCondition.setPromptText("Rango...");
+                tfSearch.setText("");
+                btnSearch.setDisable(false);
+                break;
             case ("Divisa:"):
                 cbCondition.setDisable(false);
                 tfSearch.setDisable(true);
@@ -750,6 +766,25 @@ public class AccountController {
 
                         } else if (cbCondition.getValue().toString().equalsIgnoreCase("Menor que...")) {
                             listAccounts = aInterface.filterAccountsWithLowerBalance_XML(new GenericType<List<AccountBean>>() {
+                            }, tfSearch.getText(), user.getMail());
+                        } else if (cbCondition.getValue().toString().equalsIgnoreCase("Igual que...")) {
+                            listAccounts = aInterface.filterAccountsWithEqualBalance_XML(new GenericType<List<AccountBean>>() {
+                            }, tfSearch.getText(), user.getMail());
+                        }
+                    }
+                    break;
+
+                case "Date:":
+                    if (validateDate(tfSearch.getText())) {
+                        if (cbCondition.getValue().toString().equalsIgnoreCase("Despues de...")) {
+                            listAccounts = aInterface.filterAccountsWithDateAfter_XML(new GenericType<List<AccountBean>>() {
+                            }, tfSearch.getText(), user.getMail());
+
+                        } else if (cbCondition.getValue().toString().equalsIgnoreCase("En...")) {
+                            listAccounts = aInterface.filterAccountsWithDateEquals_XML(new GenericType<List<AccountBean>>() {
+                            }, tfSearch.getText(), user.getMail());
+                        } else if (cbCondition.getValue().toString().equalsIgnoreCase("Antes de...")) {
+                            listAccounts = aInterface.filterAccountsWithDateBefore_XML(new GenericType<List<AccountBean>>() {
                             }, tfSearch.getText(), user.getMail());
                         }
                     }
@@ -809,6 +844,21 @@ public class AccountController {
         } catch (ParseErrorException e) {
             valido = false;
         }
+        return valido;
+    }
+
+    protected boolean validateDate(String date) {
+        boolean valido = true;
+        String dateFormat = null;
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        sdf.setLenient(false); // Esto hará que el analizador sea estricto
+
+        try {
+            Date parsedDate = sdf.parse(date);
+        } catch (ParseException e) {
+            valido = false;
+        }
+
         return valido;
     }
 

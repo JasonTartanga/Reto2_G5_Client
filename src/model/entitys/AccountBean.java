@@ -1,8 +1,10 @@
 package model.entitys;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -195,4 +197,17 @@ public class AccountBean {
     public String toString() {
         return "AccountBean{" + "id=" + id + ", name=" + name + ", description=" + description + ", divisa=" + divisa + ", date=" + date + ", balance=" + balance + ", plan=" + plan + '}';
     }
+
+    public String getAssociated() {
+        List<SharedBean> sharedList = getShared();
+        if (sharedList != null) {
+            List<String> associatedEmails = sharedList.stream()
+                    .map(shared -> shared.getUser().getMail())
+                    .collect(Collectors.toList());
+            return String.join(", ", associatedEmails);
+        } else {
+            return "";
+        }
+    }
+
 }

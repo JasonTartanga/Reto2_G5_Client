@@ -9,6 +9,7 @@ import exceptions.CreateException;
 import exceptions.DeleteException;
 import exceptions.SelectException;
 import exceptions.UpdateException;
+import java.util.Date;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -34,6 +35,25 @@ public interface AccountInterface {
 
     public <T> T filterAccountsWithLowerBalance_JSON(GenericType<T> responseType, String balance, String mail) throws SelectException;
 
+    public <T> T filterAccountsWithEqualBalance_XML(GenericType<T> responseType, String balance, String mail) throws SelectException;
+
+    public <T> T filterAccountsWithEqualBalance_JSON(GenericType<T> responseType, String balance, String mail) throws SelectException;
+    
+
+    public <T> T filterAccountsWithDateAfter_XML(GenericType<T> responseType, String date, String mail) throws ClientErrorException;
+
+    public <T> T filterAccountsWithDateAfter_JSON(GenericType<T> responseType, String date, String mail) throws ClientErrorException;
+
+    public <T> T filterAccountsWithDateEquals_XML(GenericType<T> responseType, String date, String mail) throws ClientErrorException;
+
+    public <T> T filterAccountsWithDateEquals_JSON(GenericType<T> responseType, String date, String mail) throws ClientErrorException;
+
+    public <T> T filterAccountsWithDateBefore_XML(GenericType<T> responseType, String date, String mail) throws ClientErrorException;
+
+    public <T> T filterAccountsWithDateBefore_JSON(GenericType<T> responseType, String date, String mail) throws ClientErrorException;
+    
+ 
+    
     public <T> T findAccount_XML(GenericType<T> responseType, Long id) throws SelectException;
 
     public <T> T findAccount_JSON(GenericType<T> responseType, Long id) throws SelectException;

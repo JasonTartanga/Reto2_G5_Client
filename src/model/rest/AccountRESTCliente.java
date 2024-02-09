@@ -5,6 +5,7 @@
  */
 package model.rest;
 
+import java.util.Date;
 import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
@@ -66,7 +67,76 @@ public class AccountRESTCliente implements AccountInterface {
         resource = resource.path(java.text.MessageFormat.format("filterAccountsWithLowerBalance/{0}/{1}", new Object[]{balance, mail}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
+    
+    @Override
+    public <T> T filterAccountsWithEqualBalance_XML(GenericType<T> responseType, String balance, String mail) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("filterAccountsWithEqualBalance/{0}/{1}", new Object[]{balance, mail}));
+        System.out.println("Igual que " + resource.getUri());
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
 
+    @Override
+    public <T> T filterAccountsWithEqualBalance_JSON(GenericType<T> responseType, String balance, String mail) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("filterAccountsWithEqualBalance/{0}/{1}", new Object[]{balance, mail}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+    
+    
+     @Override
+    public <T> T filterAccountsWithDateAfter_XML(GenericType<T> responseType, String date, String mail) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("filterAccountsWithDateAfter/{0}/{1}", new Object[]{date, mail}));
+        System.out.println("Igual que " + resource.getUri());
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    @Override
+    public <T> T filterAccountsWithDateAfter_JSON(GenericType<T> responseType, String date, String mail) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("filterAccountsWithDateAfter/{0}/{1}", new Object[]{date, mail}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+    
+    @Override
+    public <T> T filterAccountsWithDateEquals_XML(GenericType<T> responseType, String date, String mail) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("filterAccountsWithDateEquals/{0}/{1}", new Object[]{date, mail}));
+        System.out.println("Igual que " + resource.getUri());
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    @Override
+    public <T> T filterAccountsWithDateEquals_JSON(GenericType<T> responseType, String date, String mail) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("filterAccountsWithDateEquals/{0}/{1}", new Object[]{date, mail}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+    
+    
+    @Override
+    public <T> T filterAccountsWithDateBefore_XML(GenericType<T> responseType, String date, String mail) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("filterAccountsWithDateBefore/{0}/{1}", new Object[]{date, mail}));
+        System.out.println("Igual que " + resource.getUri());
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    @Override
+    public <T> T filterAccountsWithDateBefore_JSON(GenericType<T> responseType, String date, String mail) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("filterAccountsWithDateBefore/{0}/{1}", new Object[]{date, mail}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+    
+    
+    
+    
+
+    
+    
+    
     @Override
     public <T> T viewAllAccounts_XML(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
