@@ -696,7 +696,7 @@ public class AccountController {
             case ("Balance:"):
                 cbCondition.setDisable(false);
                 tfSearch.setDisable(false);
-                cbCondition.getItems().setAll("Mayor que...", "Menor que...");
+                cbCondition.getItems().setAll("Mayor que...", "Menor que...", "Igual que...");
                 cbCondition.setPromptText("Rango...");
                 tfSearch.setText("");
                 btnSearch.setDisable(false);
