@@ -530,23 +530,40 @@ public class AccountController {
      *
      * @param event del controlador
      */
+    @FXML
     public void handleRefreshTable(ActionEvent event) {
         //BTN ACTUALIZAR: Al pulsar el botón volverá a cargar la tabla con los datos actualizados.
         //En caso de error, saldrá una ventana informativa.
         //Seguido, saldrá del método del botón.
-
-        List<AccountBean> accounts = null;
         try {
+            log.info("Recargando la tabla");
+
+            List<AccountBean> accounts = null;
             accounts = aInterface.findAllAccountsByUser_XML(new GenericType< List<AccountBean>>() {
             }, user.getMail());
-        } catch (SelectException ex) {
-            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
+
+            List<AccountBean> accountsWithData = new ArrayList<>();
+
+            for (AccountBean account : accounts) {
+                if (account.getName() != null && !account.getName().isEmpty()
+                        && account.getBalance() != null && account.getBalance() != 0.0) {
+                    accountsWithData.add(account);
+                } else {
+                    aInterface.deleteAccount(account.getId());
+                }
+            }
+
+            ObservableList accountsList = FXCollections.observableArrayList(accounts);
+            table.getItems().setAll(accountsList);
+            table.refresh();
+
+            this.handleLoadGraphicsTab(event);
+
+        } catch (SelectException e) {
+            this.showAlert(e.getMessage(), AlertType.ERROR);
+        } catch (DeleteException ex) {
+            Logger.getLogger(PunctualController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        ObservableList accountsList = FXCollections.observableArrayList(accounts);
-        table.getItems().setAll(accountsList);
-        table.refresh();
-
     }
 
     /**
