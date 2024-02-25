@@ -74,7 +74,6 @@ public class MenuBarController {
             Parent root = loader.load();
             ChangePaswordController forgotPassword = loader.getController();
             forgotPassword.setStage(new Stage());
-            System.out.println("user --> " + user.toString());
             forgotPassword.setUser(user);
             forgotPassword.initStage(root);
         } catch (IOException ex) {
@@ -197,7 +196,6 @@ public class MenuBarController {
      * @param user el usuario que se ha logeado
      */
     public void setUser(UserBean user) {
-        System.out.println("user --> " + user.toString());
         this.user = user;
     }
 

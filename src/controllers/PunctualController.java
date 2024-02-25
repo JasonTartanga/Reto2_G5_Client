@@ -5,6 +5,7 @@ import exceptions.DeleteException;
 import exceptions.SelectException;
 import exceptions.UpdateException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,6 +52,7 @@ import javafx.util.converter.FloatStringConverter;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
 import model.entitys.PunctualBean;
+import model.entitys.RecurrentBean;
 import model.entitys.UserBean;
 import model.enums.Importance;
 import model.factory.AccountFactory;
@@ -74,7 +77,7 @@ public class PunctualController {
     private UserBean user;
     private AccountBean account;
 
-    private List<PunctualBean> punctuals;
+    private List<PunctualBean> punctuals = new ArrayList<>();
     private List<AccountBean> accountsUser;
     private PunctualInterface puncInt = PunctualFactory.getFactory();
     private static final Logger log = Logger.getLogger(PunctualController.class.getName());
@@ -199,13 +202,18 @@ public class PunctualController {
             tcName.setCellFactory(TextFieldTableCell.forTableColumn());
             tcName.setOnEditCommit(event -> {
                 try {
+                    if (!Pattern.matches("^[a-zA-Z0-9_ ]+$", event.getNewValue())) {
+                        throw new Exception("El nombre no puede tener caracteres especiales");
+                    }
+
                     PunctualBean punc = event.getRowValue();
-                    System.out.println("Editando el puntual --> " + punc.toString());
                     punc.setName(event.getNewValue());
                     punc.setAccount(account);
                     puncInt.updatePunctual_XML(punc, punc.getUuid());
                 } catch (UpdateException ex) {
                     this.showAlert(ex.getMessage(), AlertType.ERROR);
+                } catch (Exception ex) {
+                    this.showAlert(ex.getMessage(), AlertType.WARNING);
                 }
             });
 
@@ -226,16 +234,18 @@ public class PunctualController {
             tcAmount.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
             tcAmount.setOnEditCommit(event -> {
                 try {
-                    PunctualBean punc = event.getRowValue();
-                    Float previousAmount = punc.getAmount();
-                    punc.setAmount(event.getNewValue());
-                    Float changeAmount = previousAmount - punc.getAmount();
-                    account.setBalance(account.getBalance() - changeAmount);
+                    if (event.getNewValue() < 0) {
+                        throw new Exception("El importe no puede ser negativo");
+                    }
 
+                    PunctualBean punc = event.getRowValue();
+                    punc.setAmount(event.getNewValue());
+                    punc.setAccount(account);
                     puncInt.updatePunctual_XML(punc, punc.getUuid());
-                    AccountFactory.getFactory().updateAccount_XML(account, account.getId());
                 } catch (UpdateException ex) {
                     this.showAlert(ex.getMessage(), AlertType.ERROR);
+                } catch (Exception ex) {
+                    this.showAlert(ex.getMessage(), AlertType.WARNING);
                 }
             });
 
@@ -251,6 +261,9 @@ public class PunctualController {
                 } catch (UpdateException ex) {
                     this.showAlert(ex.getMessage(), AlertType.ERROR);
                 }
+            });
+            tcDate.setOnEditCancel(event -> {
+                this.handleRefreshTable(null);
             });
 
             //La columna de “tcImportance está formada por ComboBox y es editables.
@@ -283,15 +296,13 @@ public class PunctualController {
             miReport.setOnAction(this::handleGenerateReport);
 
             tabGrafico.setOnSelectionChanged(this::handleLoadGraphics);
-            log.addHandler(new FileHandler("punctual.log"));
-
             this.handleRefreshTable(null);
 
-            thisStage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
+            thisStage.getIcons().add(new Image(getClass().getResource("/resources/img/CashTrackerLogo.png").toExternalForm()));
 
             thisStage.show();
 
-        } catch (IOException | SecurityException ex) {
+        } catch (SecurityException ex) {
             this.showAlert(ex.getMessage(), AlertType.ERROR);
         }
     }
@@ -338,7 +349,6 @@ public class PunctualController {
             List<PunctualBean> punctuals = table.getSelectionModel().getSelectedItems();
 
             for (PunctualBean punc : punctuals) {
-                System.out.println(punc.toString());
                 puncInt.deletePunctual(punc.getUuid());
                 table.getItems().remove(punc);
             }
@@ -360,6 +370,13 @@ public class PunctualController {
         try {
             log.info("Recargando la tabla");
 
+            punctuals = table.getItems();
+            for (PunctualBean pun : punctuals) {
+                if (pun.getName() == null && pun.getConcept() == null && pun.getAmount() == 0.0 && pun.getDate() == null && pun.getImportance() == null) {
+                    puncInt.deletePunctual(pun.getUuid());
+                }
+            }
+
             punctuals = puncInt.findPunctualsByAccount_XML(new GenericType<List<PunctualBean>>() {
             }, account.getId());
 
@@ -369,7 +386,7 @@ public class PunctualController {
 
             this.handleLoadGraphics(event);
 
-        } catch (SelectException e) {
+        } catch (SelectException | DeleteException e) {
             this.showAlert(e.getMessage(), AlertType.ERROR);
         }
     }
@@ -604,8 +621,12 @@ public class PunctualController {
 
     protected void showAlert(String message, AlertType type) {
         Alert alert = new Alert(type);
-        alert.setTitle(message);
         alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResource("/resources/img/CashTrackerLogo.png").toExternalForm()));
+
         alert.showAndWait();
     }
 

@@ -31,7 +31,12 @@ public class Asimetric {
         String cipherPasswd = null;
 
         try {
-            fis = new FileInputStream(System.getProperty("user.home") + File.separator + "Documents\\CashTracker\\publicKey.der");
+            try {
+                fis = new FileInputStream(System.getProperty("user.home") + File.separator + "Documents\\CashTracker\\publicKey.der");
+            } catch (FileNotFoundException e) {
+                fis = new FileInputStream("src/cipher/publicKey.der");
+
+            }
             byte[] publicKeyBytes = new byte[fis.available()];
             fis.read(publicKeyBytes);
             fis.close();
@@ -47,6 +52,7 @@ public class Asimetric {
             cipherPasswd = DatatypeConverter.printHexBinary(encryptedData);
 
         } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+            ex.printStackTrace();
             LOG.severe(ex.getMessage());
         } finally {
             try {

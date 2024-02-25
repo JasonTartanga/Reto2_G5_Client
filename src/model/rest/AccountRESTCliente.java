@@ -56,7 +56,6 @@ public class AccountRESTCliente implements AccountInterface {
     public <T> T filterAccountsWithLowerBalance_XML(GenericType<T> responseType, String balance, String mail) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterAccountsWithLowerBalance/{0}/{1}", new Object[]{balance, mail}));
-        System.out.println("Menor que " + resource.getUri());
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
@@ -154,7 +153,6 @@ public class AccountRESTCliente implements AccountInterface {
     public <T> T filterAccountsWithHigherBalance_XML(GenericType<T> responseType, String balance, String mail) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("filterAccountsWithHigherBalance/{0}/{1}", new Object[]{balance, mail}));
-        System.out.println("Mayor que " + resource.getUri());
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
@@ -168,7 +166,6 @@ public class AccountRESTCliente implements AccountInterface {
     @Override
     public void createAccount_XML(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
-        System.out.println(webTarget.getUri());
     }
 
     @Override

@@ -5,6 +5,7 @@ import exceptions.DeleteException;
 import exceptions.SelectException;
 import exceptions.UpdateException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,6 +50,7 @@ import javafx.stage.Stage;
 import javafx.util.converter.FloatStringConverter;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
+import model.entitys.PunctualBean;
 import model.entitys.RecurrentBean;
 import model.entitys.UserBean;
 import model.enums.Category;
@@ -75,7 +78,7 @@ public class RecurrentController {
     private UserBean user;
     private AccountBean account;
 
-    private List<RecurrentBean> recurrentes;
+    private List<RecurrentBean> recurrentes = new ArrayList<>();
     private List<AccountBean> accountsUser;
 
     private final RecurrentInterface rest = RecurrentFactory.getFactory();
@@ -203,13 +206,18 @@ public class RecurrentController {
             tcName.setCellFactory(TextFieldTableCell.forTableColumn());
             tcName.setOnEditCommit(event -> {
                 try {
+                    if (!Pattern.matches("^[a-zA-Z0-9_ ]+$", event.getNewValue())) {
+                        throw new Exception("El nombre no puede tener caracteres especiales");
+                    }
+
                     RecurrentBean rec = event.getRowValue();
-                    System.out.println("Editando el recurrente --> " + rec.toString());
                     rec.setName(event.getNewValue());
                     rec.setAccount(account);
                     rest.updateRecurrent_XML(rec, rec.getUuid());
                 } catch (UpdateException ex) {
                     this.showAlert(ex.getMessage(), AlertType.ERROR);
+                } catch (Exception ex) {
+                    this.showAlert(ex.getMessage(), AlertType.WARNING);
                 }
             });
 
@@ -230,17 +238,18 @@ public class RecurrentController {
             tcAmount.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
             tcAmount.setOnEditCommit(event -> {
                 try {
-                    RecurrentBean rec = event.getRowValue();
-                    Float previousAmount = rec.getAmount();
-                    rec.setAmount(event.getNewValue());
-                    Float changeAmount = previousAmount - rec.getAmount();
-                    account.setBalance(account.getBalance() - changeAmount);
-                    //rec.setAccount(account);
+                    if (event.getNewValue() < 0) {
+                        throw new Exception("El importe no puede ser negativo");
+                    }
 
+                    RecurrentBean rec = event.getRowValue();
+                    rec.setAmount(event.getNewValue());
+                    rec.setAccount(account);
                     rest.updateRecurrent_XML(rec, rec.getUuid());
-                    AccountFactory.getFactory().updateAccount_XML(account, account.getId());
                 } catch (UpdateException ex) {
                     this.showAlert(ex.getMessage(), AlertType.ERROR);
+                } catch (Exception ex) {
+                    this.showAlert(ex.getMessage(), AlertType.WARNING);
                 }
             });
 
@@ -256,6 +265,9 @@ public class RecurrentController {
                 } catch (UpdateException ex) {
                     this.showAlert(ex.getMessage(), AlertType.ERROR);
                 }
+            });
+            tcDate.setOnEditCancel(event -> {
+                this.handleRefreshTable(null);
             });
 
             //Las columnas de “tcCategory” y “tcPeriodicity” están formadas por ComboBox y son editables.
@@ -301,14 +313,13 @@ public class RecurrentController {
             miReport.setOnAction(this::handleGenerateReport);
 
             tabGraficos.setOnSelectionChanged(this::handleLoadGraphics);
-            log.addHandler(new FileHandler("recurrent.log"));
 
             this.handleRefreshTable(null);
-            thisStage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
+            thisStage.getIcons().add(new Image(getClass().getResource("/resources/img/CashTrackerLogo.png").toExternalForm()));
 
             thisStage.show();
 
-        } catch (IOException | SecurityException ex) {
+        } catch (SecurityException ex) {
             this.showAlert(ex.getMessage(), AlertType.ERROR);
         }
     }
@@ -326,7 +337,6 @@ public class RecurrentController {
 
         log.info("Creando un gasto recurrente");
         try {
-
             RecurrentBean rec = new RecurrentBean();
             rec.setAccount(account);
             rest.createRecurrent_XML(rec);
@@ -358,7 +368,6 @@ public class RecurrentController {
             List<RecurrentBean> recurrents = table.getSelectionModel().getSelectedItems();
 
             for (RecurrentBean r : recurrents) {
-                System.out.println(r.toString());
                 rest.deleteRecurrent(r.getUuid());
                 table.getItems().remove(r);
             }
@@ -380,6 +389,13 @@ public class RecurrentController {
         try {
             log.info("Recargando la tabla");
 
+            recurrentes = table.getItems();
+            for (RecurrentBean rec : recurrentes) {
+                if (rec.getName() == null && rec.getConcept() == null && rec.getAmount() == 0.0 && rec.getDate() == null && rec.getCategory() == null && rec.getPeriodicity() == null) {
+                    rest.deleteRecurrent(rec.getUuid());
+                }
+            }
+
             recurrentes = rest.findRecurrentsByAccount_XML(new GenericType<List<RecurrentBean>>() {
             }, account.getId());
 
@@ -389,7 +405,7 @@ public class RecurrentController {
 
             this.handleLoadGraphics(event);
 
-        } catch (SelectException e) {
+        } catch (SelectException | DeleteException e) {
             this.showAlert(e.getMessage(), AlertType.ERROR);
         }
     }
@@ -671,8 +687,12 @@ public class RecurrentController {
      */
     protected void showAlert(String message, AlertType type) {
         Alert alert = new Alert(type);
-        alert.setContentText(message);
         alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResource("/resources/img/CashTrackerLogo.png").toExternalForm()));
+
         alert.showAndWait();
     }
 

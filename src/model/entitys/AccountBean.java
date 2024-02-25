@@ -34,7 +34,9 @@ public class AccountBean {
     private final SimpleObjectProperty<List<SharedBean>> shared;
     private final SimpleObjectProperty<List<ExpenseBean>> expenses;
 
-    public AccountBean(Long id, String name, String description, Divisa divisa, Date date, Float balance, Plan plan, List<SharedBean> shared, List<ExpenseBean> expenses) {
+    private final SimpleStringProperty sharedString;
+
+    public AccountBean(Long id, String name, String description, Divisa divisa, Date date, Float balance, Plan plan, List<SharedBean> shared, List<ExpenseBean> expenses, String sharedString) {
         this.id = new SimpleLongProperty(id);
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(name);
@@ -44,6 +46,7 @@ public class AccountBean {
         this.plan = new SimpleObjectProperty<>(plan);
         this.shared = new SimpleObjectProperty<>(shared);
         this.expenses = new SimpleObjectProperty<>(expenses);
+        this.sharedString = new SimpleStringProperty(sharedString);
     }
 
     public AccountBean() {
@@ -56,6 +59,7 @@ public class AccountBean {
         this.plan = new SimpleObjectProperty<>();
         this.shared = new SimpleObjectProperty<>();
         this.expenses = new SimpleObjectProperty<>();
+        this.sharedString = new SimpleStringProperty();
     }
 
     //******************** GETTERS && SETTERS *********************/
@@ -131,6 +135,14 @@ public class AccountBean {
 
     public void setExpenses(List<ExpenseBean> expenses) {
         this.expenses.set(expenses);
+    }
+
+    public String getSharedString() {
+        return sharedString.get();
+    }
+
+    public void setSharedString(String sharedString) {
+        this.sharedString.set(sharedString);
     }
 
     @Override

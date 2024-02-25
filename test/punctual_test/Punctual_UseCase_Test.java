@@ -132,7 +132,6 @@ public class Punctual_UseCase_Test extends ApplicationTest {
             }) + 1;
 
             clickOn(btnCreate);
-            System.out.println(table.getItems().size());
             assertEquals("La fila no se ha creado!!!", rowCount + 1, table.getItems().size());
 
             List<PunctualBean> punctual = table.getItems();
@@ -466,7 +465,6 @@ public class Punctual_UseCase_Test extends ApplicationTest {
             clickOn(cbAtribute);
             clickOn("Importancia:");
             clickOn(cbCondition);
-            System.out.println();
             clickOn(allPunctuals.get(0).getImportance() + "");
             clickOn(btnSearch);
 

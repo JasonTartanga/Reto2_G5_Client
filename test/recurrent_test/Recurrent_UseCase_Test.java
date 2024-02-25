@@ -75,7 +75,6 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
         }, Long.parseLong(6 + ""));
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/RecurrentView.fxml"));
-        System.out.println(loader.getLocation());
         Parent root = loader.load();
         RecurrentController recurrent = loader.getController();
         recurrent.setStage(stage);
@@ -134,7 +133,6 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
             }) + 1;
 
             clickOn(btnCreate);
-            System.out.println(table.getItems().size());
             assertEquals("La fila no se ha creado!!!", rowCount + 1, table.getItems().size());
 
             List<RecurrentBean> recurrent = table.getItems();
@@ -462,7 +460,6 @@ public class Recurrent_UseCase_Test extends ApplicationTest {
             clickOn(cbAtribute);
             clickOn("Naturaleza:");
             clickOn(cbCondition);
-            System.out.println();
             clickOn(allRecurrents.get(0).getCategory() + "");
             clickOn(btnSearch);
 

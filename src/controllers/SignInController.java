@@ -127,8 +127,7 @@ public class SignInController {
                 handleExitApplication(event);
             }
         });
-
-        thisStage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
+        thisStage.getIcons().add(new Image(getClass().getResource("/resources/img/CashTrackerLogo.png").toExternalForm()));
 
         thisStage.show();
     }

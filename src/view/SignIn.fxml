@@ -29,7 +29,7 @@
          </image>
       </ImageView>
       <PasswordField fx:id="txtPasswd" layoutX="638.0" layoutY="292.0" prefHeight="35.0" prefWidth="285.0" promptText="Introduce la contraseña" styleClass="textField" />
-      <TextField fx:id="txtShowPasswd" layoutX="638.0" layoutY="297.0" prefHeight="25.0" prefWidth="285.0" promptText="Introduce la contraseña" styleClass="textField" visible="false" />
+      <TextField fx:id="txtShowPasswd" layoutX="638.0" layoutY="292.0" prefHeight="35.0" prefWidth="285.0" promptText="Introduce la contraseña" styleClass="textField" visible="false" />
       <ToggleButton fx:id="tbtnPasswd" layoutX="936.0" layoutY="298.0" mnemonicParsing="false" onAction="#handleMostrarContraseniaToggleButtonAction" prefHeight="16.0" prefWidth="16.0">
          <graphic>
             <ImageView fx:id="ivTbntPasswd" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">

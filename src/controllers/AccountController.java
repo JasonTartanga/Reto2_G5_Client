@@ -12,6 +12,7 @@ package controllers;
 
 import exceptions.DeleteException;
 import exceptions.SelectException;
+import exceptions.UpdateException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,6 +59,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.ws.rs.core.GenericType;
 import model.entitys.AccountBean;
+import model.entitys.ExpenseBean;
 import model.enums.Permissions;
 import model.entitys.PunctualBean;
 import model.entitys.RecurrentBean;
@@ -66,6 +69,7 @@ import model.entitys.UserBean;
 import model.enums.Divisa;
 import model.enums.Plan;
 import model.factory.AccountFactory;
+import model.factory.ExpenseFactory;
 import model.factory.PunctualFactory;
 import model.factory.RecurrentFactory;
 import model.factory.SharedFactory;
@@ -93,6 +97,7 @@ public class AccountController {
     @FXML
     private Stage stage;
     private AccountInterface aInterface = AccountFactory.getFactory();
+    private SharedInterface sInterface = SharedFactory.getFactory();
     private AccountBean account;
     private UserBean user;
     private static final Logger log = Logger.getLogger(RecurrentController.class.getName());
@@ -147,7 +152,7 @@ public class AccountController {
     private TableColumn<AccountBean, Plan> tcPlan;
 
     @FXML
-    private TableColumn<AccountBean, List<SharedBean>> tcAsociated;
+    private TableColumn<AccountBean, String> tcAsociated;
 
     @FXML
     private AnchorPane fondoAccount;
@@ -187,10 +192,6 @@ public class AccountController {
         fondoAccount.setDisable(false);
         fondoAccount.setVisible(true);
 
-//        //Se añade el MenuBar.fxml a nuestra ventana.
-//        HBox hBoxMenu = (HBox) root.getChildrenUnmodifiable().get(0);
-//        //Get the menu bar from the children of the layout got before
-//        MenuBar menuBar = (MenuBar) hBoxMenu.getChildren().get(0);
         menuBarController.setUser(user);
         menuBarController.setStage(stage);
 
@@ -253,11 +254,17 @@ public class AccountController {
         tcName.setCellFactory(TextFieldTableCell.forTableColumn());
         tcName.setOnEditCommit(event -> {
             try {
+                if (!Pattern.matches("^[a-zA-Z0-9_ ]+$", event.getNewValue())) {
+                    throw new Exception("El nombre no puede tener caracteres especiales");
+                }
+
                 AccountBean accountBean = event.getRowValue();
                 accountBean.setName(event.getNewValue());
                 aInterface.updateAccount_XML(accountBean, accountBean.getId());
-            } catch (Exception e) {
+            } catch (UpdateException e) {
                 this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
+            } catch (Exception e) {
+                this.showAlert(e.getMessage(), Alert.AlertType.WARNING);
             }
         });
 
@@ -269,14 +276,13 @@ public class AccountController {
                 AccountBean accountBean = event.getRowValue();
                 accountBean.setDescription(event.getNewValue());
                 aInterface.updateAccount_XML(accountBean, accountBean.getId());
-            } catch (Exception e) {
+            } catch (UpdateException e) {
                 this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
             }
         });
 
         //La columna de “Balance” tendrá un formato numérico para el cómputo global de los gastos de la cuenta.
         tcBalance.setCellValueFactory(new PropertyValueFactory<>("balance"));
-//
 
         //La columna de “Fecha” está formada por una DatePicker y es editable.
         //La columna de “fecha” será con un DatePicker.
@@ -287,9 +293,12 @@ public class AccountController {
                 AccountBean accountBean = event.getRowValue();
                 accountBean.setDate(event.getNewValue());
                 aInterface.updateAccount_XML(accountBean, accountBean.getId());
-            } catch (Exception e) {
+            } catch (UpdateException e) {
                 this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
             }
+        });
+        tcDate.setOnEditCancel(event -> {
+            this.handleRefreshTable(null);
         });
 
         //Las columnas de “Divisa” y “Plan” están formadas por ComboBox y son editables.
@@ -301,7 +310,7 @@ public class AccountController {
                 AccountBean accountBean = event.getRowValue();
                 accountBean.setDivisa(event.getNewValue());
                 aInterface.updateAccount_XML(accountBean, accountBean.getId());
-            } catch (Exception e) {
+            } catch (UpdateException e) {
                 this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
             }
         });
@@ -314,61 +323,74 @@ public class AccountController {
                 AccountBean accountBean = event.getRowValue();
                 accountBean.setPlan(event.getNewValue());
                 aInterface.updateAccount_XML(accountBean, accountBean.getId());
-            } catch (Exception e) {
+            } catch (UpdateException e) {
                 this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
             }
         });
 
         //La columna “Asociados” está formada por un ComboBox multi seleccionable y será editable.
-        tcAsociated.setCellValueFactory(new PropertyValueFactory<>("asociated"));
+        tcAsociated.setCellValueFactory(new PropertyValueFactory<>("sharedString"));
         tcAsociated.setOnEditStart(event -> {
             try {
-                SharedInterface si = SharedFactory.getFactory();
 
-                AccountBean selectedAccount = table.getSelectionModel().getSelectedItem();
-                List<SharedBean> sharedList = selectedAccount.getShared();
+                AccountBean account = event.getRowValue();
 
-                if (sharedList == null) {
-                    sharedList = new ArrayList<>();
+                //Cogemos todos los usuarios y guardamos su mail en un array de string
+                List<UserBean> usuarios = UserFactory.getFactory().findAllUsers_XML(new GenericType<List<UserBean>>() {
+                });
+                List<String> userMails = new ArrayList<>();
+                for (UserBean usuario : usuarios) {
+                    userMails.add(usuario.getMail());
                 }
 
-                String sharedMails = this.abrirNM(null);
+                //Abrimos la ventana que permite elegir usuarios
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SelectAsociatedView.fxml"));
+                Parent root2 = loader.load();
+                SelectAsociatedController selectAsociated = loader.getController();
+                selectAsociated.setStage(stage);
+                selectAsociated.setItems(userMails);
+                selectAsociated.initStage(root2);
 
-                TablePosition<AccountBean, ?> editingCellPosition = table.getEditingCell();
-                int row = editingCellPosition.getRow();
-                TableColumn< AccountBean, ?> column = editingCellPosition.getTableColumn();
+                List<String> usuariosSeleccionados = selectAsociated.handleGetSelectedItems(null);
 
-                String[] emailArray = sharedMails.split(",\\s*");
-                List<String> emailList = Arrays.asList(emailArray);
-
-                for (String string : emailList) {
-                    try {
-                        SharedBean s = si.findShared_XML(new GenericType<SharedBean>() {
-                        }, selectedAccount.getId().toString(), string);
-
-                        this.showAlert("El usuario " + string + " ya esta asociado", AlertType.WARNING);
-
-                    } catch (Exception e) {
-                        SharedIdBean sib = new SharedIdBean(selectedAccount.getId(), string);
-                        UserBean u = UserFactory.getFactory().findUser_XML(new GenericType<UserBean>() {
-                        }, string);
-
-                        SharedBean newS = new SharedBean(sib, selectedAccount, u, Permissions.Autorizado);
-                        si.create_XML(newS);
-                        sharedList.add(newS);
+                //Eliminamos todos los usuarios con los que se ha compartido (sin contar el creador)
+                List<SharedBean> shareds = sInterface.findAllSharedByAccount_XML(new GenericType<List<SharedBean>>() {
+                }, account.getId());
+                for (SharedBean shared : shareds) {
+                    if (!shared.getPermissions().equals(Permissions.Creador)) {
+                        sInterface.remove(shared.getAccount().getId().toString(), shared.getUser().getMail());
                     }
                 }
-                selectedAccount.setShared(sharedList);
-                aInterface.updateAccount_XML(selectedAccount, selectedAccount.getId());
 
-                this.handleRefreshTable(null);
+                //Cogemos todos los usuarios compartidos y lo guardamos sus mails en un string
+                //Creamos los Shared de cada usuario
+                String sharedString = "";
+                for (String mails : usuariosSeleccionados) {
+                    sharedString += mails + ", ";
+                    UserBean usuario = UserFactory.getFactory().findUser_XML(new GenericType<UserBean>() {
+                    }, mails);
 
+                    SharedIdBean sib = new SharedIdBean(account.getId(), usuario.getMail());
+                    SharedBean shared = new SharedBean(sib, account, usuario, Permissions.Autorizado);
+                    sInterface.create_XML(shared);
+                }
+
+                sharedString = sharedString.substring(0, sharedString.length() - 2);
+
+                //Actulizamos el account
+                account.setSharedString(sharedString);
+                aInterface.updateAccount_XML(account, account.getId());
+
+                //Forzamos a la tabla a dejar de editar
+                TableView<AccountBean> tableView = event.getTableView();
+                if (tableView != null) {
+                    tableView.edit(-1, null);
+                    this.handleRefreshTable(null);
+                }
             } catch (Exception e) {
                 this.showAlert(e.getMessage(), Alert.AlertType.ERROR);
-                e.printStackTrace();
             }
-        }
-        );
+        });
 
         //La columna de ID no será editable ya que se genera automáticamente.
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -398,9 +420,6 @@ public class AccountController {
         btnSearch.setVisible(true);
         btnSearch.setOnAction(this::handleSearch);
 
-        //El MenuBar (menu) está habilitado y visible siempre y será el común utilizado para todas las ventanas, creado anteriormente en una ventana individual.
-//        menuBar.setDisable(false);
-//        menuBar.setVisible(true);
         //CONTEXTMENU
         //Cuando se pulse click derecho sobre la tableView se verá un menú de contexto con un menu (menú) que tendrá
         //dos menu items (miCreate) que llamara al mismo método que el botón btnCreate  y (miDelete) que llamara
@@ -412,43 +431,10 @@ public class AccountController {
         miReport.setOnAction(this::handleButtonInformeAction);
 
         tabGraficos.setOnSelectionChanged(this::handleLoadGraphicsTab);
-        stage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
+        stage.getIcons().add(new Image(getClass().getResource("/resources/img/CashTrackerLogo.png").toExternalForm()));
 
         this.handleRefreshTable(null);
         stage.show();
-    }
-
-    /**
-     * Metodo para abrir la nm de asociados
-     *
-     * @param event evento del controlador
-     * @return un asociado de un grupo de cuentas
-     */
-    public String abrirNM(ActionEvent event) {
-        String asociated = null;
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SelectAsociatedView.fxml"));
-            Parent root = loader.load();
-            SelectAsociatedController selectController = loader.getController();
-            Stage selectStage = new Stage();
-            selectController.setStage(selectStage);
-
-            List<UserBean> userList = UserFactory.getFactory().findAllUsers_XML(new GenericType<List<UserBean>>() {
-            });
-            selectController.handleLoadList(userList);
-
-            selectController.initStage(root);
-            asociated = selectController.getAsociated();
-
-        } catch (IOException ex) {
-            Logger.getLogger(AccountController.class
-                    .getName()).log(Level.SEVERE, null, ex);
-
-        } catch (SelectException ex) {
-            Logger.getLogger(AccountController.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return asociated;
     }
 
     /**
@@ -457,6 +443,7 @@ public class AccountController {
      * @param event del controlador
      */
     @FXML
+
     private void handleButtonCrearAction(ActionEvent event) {
         //BTN CREAR: Creará una nueva fila en el TableView con datos nulos excepto el id que se autogeneran.
         //Creará un nuevo grupo en la base de datos.
@@ -498,12 +485,9 @@ public class AccountController {
         LOGGER.info("Eliminando uno o varios Account.");
         try {
             List<AccountBean> selectedAccount = table.getSelectionModel().getSelectedItems();
-            SharedInterface si = SharedFactory.getFactory();
 
             for (AccountBean a : selectedAccount) {
-                System.out.println(a.toString());
-
-                si.remove(a.getId().toString(), user.getMail());
+                sInterface.remove(a.getId().toString(), user.getMail());
 
                 aInterface.deleteAccount(a.getId());
                 table.getItems().remove(a);
@@ -526,18 +510,28 @@ public class AccountController {
         //BTN ACTUALIZAR: Al pulsar el botón volverá a cargar la tabla con los datos actualizados.
         //En caso de error, saldrá una ventana informativa.
         //Seguido, saldrá del método del botón.
-
+        LOGGER.info("Actualizando tabla...");
         List<AccountBean> accounts = null;
         try {
+
+            accounts = table.getItems();
+            for (AccountBean acc : accounts) {
+                if (acc.getName() == null && acc.getDescription() == null && acc.getBalance() == 0.0 && acc.getDate() == null && acc.getDivisa() == null) {
+                    aInterface.deleteAccount(acc.getId());
+                }
+            }
+
             accounts = aInterface.findAllAccountsByUser_XML(new GenericType< List<AccountBean>>() {
             }, user.getMail());
-        } catch (SelectException ex) {
-            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
-        ObservableList accountsList = FXCollections.observableArrayList(accounts);
-        table.getItems().setAll(accountsList);
-        table.refresh();
+            accounts = this.handleFormatAccounts(accounts);
+
+            ObservableList accountsList = FXCollections.observableArrayList(accounts);
+            table.getItems().setAll(accountsList);
+            table.refresh();
+        } catch (SelectException | DeleteException ex) {
+            this.showAlert(ex.getMessage(), AlertType.ERROR);
+        }
 
     }
 
@@ -812,6 +806,39 @@ public class AccountController {
         return valido;
     }
 
+    private List<AccountBean> handleFormatAccounts(List<AccountBean> accounts) {
+        try {
+            for (AccountBean account : accounts) {
+                String usuariosList = "";
+                Float accountBalance = 0f;
+
+                List<SharedBean> shareds = sInterface.findAllSharedByAccount_XML(new GenericType<List<SharedBean>>() {
+                }, account.getId());
+                for (SharedBean shared : shareds) {
+                    usuariosList += shared.getUser().getName() + ", ";
+
+                }
+
+                List<ExpenseBean> expenses = ExpenseFactory.getFactory().listAllExpensesByAccount_XML(new GenericType<List<ExpenseBean>>() {
+                }, account.getId());
+                for (ExpenseBean expense : expenses) {
+                    accountBalance += expense.getAmount();
+                }
+
+                usuariosList = usuariosList.substring(0, usuariosList.length() - 2);
+                account.setSharedString(usuariosList);
+                account.setBalance(accountBalance);
+                aInterface.updateAccount_XML(account, account.getId());
+
+            }
+
+        } catch (UpdateException | SelectException ex) {
+            ex.printStackTrace();
+            this.showAlert(ex.getMessage(), Alert.AlertType.ERROR);
+        }
+        return accounts;
+    }
+
     /**
      * Metodo para cargar los graficos con los datos de los grupos
      *
@@ -960,10 +987,14 @@ public class AccountController {
         this.user = user;
     }
 
-    protected void showAlert(String message, Alert.AlertType type) {
+    protected void showAlert(String message, AlertType type) {
         Alert alert = new Alert(type);
-        alert.setContentText(message);
         alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResource("/resources/img/CashTrackerLogo.png").toExternalForm()));
+
         alert.showAndWait();
     }
 

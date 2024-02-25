@@ -3,6 +3,7 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -47,9 +48,9 @@ public class SelectAsociatedController {
         stage.setScene(scene);
 
         list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        btn.setOnAction(this::handleSelectNames);
+        btn.setOnAction(this::handleGetSelectedItems);
 
-        stage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
+        stage.getIcons().add(new Image(getClass().getResource("/resources/img/CashTrackerLogo.png").toExternalForm()));
 
         stage.showAndWait();
     }
@@ -72,33 +73,28 @@ public class SelectAsociatedController {
             }
         }
 
-        System.out.println(asociated);
         stage.close();
     }
 
     /**
      * Carga los mails de los UserBean posibles en el ListView.
      *
-     * @param usuarios los usuarios que recoge.
+     * @param items una lista con todos los mails.
      */
-    public void handleLoadList(List<UserBean> usuarios) {
-        List<String> names = new ArrayList<>();
-
-        for (UserBean usuario : usuarios) {
-            names.add(usuario.getMail());
-        }
-
-        list.getItems().setAll(FXCollections.observableArrayList(names));
+    protected void setItems(List<String> items) {
+        list.setItems(FXCollections.observableArrayList(items));
         list.refresh();
     }
 
     /**
-     * Consigue todos los asociados.
+     * Devuelve todos los elementos seleccionados.
      *
-     * @return los asociados.
+     * @param event del controlador
+     * @return todos los elementos seleccionados.
      */
-    public String getAsociated() {
-        return asociated;
+    protected ObservableList handleGetSelectedItems(ActionEvent event) {
+        stage.close();
+        return list.getSelectionModel().getSelectedItems();
     }
 
     /**

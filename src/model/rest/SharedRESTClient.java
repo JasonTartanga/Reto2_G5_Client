@@ -41,7 +41,6 @@ public class SharedRESTClient implements SharedInterface {
 
     @Override
     public void create_XML(Object requestEntity) throws CreateException {
-        System.out.println("Enviando shared al servidor --> " + requestEntity.toString());
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
@@ -88,6 +87,20 @@ public class SharedRESTClient implements SharedInterface {
     public <T> T findShared_JSON(GenericType<T> responseType, String account_id, String user_mail) throws SelectException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{account_id, user_mail}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+
+    @Override
+    public <T> T findAllSharedByAccount_XML(GenericType<T> responseType, Long account_id) throws SelectException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("findAllSharedByAccount/{0}", new Object[]{account_id}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    @Override
+    public <T> T findAllSharedByAccount_JSON(GenericType<T> responseType, Long account_id) throws SelectException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("findAllSharedByAccount/{0}", new Object[]{account_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 

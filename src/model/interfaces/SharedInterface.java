@@ -30,4 +30,9 @@ public interface SharedInterface {
     public <T> T findShared_XML(GenericType<T> responseType, String account_id, String user_mail) throws SelectException;
 
     public <T> T findShared_JSON(GenericType<T> responseType, String account_id, String user_mail) throws SelectException;
+
+    public <T> T findAllSharedByAccount_XML(GenericType<T> responseType, Long account_id) throws SelectException;
+
+    public <T> T findAllSharedByAccount_JSON(GenericType<T> responseType, Long account_id) throws SelectException;
+
 }

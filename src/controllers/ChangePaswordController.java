@@ -181,8 +181,6 @@ public class ChangePaswordController {
             if (action.get() == ButtonType.OK) {
 
                 String passwdCifrada = Asimetric.cipherPassword(txtPasswd2.getText());
-                System.out.println(user.getMail());
-                System.out.println(passwdCifrada);
                 userInter.changePassword(new GenericType<String>() {
                 }, user.getMail(), passwdCifrada);
 
@@ -300,7 +298,6 @@ public class ChangePaswordController {
     }
 
     public void setUser(UserBean user) {
-        System.out.println("user --> " + user.toString());
         this.user = user;
     }
 }

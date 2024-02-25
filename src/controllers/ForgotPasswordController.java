@@ -76,7 +76,7 @@ public class ForgotPasswordController {
             btnEnviar.setVisible(true);
             btnEnviar.setDisable(false);
             btnEnviar.setOnAction(this::handleEnviar);
-            thisStage.getIcons().add(new Image("file:" + System.getProperty("user.dir") + "\\src\\resources\\img\\CashTrackerLogo.png"));
+            thisStage.getIcons().add(new Image(getClass().getResource("/resources/img/CashTrackerLogo.png").toExternalForm()));
 
             thisStage.show();
         } catch (Exception e) {

@@ -6,7 +6,6 @@
 package model.rest;
 
 import java.util.ResourceBundle;
-import javax.annotation.Resource;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;

@@ -71,7 +71,6 @@ public class Account_UseCase_Test extends ApplicationTest {
         }, Long.parseLong(6 + ""));
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AccountView.fxml"));
-        System.out.println(loader.getLocation());
         Parent root = loader.load();
         AccountController account = loader.getController();
         account.setStage(stage);
@@ -133,7 +132,6 @@ public class Account_UseCase_Test extends ApplicationTest {
             }) + 1;
 
             clickOn(btnCreate);
-            System.out.println(table.getItems().size());
             assertEquals("La fila no se ha creado!!!", rowCount + 1, table.getItems().size());
 
             List<AccountBean> account = table.getItems();
@@ -474,7 +472,6 @@ public class Account_UseCase_Test extends ApplicationTest {
             clickOn(cbAtribute);
             clickOn("Divisa:");
             clickOn(cbCondition);
-            System.out.println();
             clickOn("AED");
             clickOn(btnSearch);
 
